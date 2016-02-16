@@ -1,0 +1,421 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.lleps.jsamp;
+
+/**
+ * @author spell
+ */
+public class SAMPFunctions {
+
+    /* misc */
+    public static native boolean logprintf(String string);
+    public static native boolean crash();
+    public static native boolean SomeVeryLargeNameMethodOne();
+
+    /* a_players */
+    public static native boolean SetSpawnInfo(int playerid, int team, int skin, float x, float y, float z, float rotation, int weapon1, int weapon1_ammo, int weapon2, int weapon2_ammo, int weapon3, int weapon3_ammo);
+    public static native boolean SpawnPlayer(int playerid);
+    public static native boolean SetPlayerPos(int playerid, float x, float y, float z);
+    public static native boolean SetPlayerPosFindZ(int playerid, float x, float y, float z);
+    public static native boolean SetPlayerFacingAngle(int playerid, float angle);
+    public static native boolean IsPlayerInRangeOfPoint(int playerid, float range, float x, float y, float z);
+    public static native float GetPlayerDistanceFromPoint(int playerid, float x, float y, float z);
+    public static native boolean IsPlayerStreamedIn(int playerid, int forplayerid);
+    public static native boolean SetPlayerInterior(int playerid, int interiorid);
+    public static native int GetPlayerInterior(int playerid);
+    public static native boolean SetPlayerHealth(int playerid, float health);
+    public static native boolean SetPlayerArmour(int playerid, float armour);
+    public static native boolean SetPlayerAmmo(int playerid, int weaponid, int ammo);
+    public static native int GetPlayerAmmo(int playerid);
+    public static native int GetPlayerWeaponState(int playerid);
+    public static native int GetPlayerTargetPlayer(int playerid);
+    public static native boolean SetPlayerTeam(int playerid, int teamid);
+    public static native int GetPlayerTeam(int playerid);
+    public static native boolean SetPlayerScore(int playerid, int score);
+    public static native int GetPlayerScore(int playerid);
+    public static native int GetPlayerDrunkLevel(int playerid);
+    public static native boolean SetPlayerDrunkLevel(int playerid, int level);
+    public static native boolean SetPlayerColor(int playerid, int color);
+    public static native int GetPlayerColor(int playerid);
+    public static native boolean SetPlayerSkin(int playerid, int skinid);
+    public static native int GetPlayerSkin(int playerid);
+    public static native boolean GivePlayerWeapon(int playerid, int weaponid, int ammo);
+    public static native boolean ResetPlayerWeapons(int playerid);
+    public static native boolean SetPlayerArmedWeapon(int playerid, int weaponid);
+    public static native boolean GivePlayerMoney(int playerid, int money);
+    public static native boolean ResetPlayerMoney(int playerid);
+    public static native int SetPlayerName(int playerid, String name);
+    public static native int GetPlayerMoney(int playerid);
+    public static native int GetPlayerState(int playerid);
+    public static native int GetPlayerPing(int playerid);
+    public static native int GetPlayerWeapon(int playerid);
+    public static native boolean SetPlayerTime(int playerid, int hour, int minute);
+    public static native boolean TogglePlayerClock(int playerid, boolean toggle);
+    public static native boolean SetPlayerWeather(int playerid, int weather);
+    public static native boolean ForceClassSelection(int playerid);
+    public static native boolean SetPlayerWantedLevel(int playerid, int level);
+    public static native int GetPlayerWantedLevel(int playerid);
+    public static native boolean SetPlayerFightingStyle(int playerid, int style);
+    public static native int GetPlayerFightingStyle(int playerid);
+    public static native boolean SetPlayerVelocity(int playerid, float x, float y, float z);
+    public static native boolean PlayCrimeReportForPlayer(int playerid, int suspectid, int crime);
+    public static native boolean PlayAudioStreamForPlayer(int playerid, String url, float posX , float posY , float posZ , float distance , boolean usepos );
+    public static native boolean StopAudioStreamForPlayer(int playerid);
+    public static native boolean SetPlayerShopName(int playerid, String shopname);
+    public static native boolean SetPlayerSkillLevel(int playerid, int skill, int level);
+    public static native int GetPlayerSurfingVehicleID(int playerid);
+    public static native int GetPlayerSurfingObjectID(int playerid);
+    public static native boolean RemoveBuildingForPlayer(int playerid, int modelid, float fX, float fY, float fZ, float fRadius);
+    public static native boolean SetPlayerAttachedObject(int playerid, int index, int modelid, int bone, float fOffsetX , float fOffsetY , float fOffsetZ , float fRotX , float fRotY , float fRotZ , float fScaleX , float fScaleY , float fScaleZ , int materialcolor1 , int materialcolor2 );
+    public static native boolean RemovePlayerAttachedObject(int playerid, int index);
+    public static native boolean IsPlayerAttachedObjectSlotUsed(int playerid, int index);
+    public static native boolean EditAttachedObject(int playerid, int index);
+    public static native int CreatePlayerTextDraw(int playerid, float x, float y, String text);
+    public static native boolean PlayerTextDrawDestroy(int playerid, int text);
+    public static native boolean PlayerTextDrawLetterSize(int playerid, int text, float x, float y);
+    public static native boolean PlayerTextDrawTextSize(int playerid, int text, float x, float y);
+    public static native boolean PlayerTextDrawAlignment(int playerid, int text, int alignment);
+    public static native boolean PlayerTextDrawColor(int playerid, int text, int color);
+    public static native boolean PlayerTextDrawUseBox(int playerid, int text, boolean use);
+    public static native boolean PlayerTextDrawBoxColor(int playerid, int text, int color);
+    public static native boolean PlayerTextDrawSetShadow(int playerid, int text, int size);
+    public static native boolean PlayerTextDrawSetOutline(int playerid, int text, int size);
+    public static native boolean PlayerTextDrawBackgroundColor(int playerid, int text, int color);
+    public static native boolean PlayerTextDrawFont(int playerid, int text, int font);
+    public static native boolean PlayerTextDrawSetProportional(int playerid, int text, boolean set);
+    public static native boolean PlayerTextDrawSetSelectable(int playerid, int text, boolean set);
+    public static native boolean PlayerTextDrawShow(int playerid, int text);
+    public static native boolean PlayerTextDrawHide(int playerid, int text);
+    public static native boolean PlayerTextDrawSetString(int playerid, int text, String string);
+    public static native boolean PlayerTextDrawSetPreviewModel(int playerid, int text, int modelindex);
+    public static native boolean PlayerTextDrawSetPreviewRot(int playerid, int text, float fRotX, float fRotY, float fRotZ, float fZoom );
+    public static native boolean PlayerTextDrawSetPreviewVehCol(int playerid, int text, int color1, int color2);
+    public static native boolean SetPVarInt(int playerid, String varname, int value);
+    public static native int GetPVarInt(int playerid, String varname);
+    public static native boolean SetPVarString(int playerid, String varname, String value);
+    public static native boolean SetPVarFloat(int playerid, String varname, float value);
+    public static native float GetPVarFloat(int playerid, String varname);
+    public static native boolean DeletePVar(int playerid, String varname);
+    public static native int GetPVarsUpperIndex(int playerid);
+    public static native int GetPVarType(int playerid, String varname);
+    public static native boolean SetPlayerChatBubble(int playerid, String text, int color, float drawdistance, int expiretime);
+    public static native boolean PutPlayerInVehicle(int playerid, int vehicleid, int seatid);
+    public static native int GetPlayerVehicleID(int playerid);
+    public static native int GetPlayerVehicleSeat(int playerid);
+    public static native boolean RemovePlayerFromVehicle(int playerid);
+    public static native boolean TogglePlayerControllable(int playerid, boolean toggle);
+    public static native boolean PlayerPlaySound(int playerid, int soundid, float x, float y, float z);
+    public static native boolean ApplyAnimation(int playerid, String animlib, String animname, float fDelta, boolean loop, boolean lockx, boolean locky, boolean freeze, int time, boolean forcesync );
+    public static native boolean ClearAnimations(int playerid, boolean forcesync );
+    public static native int GetPlayerAnimationIndex(int playerid);
+    public static native int GetPlayerSpecialAction(int playerid);
+    public static native boolean SetPlayerSpecialAction(int playerid, int actionid);
+    public static native boolean SetPlayerCheckpoint(int playerid, float x, float y, float z, float size);
+    public static native boolean DisablePlayerCheckpoint(int playerid);
+    public static native boolean SetPlayerRaceCheckpoint(int playerid, int type, float x, float y, float z, float nextx, float nexty, float nextz, float size);
+    public static native boolean DisablePlayerRaceCheckpoint(int playerid);
+    public static native boolean SetPlayerWorldBounds(int playerid, float x_max, float x_min, float y_max, float y_min);
+    public static native boolean SetPlayerMarkerForPlayer(int playerid, int showplayerid, int color);
+    public static native boolean ShowPlayerNameTagForPlayer(int playerid, int showplayerid, boolean show);
+    public static native boolean SetPlayerMapIcon(int playerid, int iconid, float x, float y, float z, int markertype, int color, int style );
+    public static native boolean RemovePlayerMapIcon(int playerid, int iconid);
+    public static native boolean AllowPlayerTeleport(int playerid, boolean allow);
+    public static native boolean SetPlayerCameraPos(int playerid, float x, float y, float z);
+    public static native boolean SetPlayerCameraLookAt(int playerid, float x, float y, float z, int cut );
+    public static native boolean SetCameraBehindPlayer(int playerid);
+    public static native int GetPlayerCameraMode(int playerid);
+    public static native float GetPlayerCameraAspectRatio(int playerid);
+    public static native float GetPlayerCameraZoom(int playerid);
+    public static native boolean AttachCameraToObject(int playerid, int objectid);
+    public static native boolean AttachCameraToPlayerObject(int playerid, int playerobjectid);
+    public static native boolean InterpolateCameraPos(int playerid, float FromX, float FromY, float FromZ, float ToX, float ToY, float ToZ, int time, int cut );
+    public static native boolean InterpolateCameraLookAt(int playerid, float FromX, float FromY, float FromZ, float ToX, float ToY, float ToZ, int time, int cut );
+    public static native boolean IsPlayerConnected(int playerid);
+    public static native boolean IsPlayerInVehicle(int playerid, int vehicleid);
+    public static native boolean IsPlayerInAnyVehicle(int playerid);
+    public static native boolean IsPlayerInCheckpoint(int playerid);
+    public static native boolean IsPlayerInRaceCheckpoint(int playerid);
+    public static native boolean SetPlayerVirtualWorld(int playerid, int worldid);
+    public static native int GetPlayerVirtualWorld(int playerid);
+    public static native boolean EnableStuntBonusForPlayer(int playerid, boolean enable);
+    public static native boolean EnableStuntBonusForAll(boolean enable);
+    public static native boolean TogglePlayerSpectating(int playerid, boolean toggle);
+    public static native boolean PlayerSpectatePlayer(int playerid, int targetplayerid, int mode );
+    public static native boolean PlayerSpectateVehicle(int playerid, int targetvehicleid, int mode );
+    public static native boolean StartRecordingPlayerData(int playerid, int recordtype, String recordname);
+    public static native boolean StopRecordingPlayerData(int playerid);
+    public static native boolean CreateExplosionForPlayer(int playerid, float X, float Y, float Z, int type, float Radius);
+    public static native float[] GetPlayerPos(int playerid);
+    public static native float GetPlayerFacingAngle(int playerid);
+    public static native float GetPlayerHealth(int playerid);
+    public static native float GetPlayerArmour(int playerid);
+    public static native int GetPlayerWeaponSlot(int playerid, int slot);
+    public static native int GetPlayerAmmoSlot(int playerid, int slot);
+    public static native String GetPlayerIp(int playerid);
+    public static native int[] GetPlayerKeys(int playerid);
+    public static native String GetPlayerName(int playerid);
+    public static native int GetPlayerHour(int playerid);
+    public static native int GetPlayerTime(int playerid);
+    public static native float[] GetPlayerVelocity(int playerid);
+    public static native float[] GetPlayerLastShotVectors(int playerid);
+    public static native String GetPVarString(int playerid, String varname);
+    public static native String GetPVarNameAtIndex(int playerid, int index);
+    public static native String GetAnimationLibrary(int index);
+    public static native String GetAnimationName(int index);
+    public static native float[] GetPlayerCameraPos(int playerid);
+    public static native float[] GetPlayerCameraFrontVector(int playerid);
+
+    /* a_objects */
+    public static native int CreateObject(int modelid, float x, float y, float z, float rX, float rY, float rZ, float DrawDistance );
+    public static native boolean AttachObjectToVehicle(int objectid, int vehicleid, float fOffsetX, float fOffsetY, float fOffsetZ, float fRotX, float fRotY, float fRotZ);
+    public static native boolean AttachObjectToObject(int objectid, int attachtoid, float fOffsetX, float fOffsetY, float fOffsetZ, float fRotX, float fRotY, float fRotZ, boolean SyncRotation );
+    public static native boolean AttachObjectToPlayer(int objectid, int playerid, float fOffsetX, float fOffsetY, float fOffsetZ, float fRotX, float fRotY, float fRotZ);
+    public static native boolean SetObjectPos(int objectid, float x, float y, float z);
+    public static native boolean SetObjectRot(int objectid, float rotX, float rotY, float rotZ);
+    public static native boolean IsValidObject(int objectid);
+    public static native boolean DestroyObject(int objectid);
+    public static native int MoveObject(int objectid, float X, float Y, float Z, float Speed, float RotX , float RotY , float RotZ );
+    public static native boolean StopObject(int objectid);
+    public static native boolean IsObjectMoving(int objectid);
+    public static native boolean EditObject(int playerid, int objectid);
+    public static native boolean EditPlayerObject(int playerid, int objectid);
+    public static native boolean SelectObject(int playerid);
+    public static native boolean CancelEdit(int playerid);
+    public static native int CreatePlayerObject(int playerid, int modelid, float x, float y, float z, float rX, float rY, float rZ, float DrawDistance );
+    public static native boolean AttachPlayerObjectToPlayer(int objectplayer, int objectid, int attachplayer, float OffsetX, float OffsetY, float OffsetZ, float rX, float rY, float rZ);
+    public static native boolean AttachPlayerObjectToVehicle(int playerid, int objectid, int vehicleid, float fOffsetX, float fOffsetY, float fOffsetZ, float fRotX, float fRotY, float RotZ);
+    public static native boolean SetPlayerObjectPos(int playerid, int objectid, float x, float y, float z);
+    public static native boolean SetPlayerObjectRot(int playerid, int objectid, float rotX, float rotY, float rotZ);
+    public static native boolean IsValidPlayerObject(int playerid, int objectid);
+    public static native boolean DestroyPlayerObject(int playerid, int objectid);
+    public static native int MovePlayerObject(int playerid, int objectid, float x, float y, float z, float Speed, float RotX , float RotY , float RotZ );
+    public static native boolean StopPlayerObject(int playerid, int objectid);
+    public static native boolean IsPlayerObjectMoving(int playerid, int objectid);
+    public static native boolean SetObjectMaterial(int objectid, int materialindex, int modelid, String txdname, String texturename, int materialcolor );
+    public static native boolean SetPlayerObjectMaterial(int playerid, int objectid, int materialindex, int modelid, String txdname, String texturename, int materialcolor );
+    public static native boolean SetObjectMaterialText(int objectid, String text, int materialindex , int materialsize , String fontface , int fontsize , boolean bold , int fontcolor , int backcolor , int textalignment );
+    public static native boolean SetPlayerObjectMaterialText(int playerid, int objectid, String text, int materialindex , int materialsize , String fontface , int fontsize , boolean bold , int fontcolor , int backcolor , int textalignment );
+    public static native float[] GetObjectPos(int objectid);
+    public static native float[] GetObjectRot(int objectid);
+    public static native float[] GetPlayerObjectPos(int playerid, int objectid);
+    public static native float[] GetPlayerObjectRot(int playerid, int objectid);
+
+    /* a_vehicles */
+    public static native boolean IsValidVehicle(int vehicleid);
+    public static native float GetVehicleDistanceFromPoint(int vehicleid, float x, float y, float z);
+    public static native int CreateVehicle(int vehicletype, float x, float y, float z, float rotation, int color1, int color2, int respawn_delay, boolean addsiren);
+    public static native boolean DestroyVehicle(int vehicleid);
+    public static native boolean IsVehicleStreamedIn(int vehicleid, int forplayerid);
+    public static native boolean SetVehiclePos(int vehicleid, float x, float y, float z);
+    public static native boolean SetVehicleZAngle(int vehicleid, float z_angle);
+    public static native boolean SetVehicleParamsForPlayer(int vehicleid, int playerid, boolean objective, boolean doorslocked);
+    public static native boolean ManualVehicleEngineAndLights();
+    public static native boolean SetVehicleParamsEx(int vehicleid, boolean engine, boolean lights, boolean alarm, boolean doors, boolean bonnet, boolean boot, boolean objective);
+    public static native boolean SetVehicleToRespawn(int vehicleid);
+    public static native boolean LinkVehicleToInterior(int vehicleid, int interiorid);
+    public static native boolean AddVehicleComponent(int vehicleid, int componentid);
+    public static native boolean RemoveVehicleComponent(int vehicleid, int componentid);
+    public static native boolean ChangeVehicleColor(int vehicleid, int color1, int color2);
+    public static native boolean ChangeVehiclePaintjob(int vehicleid, int paintjobid);
+    public static native boolean SetVehicleHealth(int vehicleid, float health);
+    public static native boolean AttachTrailerToVehicle(int trailerid, int vehicleid);
+    public static native boolean DetachTrailerFromVehicle(int vehicleid);
+    public static native boolean IsTrailerAttachedToVehicle(int vehicleid);
+    public static native int GetVehicleTrailer(int vehicleid);
+    public static native boolean SetVehicleNumberPlate(int vehicleid, String numberplate);
+    public static native int GetVehicleModel(int vehicleid);
+    public static native int GetVehicleComponentInSlot(int vehicleid, int slot);
+    public static native int GetVehicleComponentType(int component);
+    public static native boolean RepairVehicle(int vehicleid);
+    public static native boolean SetVehicleVelocity(int vehicleid, float X, float Y, float Z);
+    public static native boolean SetVehicleAngularVelocity(int vehicleid, float X, float Y, float Z);
+    public static native boolean UpdateVehicleDamageStatus(int vehicleid, int panels, int doors, int lights, int tires);
+    public static native boolean SetVehicleVirtualWorld(int vehicleid, int worldid);
+    public static native int GetVehicleVirtualWorld(int vehicleid);
+    public static native float[] GetVehiclePos(int vehicleid);
+    public static native float GetVehicleZAngle(int vehicleid);
+    public static native float[] GetVehicleRotationQuat(int vehicleid);
+    public static native int[] GetVehicleParamsEx(int vehicleid);
+    public static native float GetVehicleHealth(int vehicleid);
+    public static native float[] GetVehicleVelocity(int vehicleid);
+    public static native int[] GetVehicleDamageStatus(int vehicleid);
+    public static native float[] GetVehicleModelInfo(int vehicleid, int infotype);
+
+    /* a_samp */
+    public static native boolean SendClientMessage(int playerid, int color, String message);
+    public static native boolean SendClientMessageToAll(int color, String message);
+    public static native boolean SendPlayerMessageToPlayer(int playerid, int senderid, String message);
+    public static native boolean SendPlayerMessageToAll(int senderid, String message);
+    public static native boolean SendDeathMessage(int killer, int killee, int weapon);
+    public static native boolean SendDeathMessageToPlayer(int playerid, int killer, int killee, int weapon);
+    public static native boolean GameTextForAll(String text, int time, int style);
+    public static native boolean GameTextForPlayer(int playerid, String text, int time, int style);
+    public static native int GetTickCount();
+    public static native int GetMaxPlayers();
+    public static native float VectorSize(float x, float y, float z);
+    public static native boolean SetGameModeText(String text);
+    public static native boolean SetTeamCount(int count);
+    public static native int AddPlayerClass(int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int weapon1, int weapon1_ammo, int weapon2, int weapon2_ammo, int weapon3, int weapon3_ammo);
+    public static native int AddPlayerClassEx(int teamid, int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int weapon1, int weapon1_ammo, int weapon2, int weapon2_ammo, int weapon3, int weapon3_ammo);
+    public static native int AddStaticVehicle(int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int color1, int color2);
+    public static native int AddStaticVehicleEx(int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int color1, int color2, int respawn_delay, boolean addsiren);
+    public static native int AddStaticPickup(int model, int type, float x, float y, float z, int virtualworld );
+    public static native int CreatePickup(int model, int type, float x, float y, float z, int virtualworld );
+    public static native boolean DestroyPickup(int pickup);
+    public static native boolean ShowNameTags(boolean show);
+    public static native boolean ShowPlayerMarkers(int mode);
+    public static native boolean GameModeExit();
+    public static native boolean SetWorldTime(int hour);
+    public static native boolean EnableTirePopping(boolean enable);
+    public static native boolean EnableVehicleFriendlyFire();
+    public static native boolean AllowInteriorWeapons(boolean allow);
+    public static native boolean SetWeather(int weatherid);
+    public static native boolean SetGravity(float gravity);
+    public static native boolean AllowAdminTeleport(boolean allow);
+    public static native boolean SetDeathDropAmount(int amount);
+    public static native boolean CreateExplosion(float x, float y, float z, int type, float radius);
+    public static native boolean EnableZoneNames(boolean enable);
+    public static native boolean UsePlayerPedAnims();
+    public static native boolean DisableInteriorEnterExits();
+    public static native boolean SetNameTagDrawDistance(float distance);
+    public static native boolean DisableNameTagLOS();
+    public static native boolean LimitGlobalChatRadius(float chat_radius);
+    public static native boolean LimitPlayerMarkerRadius(float marker_radius);
+    public static native boolean ConnectNPC(String name, String script);
+    public static native boolean IsPlayerNPC(int playerid);
+    public static native boolean IsPlayerAdmin(int playerid);
+    public static native boolean Kick(int playerid);
+    public static native boolean Ban(int playerid);
+    public static native boolean BanEx(int playerid, String reason);
+    public static native boolean SendRconCommand(String command);
+    public static native int GetServerVarAsInt(String varname);
+    public static native boolean GetServerVarAsBool(String varname);
+    public static native boolean BlockIpAddress(String ip_address, int timems);
+    public static native boolean UnBlockIpAddress(String ip_address);
+    public static native int GetServerTickRate();
+    public static native int NetStats_GetConnectedTime(int playerid);
+    public static native int NetStats_MessagesReceived(int playerid);
+    public static native int NetStats_BytesReceived(int playerid);
+    public static native int NetStats_MessagesSent(int playerid);
+    public static native int NetStats_BytesSent(int playerid);
+    public static native int NetStats_MessagesRecvPerSecond(int playerid);
+    public static native float NetStats_PacketLossPercent(int playerid);
+    public static native int NetStats_ConnectionStatus(int playerid);
+    public static native int CreateMenu(String title, int columns, float x, float y, float col1width, float col2width );
+    public static native boolean DestroyMenu(int menuid);
+    public static native int AddMenuItem(int menuid, int column, String menutext);
+    public static native boolean SetMenuColumnHeader(int menuid, int column, String columnheader);
+    public static native boolean ShowMenuForPlayer(int menuid, int playerid);
+    public static native boolean HideMenuForPlayer(int menuid, int playerid);
+    public static native boolean IsValidMenu(int menuid);
+    public static native boolean DisableMenu(int menuid);
+    public static native boolean DisableMenuRow(int menuid, int row);
+    public static native int GetPlayerMenu(int playerid);
+    public static native int TextDrawCreate(float x, float y, String text);
+    public static native boolean TextDrawDestroy(int text);
+    public static native boolean TextDrawLetterSize(int text, float x, float y);
+    public static native boolean TextDrawTextSize(int text, float x, float y);
+    public static native boolean TextDrawAlignment(int text, int alignment);
+    public static native boolean TextDrawColor(int text, int color);
+    public static native boolean TextDrawUseBox(int text, boolean use);
+    public static native boolean TextDrawBoxColor(int text, int color);
+    public static native boolean TextDrawSetShadow(int text, int size);
+    public static native boolean TextDrawSetOutline(int text, int size);
+    public static native boolean TextDrawBackgroundColor(int text, int color);
+    public static native boolean TextDrawFont(int text, int font);
+    public static native boolean TextDrawSetProportional(int text, boolean set);
+    public static native boolean TextDrawSetSelectable(int text, boolean set);
+    public static native boolean TextDrawShowForPlayer(int playerid, int text);
+    public static native boolean TextDrawHideForPlayer(int playerid, int text);
+    public static native boolean TextDrawShowForAll(int text);
+    public static native boolean TextDrawHideForAll(int text);
+    public static native boolean TextDrawSetString(int text, String string);
+    public static native boolean TextDrawSetPreviewModel(int text, int modelindex);
+    public static native boolean TextDrawSetPreviewRot(int text, float fRotX, float fRotY, float fRotZ, float fZoom );
+    public static native boolean TextDrawSetPreviewVehCol(int text, int color1, int color2);
+    public static native boolean SelectTextDraw(int playerid, int hovercolor);
+    public static native boolean CancelSelectTextDraw(int playerid);
+    public static native int GangZoneCreate(float minx, float miny, float maxx, float maxy);
+    public static native boolean GangZoneDestroy(int zone);
+    public static native boolean GangZoneShowForPlayer(int playerid, int zone, int color);
+    public static native boolean GangZoneShowForAll(int zone, int color);
+    public static native boolean GangZoneHideForPlayer(int playerid, int zone);
+    public static native boolean GangZoneHideForAll(int zone);
+    public static native boolean GangZoneFlashForPlayer(int playerid, int zone, int flashcolor);
+    public static native boolean GangZoneFlashForAll(int zone, int flashcolor);
+    public static native boolean GangZoneStopFlashForPlayer(int playerid, int zone);
+    public static native boolean GangZoneStopFlashForAll(int zone);
+    public static native int Create3DTextLabel(String text, int color, float x, float y, float z, float DrawDistance, int virtualworld, boolean testLOS );
+    public static native boolean Delete3DTextLabel(int id);
+    public static native boolean Attach3DTextLabelToPlayer(int id, int playerid, float OffsetX, float OffsetY, float OffsetZ);
+    public static native boolean Attach3DTextLabelToVehicle(int id, int vehicleid, float OffsetX, float OffsetY, float OffsetZ);
+    public static native boolean Update3DTextLabelText(int id, int color, String text);
+    public static native int CreatePlayer3DTextLabel(int playerid, String text, int color, float x, float y, float z, float DrawDistance, int attachedplayer , int attachedvehicle , boolean testLOS );
+    public static native boolean DeletePlayer3DTextLabel(int playerid, int id);
+    public static native boolean UpdatePlayer3DTextLabelText(int playerid, int id, int color, String text);
+    public static native boolean ShowPlayerDialog(int playerid, int dialogid, int style, String caption, String info, String button1, String button2);
+    public static native boolean KillTimer(int timerid);
+    public static native String GetWeaponName(int weaponid);
+    public static native String GetServerVarAsString(String varname);
+    public static native String GetPlayerNetworkStats(int playerid);
+    public static native String GetNetworkStats();
+    public static native String GetPlayerVersion(int playerid);
+    public static native String NetStats_GetIpPort(int playerid);
+    public static native String gpci(int playerid);
+
+    /* a_actors */
+    public static native int CreateActor(int modelid,float x,float y,float z,float rotation);
+    public static native boolean DestroyActor(int actorid);
+    public static native boolean IsActorStreamedIn(int actorid,int forplayerid);
+    public static native boolean SetActorVirtualWorld(int actorid,int vworld);
+    public static native int GetActorVirtualWorld(int actorid);
+    public static native boolean ApplyActorAnimation(int actorid,String animlib,String animname,float fDelta,boolean loop,boolean lockx,boolean locky,boolean freeze,int time);
+    public static native boolean ClearActorAnimations(int actorid);
+    public static native boolean SetActorPos(int actorid,float x,float y,float z);
+    public static native boolean SetActorFacingAngle(int actorid,float angle);
+    public static native boolean SetActorHealth(int actorid,float health);
+    public static native boolean SetActorInvulnerable(int actorid,boolean invulnerable);
+    public static native boolean IsActorInvulnerable(int actorid);
+    public static native boolean IsValidActor(int actorid);
+    public static native float[] GetActorPos(int actorid);
+    public static native float GetActorFacingAngle(int actorid);
+    public static native float GetActorHealth(int actorid);
+
+    /* Vehicle collision */
+    public static native boolean DisableRemoteVehicleCollisions(int playerid, boolean disable);
+
+    /* Camera target functions */
+    public static native boolean EnablePlayerCameraTarget(int playerid, boolean enable);
+    public static native int GetPlayerCameraTargetObject(int playerid);
+    public static native int GetPlayerCameraTargetPlayer(int playerid);
+    public static native int GetPlayerCameraTargetActor(int playerid);
+    public static native int GetPlayerCameraTargetVehicle(int playerid);
+
+    /* Pool */
+    public static native int GetPlayerPoolSize();
+    public static native int GetVehiclePoolSize();
+
+    /* Car doors and windows */
+    public static native boolean[] GetVehicleParamsCarDoors(int vehicleid);
+    public static native boolean[] GetVehicleParamsCarWindows(int vehicleid);
+    public static native boolean SetVehicleParamsCarDoors(int vehicleid, boolean driver, boolean passenger, boolean backleft, boolean backright);
+    public static native boolean SetVehicleParamsCarWindows(int vehicleid, boolean driver, boolean passenger, boolean backleft, boolean backright);
+
+    /* Camera col */
+    public static native boolean SetObjectNoCameraCol(int objectid);
+    public static native boolean SetObjectsDefaultCameraCol(boolean disable);
+    public static native boolean SetPlayerObjectNoCameraCol(int playerid, int objectid);
+
+    public static native boolean SomeVeryLargeNameMethodTwo();
+}

@@ -1,0 +1,67 @@
+EXPORTS
+    ; AMX
+	Load
+	Unload
+	ProcessTick
+	Supports
+
+	; Collbaks
+	OnGameModeInit
+	OnGameModeExit
+	OnPlayerRequestClass
+	OnPlayerConnect
+	OnPlayerDisconnect
+	OnPlayerSpawn
+	OnPlayerDeath
+	OnVehicleSpawn
+	OnVehicleDeath
+	OnPlayerEnterVehicle
+	OnPlayerExitVehicle
+	OnPlayerStateChange
+	OnPlayerEnterCheckpoint
+	OnPlayerLeaveCheckpoint
+	OnPlayerEnterRaceCheckpoint
+	OnPlayerLeaveRaceCheckpoint
+	OnPlayerRequestSpawn
+	OnObjectMoved
+	OnPlayerObjectMoved
+	OnPlayerPickUpPickup
+	OnVehicleMod
+	OnVehiclePaintjob
+	OnVehicleRespray
+	OnPlayerSelectedMenuRow
+	OnPlayerExitedMenu
+	OnPlayerInteriorChange
+	OnPlayerKeyStateChange
+	OnPlayerUpdate
+	OnPlayerStreamIn
+	OnPlayerStreamOut
+	OnVehicleStreamIn
+	OnVehicleStreamOut
+	OnPlayerClickPlayer
+	OnVehicleDamageStatusUpdate
+	OnEnterExitModShop
+	OnUnoccupiedVehicleUpdate
+	OnPlayerClickMap
+	OnPlayerGiveDamage
+	OnPlayerTakeDamage
+	OnPlayerClickPlayerTextDraw
+	OnPlayerClickTextDraw
+	OnPlayerEditAttachedObject
+	OnPlayerEditObject
+	OnPlayerSelectObject
+	OnPlayerWeaponShot
+	OnTrailerUpdate
+	OnPlayerGiveDamageActor
+	OnVehicleSirenStateChange
+	OnActorStreamIn
+	OnActorStreamOut
+
+	; String callbacks (different format)
+	OnPlayerText
+	OnPlayerCommandText
+	OnRconCommand
+	OnRconLoginAttempt
+	OnDialogResponse
+	OnIncomingConnection
+
