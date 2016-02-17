@@ -11,10 +11,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.anticheat;
+package com.lleps.jsamp.anticheat.event;
 
 /**
+ * This class represents an event that occurs when a player has an illegal state.
+ * For example, spawning without SpawnPlayer or dead when is already dead.
  * @author spell
  */
-public class AnticheatEvent {
+public class IllegalStateCheat extends AnticheatEvent {
+    private String description;
+
+    public IllegalStateCheat(AccurateLevel accurateLevel, String description) {
+        super(accurateLevel);
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

@@ -11,11 +11,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.anticheat;
+package com.lleps.jsamp.anticheat.event;
 
 /**
  * @author spell
  */
-public class AccurateLevel {
+public abstract class AnticheatEvent {
+    private AccurateLevel accurateLevel;
 
+    protected AnticheatEvent(AccurateLevel accurateLevel) {
+        this.accurateLevel = accurateLevel;
+    }
+
+    /**
+     * @return the cheat detection accurate level.
+     */
+    public AccurateLevel getAccurateLevel() {
+        return accurateLevel;
+    }
 }

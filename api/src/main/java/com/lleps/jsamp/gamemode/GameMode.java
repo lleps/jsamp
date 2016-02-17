@@ -16,6 +16,7 @@ package com.lleps.jsamp.gamemode;
 import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.anticheat.AnticheatLayer;
+import com.lleps.jsamp.anticheat.event.AnticheatEvent;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.constant.Weather;
@@ -73,7 +74,7 @@ public abstract class GameMode {
         setWeather(Weather.get(0));
         setTime(LocalTime.of(14, 30));
 
-        AnticheatLayer anticheat = new AnticheatLayer();
+        AnticheatLayer anticheat = new AnticheatLayer(this);
         MainCallbackListener.addCallbackListener(anticheat, MainCallbackListener.ListenerPriority.LOW);
         FunctionAccess.setExecutor(anticheat);
 
@@ -97,10 +98,40 @@ public abstract class GameMode {
     }
 
     /**
-     * Called when the server goes down by MainCallbackListener. Clean up should be done here.
+     * Called when the server goes down by MainCallbackListener (OnGameModeExit called). Clean up should be done here.
      */
     public void onExit() {
 
+    }
+
+    /**
+     * Called by anticheat, when an event occurs.
+     * @param playerId which player.
+     * @param event the event. You can use instanceof or getClass to check what kind of event is.
+     * @return if false, then the anticheat will continue doing their work. But, if true, the anticheat will return
+     * the function immediately (for example, returning 0 on OnPlayerUpdate)
+     */
+    public boolean onAnticheatEvent(int playerId, AnticheatEvent event) {
+        switch (event.getAccurateLevel()) {
+            case HIGH: {
+                printLine("[Anticheat] Banning " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") for: "
+                + event.toString());
+                FunctionAccess.BanEx(playerId, event.toString());
+                return true;
+            }
+            case MEDIUM: {
+                printLine("[Anticheat] Kicking " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") for: "
+                        + event.toString());
+                FunctionAccess.Kick(playerId);
+                return true;
+            }
+            case LOW: {
+                printLine("[Anticheat] Warning: Player " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") " +
+                        "reported an event: "
+                        + event.toString());
+            }
+        }
+        return false;
     }
 
     /**
@@ -147,6 +178,7 @@ public abstract class GameMode {
     public static void runLater(Runnable runnable) {
         runLater(Duration.ZERO, runnable);
     }
+
 
     /**
      * Run a task later on SA:MP thread.
