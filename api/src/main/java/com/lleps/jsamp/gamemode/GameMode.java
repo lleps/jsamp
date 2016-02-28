@@ -14,8 +14,11 @@
 package com.lleps.jsamp.gamemode;
 
 import com.lleps.jsamp.MainCallbackListener;
-import com.lleps.jsamp.SAMPFunctions;
-import com.lleps.jsamp.anticheat.AnticheatLayer;
+import com.lleps.jsamp.SAMPConstants;
+import com.lleps.jsamp.anticheat.ACPlayer;
+import com.lleps.jsamp.anticheat.Anticheat;
+import com.lleps.jsamp.anticheat.AnticheatFunctionsExecutor;
+import com.lleps.jsamp.anticheat.AnticheatListener;
 import com.lleps.jsamp.anticheat.event.AnticheatEvent;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.FunctionAccess;
@@ -63,8 +66,9 @@ public abstract class GameMode {
     private Collection<World> worlds;
 
     /**
-     * Called by MainCallbackListener, when GameMode instance is sucessfully created.
-     * @throws Exception if something wrong happens at initialization.
+     * Called by MainCallbackListener, when GameMode instance is successfully created.
+     * @throws Exception if something wrong happens at initialization(normally by user code).
+     * An error will shut down the server immediately.
      */
     public void onInit() throws Exception {
         THIS = this;
@@ -74,9 +78,13 @@ public abstract class GameMode {
         setWeather(Weather.get(0));
         setTime(LocalTime.of(14, 30));
 
-        AnticheatLayer anticheat = new AnticheatLayer(this);
-        MainCallbackListener.addCallbackListener(anticheat, MainCallbackListener.ListenerPriority.LOW);
-        FunctionAccess.setExecutor(anticheat);
+        Anticheat anticheat = new Anticheat(this, new ACPlayer[SAMPConstants.MAX_PLAYERS]);
+
+        AnticheatListener acListener = new AnticheatListener(anticheat);
+        MainCallbackListener.addCallbackListener(acListener, MainCallbackListener.ListenerPriority.LOW);
+
+        AnticheatFunctionsExecutor acExecutor = new AnticheatFunctionsExecutor(anticheat);
+        FunctionAccess.setExecutor(acExecutor);
 
         MainCallbackListener.addCallbackListener(new EventDispatcher(this), MainCallbackListener.ListenerPriority.LOW);
     }
@@ -107,28 +115,26 @@ public abstract class GameMode {
     /**
      * Called by anticheat, when an event occurs.
      * @param playerId which player.
-     * @param event the event. You can use instanceof or getClass to check what kind of event is.
+     * @param anticheatEvent the event. You can use instanceof or getClass to check what kind of event is.
      * @return if false, then the anticheat will continue doing their work. But, if true, the anticheat will return
-     * the function immediately (for example, returning 0 on OnPlayerUpdate)
+     * the function immediately (for example, returning 0 in OnPlayerUpdate)
      */
-    public boolean onAnticheatEvent(int playerId, AnticheatEvent event) {
-        switch (event.getAccurateLevel()) {
-            case HIGH: {
-                printLine("[Anticheat] Banning " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") for: "
-                + event.toString());
-                FunctionAccess.BanEx(playerId, event.toString());
-                return true;
+    // TODO: Use abstraction methods (Player.Kick, Player.Ban instead of other methods).
+    public boolean onAnticheatEvent(int playerId, AnticheatEvent anticheatEvent) {
+        switch (anticheatEvent.getRecommendedAction()) {
+            case BAN: {
+                printLine("[anticheat] Banning " + FunctionAccess.GetPlayerName(playerId) + ": " + anticheatEvent);
+                FunctionAccess.BanEx(playerId, anticheatEvent.toString());
+                break;
             }
-            case MEDIUM: {
-                printLine("[Anticheat] Kicking " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") for: "
-                        + event.toString());
+            case KICK: {
+                printLine("[anticheat] Kicking " + FunctionAccess.GetPlayerName(playerId) + ": " + anticheatEvent);
                 FunctionAccess.Kick(playerId);
-                return true;
+                break;
             }
-            case LOW: {
-                printLine("[Anticheat] Warning: Player " + FunctionAccess.GetPlayerName(playerId) + "(" + playerId + ") " +
-                        "reported an event: "
-                        + event.toString());
+            case WARN: {
+                printLine("[anticheat] Warning: " + FunctionAccess.GetPlayerName(playerId) + ": " + anticheatEvent);
+                break;
             }
         }
         return false;
@@ -234,7 +240,7 @@ public abstract class GameMode {
     }
 
     /**
-     * Equivalent to printf. Will write to console and to server_log.txt
+     * Equivalent to printf. Will write to console and server_log.txt
      * @param string string.
      */
     public static void printLine(String string) {

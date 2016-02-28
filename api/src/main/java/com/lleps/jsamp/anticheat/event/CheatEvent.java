@@ -18,12 +18,24 @@ package com.lleps.jsamp.anticheat.event;
  * For example, spawning without SpawnPlayer or dead when is already dead.
  * @author spell
  */
-public class IllegalStateCheat extends AnticheatEvent {
+public class CheatEvent extends AnticheatEvent {
+    private AccurateLevel accurateLevel;
     private String description;
 
-    public IllegalStateCheat(AccurateLevel accurateLevel, String description) {
-        super(accurateLevel);
+    public CheatEvent(AccurateLevel accurateLevel, String description) {
+        this.accurateLevel = accurateLevel;
         this.description = description;
+    }
+
+    public AccurateLevel getAccurateLevel() {
+        return accurateLevel;
+    }
+
+    @Override
+    public RecommendedAction getRecommendedAction() {
+        if (accurateLevel == AccurateLevel.HIGH) return RecommendedAction.BAN;
+        else if (accurateLevel == AccurateLevel.MEDIUM) return RecommendedAction.KICK;
+        else return RecommendedAction.WARN;
     }
 
     @Override

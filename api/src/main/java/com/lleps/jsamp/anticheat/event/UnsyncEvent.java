@@ -14,11 +14,23 @@
 package com.lleps.jsamp.anticheat.event;
 
 /**
- * Everything the anticheat layer reports must extends this class.
+ * When a player is desynced.
  * @author spell
  */
-public abstract class AnticheatEvent {
-    public enum RecommendedAction {KICK, BAN, WARN};
+public class UnsyncEvent extends AnticheatEvent {
+    private String description;
 
-    public abstract RecommendedAction getRecommendedAction();
+    public UnsyncEvent(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public RecommendedAction getRecommendedAction() {
+        return RecommendedAction.KICK;
+    }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

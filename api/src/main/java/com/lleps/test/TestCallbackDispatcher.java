@@ -36,7 +36,7 @@ public class TestCallbackDispatcher implements CallbackListener {
     }
 
     @Override
-    public boolean onPlayerCommandText(int playerId, String command) {
+    public boolean OnPlayerCommandText(int playerId, String command) {
         Player player = Player.getById(playerId).get();
         String[] commandAndParams = command.split(" ", 2);
         String commandString = commandAndParams[0];

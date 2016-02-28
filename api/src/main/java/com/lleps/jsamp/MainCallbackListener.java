@@ -369,12 +369,48 @@ public class MainCallbackListener {
         return 1;
     }
 
+    private static long minOPUTime, maxOPUTime;
+    private static long secCounterLock;
+    private static long nsAccumulator, updateCounter;
+
     public static int OnPlayerUpdate(int playerId ) {
+        boolean shouldReturnZero = false;
+
+        /*
+        long secCounter = System.currentTimeMillis();
+        if (secCounter > secCounterLock) {
+            secCounterLock = secCounter + 1_000;
+            double min = nsToMS(minOPUTime);
+            double max = nsToMS(maxOPUTime);
+            double average = (min + max) / 2.0;
+            SAMPFunctions.SendClientMessage(playerId, -1, "min: " + min + " | max: " + max + " | average: " + average);
+            minOPUTime = Long.MAX_VALUE;
+            maxOPUTime = 0;
+
+            double average2 = nsToMS(nsAccumulator / updateCounter);
+            SAMPFunctions.SendClientMessage(playerId, 0xFF0000FF,
+                    "the ultimate result! {ffffff}average time: " + average2
+                            + " for total " + nsToMS(updateCounter) + " (updates: " + updateCounter + ")");
+
+            updateCounter = 0;
+            nsAccumulator = 0;
+        }
+
+
+        long clockStart = System.nanoTime();*/
         for (CallbackListener listener : listeners) {
             if (listener.OnPlayerUpdate(playerId ))
-                return 0;
+                shouldReturnZero = true;
+                break; // TODO: CHANGE IT TO 'return 0' IF YOU ARE NOT BENCHMARKING
         }
-        return 1;
+        /*long timeSpentUpdating = System.nanoTime() - clockStart;
+        nsAccumulator += timeSpentUpdating;
+        updateCounter++;*/
+        return shouldReturnZero ? 0 : 1;
+    }
+
+    static double nsToMS(long nano) {
+        return nano / 1_000_000.0;
     }
 
     public static int OnPlayerStreamIn(int playerId, int forPlayerId ) {

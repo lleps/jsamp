@@ -19,6 +19,7 @@ package com.lleps.jsamp;
 public class SAMPConstants {
 
     // Useful constants (not default)
+    public static final int MAX_WEAPON_SLOTS = 13;
     public static final int MAX_SKINS = 311;
     public static final int DOOR_DRIVER = 0;
     public static final int DOOR_PASSENGER = 1;

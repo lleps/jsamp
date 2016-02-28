@@ -44,6 +44,9 @@ public class VehicleTest implements CommandListener {
     public boolean onCommand(Player player, String command, String[] args) {
         if (world == null) {
             world = new NoStreamingWorld(new Interior(0));
+        }
+
+        if (player.getWorld() != world) {
             player.setWorld(world);
         }
 
