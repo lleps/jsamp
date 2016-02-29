@@ -1,3 +1,0 @@
-* Las librerias y includes como sampsdk o jni deberian estar en "project folder/include" o "project folder/libs" 
-Manchan el source code! 
-* Borrar la carpeta vieja y actualizarlo en GIT pero quitar archivos de debug porque pesan mucho

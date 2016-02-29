@@ -19,21 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EncodingUtils.cpp" />
-    <ClCompile Include="FileUtils.cpp" />
-    <ClCompile Include="JNISampFunctions.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="sampgdk\sampgdk.c" />
+    <ClCompile Include="src\EncodingUtils.cpp" />
+    <ClCompile Include="src\FileUtils.cpp" />
+    <ClCompile Include="src\JNISampFunctions.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\sampgdk.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EncodingUtils.h" />
-    <ClInclude Include="FileUtils.h" />
-    <ClInclude Include="JNISampFunctions.h" />
-    <ClInclude Include="sampgdk\sampgdk.h" />
-    <ClInclude Include="windows\windirent.h" />
+    <ClInclude Include="src\EncodingUtils.h" />
+    <ClInclude Include="src\FileUtils.h" />
+    <ClInclude Include="src\JNISampFunctions.h" />
+    <ClInclude Include="src\sampgdk.h" />
+    <ClInclude Include="src\windirent.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="exports.def" />
+    <None Include="src\exports.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DB264C75-D2C4-402A-8C9B-527394088178}</ProjectGuid>
@@ -88,12 +88,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\windows\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -105,12 +109,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>SAMPGDK_AMALGAMATION;WIN32;_DEBUG;_WINDOWS;_USRDLL;JSAMPPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\Java\jdk1.8.0_66\include;C:\Program Files\Java\jdk1.8.0_66\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JDK_HOME)\include;$(JDK_HOME)\include\win32;lib;lib\sampsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ShowIncludes />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\Java\jdk1.8.0_66\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(JDK_HOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>jvm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\exports.def</ModuleDefinitionFile>
     </Link>
@@ -137,18 +142,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>SAMPGDK_AMALGAMATION;WIN32;NDEBUG;_WINDOWS;_USRDLL;JSAMPPLUGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\Java\jdk1.8.0_66\include;C:\Program Files\Java\jdk1.8.0_66\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JDK_HOME)\include;$(JDK_HOME)\include\win32;lib;lib\sampsdk;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <ShowIncludes />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files\Java\jdk1.8.0_66\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(JDK_HOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>jvm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <ModuleDefinitionFile>.\exports.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\src\exports.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

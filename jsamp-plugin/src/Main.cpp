@@ -11,7 +11,7 @@
 #include <jni.h>
 #include <cstring>
 
-#include "sampgdk/sampgdk.h"
+#include "sampgdk.h"
 #include "EncodingUtils.h"
 #include "FileUtils.h"
 #include "JNISampFunctions.h"
@@ -52,7 +52,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData) {
 	}
 
 	string classPathOption = "-Djava.class.path=";
-	for (int i = 0; i < jarsForLoad->size(); i++) {
+	for (unsigned int i = 0; i < jarsForLoad->size(); i++) {
 		classPathOption += JARS_PATH + jarsForLoad->at(i);
 		#ifdef __linux__
 		classPathOption += ":";
@@ -77,7 +77,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData) {
 
 	if (vm_options_file != NULL) {
 		sampgdk::logprintf("Incluyendo %d opciones desde %s..", vm_options_file->size(), JVM_FILE_PATH);
-		for (int i = 0; i < vm_options_file->size(); i++) {
+		for (unsigned int i = 0; i < vm_options_file->size(); i++) {
 			if (!vm_options_file->at(i).empty()) {
 				JVMoptions[i + 1].optionString = (char*)vm_options_file->at(i).c_str();
 				sampgdk::logprintf("%d: %s", i + 1, JVMoptions[i + 1].optionString);
@@ -803,7 +803,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL OnActorStreamOut(int actorid, int forplayerid) {
 }
 
 #ifdef _WIN32
-#	include "windows/windirent.h"
+#	include "windirent.h"
 #else
 #	include <dirent.h>
 #endif

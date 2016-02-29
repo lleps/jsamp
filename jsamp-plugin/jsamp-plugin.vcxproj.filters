@@ -15,42 +15,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EncodingUtils.cpp">
+    <ClCompile Include="src\EncodingUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileUtils.cpp">
+    <ClCompile Include="src\FileUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JNISampFunctions.cpp">
+    <ClCompile Include="src\JNISampFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sampgdk\sampgdk.c">
+    <ClCompile Include="src\sampgdk.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EncodingUtils.h">
+    <ClInclude Include="src\EncodingUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileUtils.h">
+    <ClInclude Include="src\FileUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JNISampFunctions.h">
+    <ClInclude Include="src\JNISampFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sampgdk\sampgdk.h">
+    <ClInclude Include="src\windirent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="windows\windirent.h">
+    <ClInclude Include="src\sampgdk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="exports.def">
-      <Filter>Source Files</Filter>
+    <None Include="src\exports.def">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@
 #include <cstring>
 #include <jni.h>
 #include <stdio.h>
-#include "sampgdk/sampgdk.h"
+#include "sampgdk.h"
 #include "EncodingUtils.h"
 
 #define BYTES_PER_CHARACTER 2
