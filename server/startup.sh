@@ -1,7 +1,6 @@
-#export JRE_HOME=Path to JRE8 (32-bit)
 
 if [ -z "$JRE_HOME" ]; then
-	echo "Please edit the startup.sh file and add your JRE installation path to line 1 and remove the # character."
+	echo "Please JRE_PATH environment variable."
 	exit 1
 fi
 

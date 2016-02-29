@@ -2199,7 +2199,7 @@ static jboolean Java_SomeVeryLargeNameMethodTwo(JNIEnv* env, jobject obj) {
 }
 
 static JNINativeMethod methods[] = {
-	{ "crash", "()Z", (void *)Java_crash }, /* METHOD FOR CRASH AHAHAHAHA AHAHHAHAHAHAHAHAHAHHAHAH*/
+	{ "crash", "()Z", (void *)Java_crash }, /* METHOD FOR CRASH */
 	{ "logprintf", "(Ljava/lang/String;)Z", (void *)Java_logprintf },
 	{ "SomeVeryLargeNameMethodOne", "()Z", (void *)Java_SomeVeryLargeNameMethodOne },
 	{ "SetSpawnInfo", "(IIIFFFFIIIIII)Z", (void *)Java_SetSpawnInfo },

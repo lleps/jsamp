@@ -3,7 +3,7 @@
 
 while true; do
 	cp "../api/target/jsamp-1.0-SNAPSHOT.jar" "jsamp/jars/"
-	cp "../jsamp-plugin/bin/linux/Release/libjsamp-plugin.so" "plugins/jsamp"
+	cp "../jsamp-plugin/bin/linux/Release/libjsamp-plugin.so" "plugins/jsamp.so"
 	
 	./startup.sh
 
