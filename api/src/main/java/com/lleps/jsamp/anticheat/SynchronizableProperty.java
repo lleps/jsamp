@@ -68,4 +68,9 @@ public class SynchronizableProperty<T> {
     public void setShouldBe(T shouldBe) {
         this.shouldBe = shouldBe;
     }
+
+    @Override
+    public String toString() {
+        return "{synced="+synced+", shouldBe="+shouldBe+"}";
+    }
 }

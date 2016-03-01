@@ -32,8 +32,12 @@ public class MainTest extends GameMode {
 
     @Override
     public boolean onAnticheatEvent(int playerId, AnticheatEvent anticheatEvent) {
-        SAMPFunctions.SendClientMessageToAll(-1, SAMPFunctions.GetPlayerName(playerId) + " cheat! ");
-        SAMPFunctions.SendClientMessageToAll(-1, anticheatEvent.toString());
+        int color = 0x000000FF;//black
+        if (anticheatEvent.getRecommendedAction() == AnticheatEvent.RecommendedAction.BAN) color = 0xFF0000FF;//red
+        else if (anticheatEvent.getRecommendedAction() == AnticheatEvent.RecommendedAction.KICK) color = 0xFE9A2EFF;//orange
+        else if (anticheatEvent.getRecommendedAction() == AnticheatEvent.RecommendedAction.WARN) color = 0xF3F781FF;//yellow
+
+        SAMPFunctions.SendClientMessageToAll(color, SAMPFunctions.GetPlayerName(playerId) + " - " + anticheatEvent.toString());
         return false;
     }
 

@@ -143,6 +143,36 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     }
 
     @Override
+    public boolean Kick(int playerid) {
+        checkForValidPlayerId(playerid);
+        players[playerid].setKickedOrBanned(true);
+        return SAMPFunctions.Kick(playerid);
+    }
+
+    @Override
+    public boolean Ban(int playerid) {
+        checkForValidPlayerId(playerid);
+        players[playerid].setKickedOrBanned(true);
+        return SAMPFunctions.Ban(playerid);
+    }
+    @Override
+    public boolean BanEx(int playerid, String reason) {
+        checkForValidPlayerId(playerid);
+        players[playerid].setKickedOrBanned(true);
+        return SAMPFunctions.BanEx(playerid, reason);
+    }
+
+    @Override
+    public float[] GetPlayerPos(int playerid) {
+        checkForValidPlayerId(playerid);
+        if (players[playerid].isKickedOrBanned()) {
+            // In TP hacks, if a cheater gets a kick and come back they'll be on cheated pos
+            return players[playerid].getPosition().getShouldBe();
+        }
+        return SAMPFunctions.GetPlayerPos(playerid);
+    }
+
+    @Override
     public boolean SetPlayerAmmo(int playerid, int weaponid, int ammo) {
         checkForValidPlayerId(playerid);
 

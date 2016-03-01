@@ -47,6 +47,8 @@ public class ACPlayer {
     private int weaponSlotsMaxAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
     private long weaponSlotsAmmoLockTime[] = new long[SAMPConstants.MAX_WEAPON_SLOTS];
 
+    private boolean kickedOrBanned;
+
     public ACPlayer(int id) {
         this.id = id;
 
@@ -57,6 +59,14 @@ public class ACPlayer {
 
     public int getId() {
         return id;
+    }
+
+    public void setKickedOrBanned(boolean kickedOrBanned) {
+        this.kickedOrBanned = kickedOrBanned;
+    }
+
+    public boolean isKickedOrBanned() {
+        return kickedOrBanned;
     }
 
     public SynchronizableProperty<float[]> getPosition() {

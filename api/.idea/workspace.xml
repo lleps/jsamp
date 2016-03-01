@@ -5,18 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2e0b04d2-4dce-423b-bd3a-a1db3de2ec97" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/SynchronizableVar.class" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableVar.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/ACPlayer.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/ACPlayer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/Anticheat.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/Anticheat.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatListener.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatListener.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/test/MainTest.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/test/MainTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsamp-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/target/jsamp-1.0-SNAPSHOT.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server/jsamp/jars/jsamp-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/../server/jsamp/jars/jsamp-1.0-SNAPSHOT.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.BitsTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.BitsTest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.ColorTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.ColorTest.xml" />
@@ -25,7 +25,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.BitsTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.BitsTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.ColorTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.ColorTest.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.VectorTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.VectorTest.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.VehicleDamageStateTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.VehicleDamageStateTest.txt" />
     </list>
     <ignored path="jsamp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,67 +46,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Anticheat.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-              <folding>
-                <element signature="e#1430#1431#0" expanded="true" />
-                <element signature="e#1475#1476#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AnticheatListener.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6203966">
-              <caret line="419" column="21" selection-start-line="419" selection-start-column="21" selection-end-line="419" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.87842464">
+              <caret line="630" column="44" selection-start-line="630" selection-start-column="25" selection-end-line="630" selection-end-column="44" />
               <folding>
-                <element signature="e#31082#31083#0" expanded="true" />
-                <element signature="e#31142#31143#0" expanded="true" />
-                <element signature="e#32669#32670#0" expanded="true" />
-                <element signature="e#32729#32730#0" expanded="true" />
-                <element signature="e#32775#32776#0" expanded="true" />
-                <element signature="e#32829#32830#0" expanded="true" />
+                <element signature="e#32634#32635#0" expanded="true" />
+                <element signature="e#32694#32695#0" expanded="true" />
+                <element signature="e#34221#34222#0" expanded="true" />
+                <element signature="e#34281#34282#0" expanded="true" />
+                <element signature="e#34327#34328#0" expanded="true" />
+                <element signature="e#34381#34382#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ACPlayer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="142" column="8" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="33" />
-              <folding>
-                <element signature="e#4025#4026#0" expanded="true" />
-                <element signature="e#4083#4084#0" expanded="true" />
-                <element signature="e#4125#4126#0" expanded="true" />
-                <element signature="e#4165#4166#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SynchronizableProperty.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AnticheatFunctionsExecutor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="123" column="9" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -154,18 +105,18 @@
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatWeaponsTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/PlayerSlot.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatPosTests.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatLayer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/MainCallbackListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/event/AnticheatListener2.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" />
       </list>
     </option>
@@ -237,6 +188,8 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -312,6 +265,10 @@
               <option name="myItemId" value="lleps" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -379,8 +336,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -725,7 +680,13 @@
       <option name="project" value="LOCAL" />
       <updated>1456648518225</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="refactored anticheat code and added (nonworking) pos checks">
+      <created>1456794019949</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1456794019949</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TodoView">
@@ -739,7 +700,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -747,22 +708,22 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2118003" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2118003" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -779,7 +740,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added anticheat state (alive or not) check." />
     <MESSAGE value="improved anticheat" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved anticheat" />
+    <MESSAGE value="refactored anticheat code and added (nonworking) pos checks" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored anticheat code and added (nonworking) pos checks" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -788,6 +750,40 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="142" column="8" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="33" />
+          <folding>
+            <element signature="e#2190#2191#0" expanded="true" />
+            <element signature="e#2242#2243#0" expanded="true" />
+            <element signature="e#2283#2284#0" expanded="true" />
+            <element signature="e#2320#2321#0" expanded="true" />
+            <element signature="e#4353#4354#0" expanded="true" />
+            <element signature="e#4393#4394#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
+          <folding>
+            <element signature="e#1868#1869#0" expanded="true" />
+            <element signature="e#1935#1936#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="123" column="9" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatHealthArmourTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1040,13 +1036,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.67066896">
-          <caret line="27" column="61" selection-start-line="27" selection-start-column="61" selection-end-line="27" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatPosTests.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.34991422">
@@ -1086,57 +1075,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="123" column="9" selection-start-line="123" selection-start-column="9" selection-end-line="123" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/SynchronizableProperty.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
-          <folding />
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding>
+            <element signature="e#1868#1869#0" expanded="true" />
+            <element signature="e#1935#1936#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding>
-            <element signature="e#1430#1431#0" expanded="true" />
-            <element signature="e#1475#1476#0" expanded="true" />
-          </folding>
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="142" column="8" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="33" />
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
           <folding>
-            <element signature="e#4025#4026#0" expanded="true" />
-            <element signature="e#4083#4084#0" expanded="true" />
-            <element signature="e#4125#4126#0" expanded="true" />
-            <element signature="e#4165#4166#0" expanded="true" />
+            <element signature="e#2190#2191#0" expanded="true" />
+            <element signature="e#2242#2243#0" expanded="true" />
+            <element signature="e#2283#2284#0" expanded="true" />
+            <element signature="e#2320#2321#0" expanded="true" />
+            <element signature="e#4353#4354#0" expanded="true" />
+            <element signature="e#4393#4394#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/SAMPFunctions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33246073">
+          <caret line="77" column="29" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="38" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="192" column="49" selection-start-line="192" selection-start-column="49" selection-end-line="192" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6203966">
-          <caret line="419" column="21" selection-start-line="419" selection-start-column="21" selection-end-line="419" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.87842464">
+          <caret line="630" column="44" selection-start-line="630" selection-start-column="25" selection-end-line="630" selection-end-column="44" />
           <folding>
-            <element signature="e#31082#31083#0" expanded="true" />
-            <element signature="e#31142#31143#0" expanded="true" />
-            <element signature="e#32669#32670#0" expanded="true" />
-            <element signature="e#32729#32730#0" expanded="true" />
-            <element signature="e#32775#32776#0" expanded="true" />
-            <element signature="e#32829#32830#0" expanded="true" />
+            <element signature="e#32634#32635#0" expanded="true" />
+            <element signature="e#32694#32695#0" expanded="true" />
+            <element signature="e#34221#34222#0" expanded="true" />
+            <element signature="e#34281#34282#0" expanded="true" />
+            <element signature="e#34327#34328#0" expanded="true" />
+            <element signature="e#34381#34382#0" expanded="true" />
           </folding>
         </state>
       </provider>

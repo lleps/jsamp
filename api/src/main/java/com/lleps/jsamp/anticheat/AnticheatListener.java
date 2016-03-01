@@ -332,6 +332,11 @@ public class AnticheatListener implements CallbackListener {
 
         players[playerId].getPosition().setShouldBe(SAMPFunctions.GetPlayerPos(playerId));
         players[playerId].getPosition().sync();
+
+        for (int slot = 0; slot < MAX_WEAPON_SLOTS; slot++) {
+            players[playerId].getWeaponInSlot(slot).setShouldBe(0);
+            players[playerId].getWeaponInSlot(slot).sync();
+        }
         return false;
     }
 
@@ -502,7 +507,7 @@ public class AnticheatListener implements CallbackListener {
         int currentWeapon = SAMPFunctions.GetPlayerWeaponSlot(player.getId(), slot);
         SynchronizableProperty<Integer> weapon = player.getWeaponInSlot(slot);
         if (currentWeapon != weapon.getShouldBe()) {
-            return reportCheat(player, AccurateLevel.MEDIUM, "weapon is " + currentWeapon + " - should be " + weapon);
+            return reportCheat(player, AccurateLevel.MEDIUM, "weapon is " + currentWeapon + " - should be " + weapon.getShouldBe());
         }
         return false;
     }
@@ -615,11 +620,34 @@ public class AnticheatListener implements CallbackListener {
         if (state == PLAYER_STATE_DRIVER || state == PLAYER_STATE_ONFOOT) {
             float toMtsPerSecond = ((float)msSinceLastCheck / 1000f);
 
-            float distanceToWarn = state == PLAYER_STATE_DRIVER ? (toMtsPerSecond*30) : (toMtsPerSecond*10);
+            float distanceToWarn = toMtsPerSecond*20;
             float distanceToFlagAsTeleport = toMtsPerSecond * 300f;
             float distance = distanceBetweenPoints(position, positionShouldBe);
 
-            if (distance > distanceToWarn) {
+            final float DISTANCE_TO_SAVE_YOUR_ASS = -1f; // This will be ignored on final check.
+
+            final int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
+
+            if (state == PLAYER_STATE_ONFOOT) {
+                float[] velocity = SAMPFunctions.GetPlayerVelocity(player.getId());
+
+                if (
+                        (positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) // Player fell from map (last z pos is below the map)
+                        || SAMPFunctions.GetPlayerSurfingVehicleID(player.getId()) != INVALID_VEHICLE_ID
+                        || SAMPFunctions.GetPlayerSurfingObjectID(player.getId()) != INVALID_OBJECT_ID
+                        || velocity[POS_INDEX_Z] < -0.4/*falling*/) {
+                    distance = DISTANCE_TO_SAVE_YOUR_ASS;
+                }
+            } else {// PLAYER_STATE_DRIVER
+                float[] velocity = SAMPFunctions.GetVehicleVelocity(SAMPFunctions.GetPlayerVehicleID(player.getId()));
+
+                if ((Math.abs(velocity[0]) > 0.001 || Math.abs(velocity[1]) > 0.001 || Math.abs(velocity[2]) > 0.005)
+                  || positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) {
+                    distance = DISTANCE_TO_SAVE_YOUR_ASS;
+                }
+            }
+
+            if (distance != DISTANCE_TO_SAVE_YOUR_ASS && distance > distanceToWarn) {
                 float toSeconds = msSinceLastCheck / 1000f;
 
                 AccurateLevel accurateLevel = distance > distanceToFlagAsTeleport ? AccurateLevel.MEDIUM : AccurateLevel.LOW;
@@ -630,6 +658,7 @@ public class AnticheatListener implements CallbackListener {
         }
 
         player.getPosition().setShouldBe(position);
+        player.setLastPositionCheck(System.currentTimeMillis());
         return false;
     }
 
