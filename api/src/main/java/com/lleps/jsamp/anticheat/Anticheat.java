@@ -23,6 +23,7 @@ import static com.lleps.jsamp.SAMPConstants.MAX_PLAYERS;
 public class Anticheat {
     private final ACPlayer[] players;
     private final GameMode gameMode;
+    private int unsyncSecondsToTimeout = 12;
 
     public static final int AMMO_TO_INVALIDATE_CHECKS = 32_000; // should be 0xFFFF / 2 (which is ~32k)
 
@@ -37,6 +38,14 @@ public class Anticheat {
 
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    public void setUnsyncSecondsToTimeout(int unsyncSecondsToTimeout) {
+        this.unsyncSecondsToTimeout = unsyncSecondsToTimeout;
+    }
+
+    public int getUnsyncSecondsToTimeout() {
+        return unsyncSecondsToTimeout;
     }
 
     public boolean isConnected(int id) {

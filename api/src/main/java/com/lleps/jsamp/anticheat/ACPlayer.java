@@ -34,12 +34,14 @@ public class ACPlayer {
 
     private final Map<Integer, Boolean> weaponIdsAllowed = new HashMap<>();
 
-    private final SynchronizableVar<Float> health = new SynchronizableVar<>(0f);
-    private final SynchronizableVar<Float> armour = new SynchronizableVar<>(0f);
-    private final SynchronizableVar<Integer> vehicleId = new SynchronizableVar<>(0);
-    private final SynchronizableVar<float[]> position = new SynchronizableVar<>(new float[] {0, 0, 0});
+    private final SynchronizableProperty<Float> health = new SynchronizableProperty<>(0f);
+    private final SynchronizableProperty<Float> armour = new SynchronizableProperty<>(0f);
+    private final SynchronizableProperty<Integer> vehicleId = new SynchronizableProperty<>(0);
+    private final SynchronizableProperty<float[]> position = new SynchronizableProperty<>(new float[] {0, 0, 0});
 
-    private final Map<Integer, SynchronizableVar<Integer>> weaponIds = new HashMap<>();
+    private long lastPositionCheck;
+
+    private final Map<Integer, SynchronizableProperty<Integer>> weaponIds = new HashMap<>();
 
     private int weaponSlotsAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
     private int weaponSlotsMaxAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
@@ -49,7 +51,7 @@ public class ACPlayer {
         this.id = id;
 
         for (int weaponSlot = 0; weaponSlot < SAMPConstants.MAX_WEAPON_SLOTS; weaponSlot++) {
-            weaponIds.put(weaponSlot, new SynchronizableVar<>(0));
+            weaponIds.put(weaponSlot, new SynchronizableProperty<>(0));
         }
     }
 
@@ -57,7 +59,7 @@ public class ACPlayer {
         return id;
     }
 
-    public SynchronizableVar<float[]> getPosition() {
+    public SynchronizableProperty<float[]> getPosition() {
         return position;
     }
 
@@ -93,7 +95,7 @@ public class ACPlayer {
         return weaponIdsAllowed.get(weaponId);
     }
 
-    public SynchronizableVar<Integer> getWeaponInSlot(int slot) {
+    public SynchronizableProperty<Integer> getWeaponInSlot(int slot) {
         return weaponIds.get(slot);
     }
 
@@ -113,15 +115,15 @@ public class ACPlayer {
         return jetpackAllowed;
     }
 
-    public SynchronizableVar<Float> getHealth() {
+    public SynchronizableProperty<Float> getHealth() {
         return health;
     }
 
-    public SynchronizableVar<Float> getArmour() {
+    public SynchronizableProperty<Float> getArmour() {
         return armour;
     }
 
-    public SynchronizableVar<Integer> getVehicleId() {
+    public SynchronizableProperty<Integer> getVehicleId() {
         return vehicleId;
     }
 
@@ -131,6 +133,14 @@ public class ACPlayer {
 
     public boolean isAlreadySpawned() {
         return alreadySpawned;
+    }
+
+    public void setLastPositionCheck(long lastPositionCheck) {
+        this.lastPositionCheck = lastPositionCheck;
+    }
+
+    public long getLastPositionCheck() {
+        return lastPositionCheck;
     }
 
     public void setConnected(boolean connected) {

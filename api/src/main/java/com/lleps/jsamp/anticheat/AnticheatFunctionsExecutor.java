@@ -66,7 +66,6 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     @Override
     public boolean SetPlayerArmour(int playerid, float armour) {
         checkForValidPlayerId(playerid);
-
         Preconditions.checkArgument(armour >= 0 && armour <= 100, "invalid armour: " + armour + ". Valid values: [0-100]");
 
         if (armour > 99) armour = 99; // Impossible to get server-side 100 armour. If you get it, you're most likely cheating.
@@ -148,7 +147,7 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
         checkForValidPlayerId(playerid);
 
         int slot = ACUtils.getWeaponSlot(weaponid);
-        SynchronizableVar<Integer> weaponAtThisSlot = players[playerid].getWeaponInSlot(slot);
+        SynchronizableProperty<Integer> weaponAtThisSlot = players[playerid].getWeaponInSlot(slot);
         if (weaponAtThisSlot.isSynced() && weaponAtThisSlot.getShouldBe() == weaponid) {
             players[playerid].setWeaponSlotAmmoLockTime(slot, System.currentTimeMillis() + 5_000);
             players[playerid].setWeaponSlotAmmo(slot, ammo);

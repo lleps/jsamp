@@ -55,7 +55,7 @@ import static com.lleps.jsamp.SAMPConstants.*;
  * If the server sends a message to a player, and the player doesn't report the update in x time, the
  * server will try to resync him by sending the message again. If after a while, the client is still
  * unsynced, then will be reported as an unsync.
- * Abstraction of a synchronizable value is SynchronizableVar.
+ * Abstraction of a synchronizable value is SynchronizableProperty.
  *
  * -------------------------
  * HEALTH AND ARMOUR SYNCING
@@ -113,8 +113,7 @@ import static com.lleps.jsamp.SAMPConstants.*;
  * max_ammo_that_you_can_have is obtained by keeping track of given ammo per slot.
  * Process must be different for weapons with bullets and weapons without bullets.
  *
- * TODO (ammo hack): You can get a negative weapon ammo value by giving player lot of ammo (more than 32k).
- * TODO: Ammo checks SUCKS. Inconsistent, unreadable, and only god understand it. FIX!
+ * TODO: Rewrite ammo and anticheat checks.
  *
  *  design
  * Okay. Player has a synchronizableVar for each weapon slot.
@@ -201,11 +200,13 @@ public class AnticheatListener implements CallbackListener {
     private final long[] lockFor250ms = new long[SAMPConstants.MAX_PLAYERS];
 
     private final GameMode gm;
+    private final Anticheat anticheat;
 
     private static final int SYNC_SECONDS_TO_RESYNC = 10;
     private static final int SYNC_SECONDS_TO_GIVEUP = 20;
 
     public AnticheatListener(Anticheat anticheat) {
+        this.anticheat = anticheat;
         this.gm = anticheat.getGameMode();
         this.players = anticheat.getPlayers();
 
@@ -214,6 +215,10 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerConnect(int playerId) {
+        if (players[playerId] != null) {
+            return true;
+        }
+
         if (SAMPFunctions.IsPlayerNPC(playerId)) {
             String ip = SAMPFunctions.GetPlayerIp(playerId);
             if (!ip.startsWith("127.0.0")) {
@@ -380,7 +385,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkEveryUpdate(ACPlayer player) {
         int playerId = player.getId();
         int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
-        SynchronizableVar<Integer> vehicleVar = player.getVehicleId();
+        SynchronizableProperty<Integer> vehicleVar = player.getVehicleId();
         if (!vehicleVar.isSynced()) {
             if (vehicleId == vehicleVar.getShouldBe()) {
                 vehicleVar.sync();
@@ -400,25 +405,72 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean checkEvery250ms(ACPlayer player) {
-        return checkPosition(player);
+        if (!player.getPosition().isSynced()) {
+            tryToSyncPosition(player);
+        }
+        return false;
     }
 
     private boolean checkEvery500ms(ACPlayer player) {
+        if (player.getPosition().isSynced()) {
+            if (checkPosition(player)) {
+                return true;
+            }
+        }
         return false;
     }
 
     private boolean checkEvery1000ms(ACPlayer player) {
-        return checkOthers(player) || checkHealth(player) || checkArmour(player) || checkWeapons(player);
+        if (player.getHealth().isSynced()) {
+            if (checkHealth(player)) {
+                return true;
+            }
+        } else {
+            if (!tryToSyncHealth(player)) {
+                if (checkForHealthTimeout(player)) {
+                    return true;
+                }
+            }
+        }
+
+        if (player.getArmour().isSynced()) {
+            if (checkArmour(player)) {
+                return true;
+            }
+        } else {
+            if (!tryToSyncArmour(player)) {
+                if (checkForArmourTimeout(player)) {
+                    return true;
+                }
+            }
+        }
+
+        for (int slot = 1; slot < 12; slot++) { // slots 0 and 12 are ignored
+            if (player.getWeaponInSlot(slot).isSynced()) {
+                if (checkWeaponSlot(player, slot)) {
+                    return true;
+                }
+            } else {
+                if (!tryToSyncWeaponSlot(player, slot)) {
+                    if (checkForWeaponSlotTimeout(player, slot)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if (checkOtherStuff(player)) {
+            return false;
+        }
+        return false;
     }
 
-    private boolean checkOthers(ACPlayer player) {
+    private boolean checkOtherStuff(ACPlayer player) {
         int playerId = player.getId();
 
-        // JETPACK
         if (SAMPFunctions.GetPlayerSpecialAction(playerId) == SPECIAL_ACTION_USEJETPACK) {
             if (!player.isJetpackAllowed()) {
-                if (reportCheat(playerId, AccurateLevel.HIGH,
-                        "Using a jetpack")) {
+                if (reportCheat(playerId, AccurateLevel.HIGH, "Using a jetpack")) {
                     return true;
                 }
             }
@@ -437,6 +489,32 @@ public class AnticheatListener implements CallbackListener {
         return false;
     }
 
+    private boolean tryToSyncWeaponSlot(ACPlayer player, int slot) {
+        int currentWeapon = SAMPFunctions.GetPlayerWeaponSlot(player.getId(), slot);
+        if (currentWeapon == player.getWeaponInSlot(slot).getShouldBe()) {
+            player.getWeaponInSlot(slot).sync();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkWeaponSlot(ACPlayer player, int slot) {
+        int currentWeapon = SAMPFunctions.GetPlayerWeaponSlot(player.getId(), slot);
+        SynchronizableProperty<Integer> weapon = player.getWeaponInSlot(slot);
+        if (currentWeapon != weapon.getShouldBe()) {
+            return reportCheat(player, AccurateLevel.MEDIUM, "weapon is " + currentWeapon + " - should be " + weapon);
+        }
+        return false;
+    }
+
+    private boolean checkForWeaponSlotTimeout(ACPlayer player, int slot) {
+        int unsyncSeconds = player.getWeaponInSlot(slot).increaseUnsyncedSecondsAndGet();
+        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+            return reportUnsyncTimeout(player.getId(), "weapon slot unsynced");
+        }
+        return false;
+    }
+
     private boolean checkWeapons(ACPlayer player) {
         int playerId = player.getId();
         for (int slot=0; slot < MAX_WEAPON_SLOTS; slot++) {
@@ -444,7 +522,7 @@ public class AnticheatListener implements CallbackListener {
             // TODO: Check ammo only when the weapon uses ammo.
             // TODO: Perform checks only when needed. Study every case!
 
-            SynchronizableVar<Integer> weaponVar = player.getWeaponInSlot(slot);
+            SynchronizableProperty<Integer> weaponVar = player.getWeaponInSlot(slot);
             int weaponId = SAMPFunctions.GetPlayerWeaponSlot(playerId, slot);
             int ammo = SAMPFunctions.GetPlayerAmmoSlot(playerId, slot);
             int weaponShouldBe = weaponVar.getShouldBe();
@@ -453,9 +531,9 @@ public class AnticheatListener implements CallbackListener {
                 if (weaponId == weaponShouldBe) {
                     weaponVar.sync();
                 } else {
-                    int tries = weaponVar.increaseSyncTries();
+                    int tries = weaponVar.increaseUnsyncedSecondsAndGet();
                     if (tries == SYNC_SECONDS_TO_GIVEUP) {
-                        if (reportUnsync(playerId, "weapon id is " + weaponId + " instead of " + weaponShouldBe)) {
+                        if (reportUnsyncTimeout(playerId, "weapon id is " + weaponId + " instead of " + weaponShouldBe)) {
                             return true;
                         }
                     }
@@ -518,140 +596,136 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean tryToSyncPosition(ACPlayer player) {
-        int playerId = player.getId();
-        SynchronizableVar<float[]> posVar = players[playerId].getPosition();
-        float[] posShouldBe = posVar.getShouldBe();
+        float[] posShouldBe = player.getPosition().getShouldBe();
+        if (SAMPFunctions.IsPlayerInRangeOfPoint(player.getId(), 3, posShouldBe[0], posShouldBe[1], posShouldBe[2])) {
+            player.getPosition().sync();
+            return true;
+        }
+        return false;
+    }
 
-        if (SAMPFunctions.IsPlayerInRangeOfPoint(playerId, 6, posShouldBe[0], posShouldBe[1], posShouldBe[2])) {
-            posVar.sync();
-            scm(playerId, "pos synced.");
-        } else {
-            int syncTries = posVar.increaseSyncTries();
-            if (syncTries == (SYNC_SECONDS_TO_RESYNC*4)) {
-                SAMPFunctions.SetPlayerPos(playerId, posShouldBe[0], posShouldBe[1], posShouldBe[2]);
-            } else if (syncTries == (SYNC_SECONDS_TO_GIVEUP*4)) {
-                if (reportUnsync(playerId, "position unsynced.")) {
+    private boolean checkPosition(ACPlayer player) {
+        long msSinceLastCheck = System.currentTimeMillis() - player.getLastPositionCheck();
+
+        int state = SAMPFunctions.GetPlayerState(player.getId());
+
+        float[] position = SAMPFunctions.GetPlayerPos(player.getId());
+        float[] positionShouldBe = player.getPosition().getShouldBe();
+
+        if (state == PLAYER_STATE_DRIVER || state == PLAYER_STATE_ONFOOT) {
+            float toMtsPerSecond = ((float)msSinceLastCheck / 1000f);
+
+            float distanceToWarn = state == PLAYER_STATE_DRIVER ? (toMtsPerSecond*30) : (toMtsPerSecond*10);
+            float distanceToFlagAsTeleport = toMtsPerSecond * 300f;
+            float distance = distanceBetweenPoints(position, positionShouldBe);
+
+            if (distance > distanceToWarn) {
+                float toSeconds = msSinceLastCheck / 1000f;
+
+                AccurateLevel accurateLevel = distance > distanceToFlagAsTeleport ? AccurateLevel.MEDIUM : AccurateLevel.LOW;
+                if (reportCheat(player.getId(), accurateLevel, "moved " + distance + " in " + toSeconds + " secs.")) {
                     return true;
                 }
             }
         }
-        return true;
+
+        player.getPosition().setShouldBe(position);
+        return false;
     }
 
-    private boolean checkPosition(ACPlayer player) {
-        int playerId = player.getId();
-        SynchronizableVar<float[]> posVar = players[playerId].getPosition();
-        float[] posShouldBe = posVar.getShouldBe();
-
-        if (!posVar.isSynced()) {
-            float[] currentPos = SAMPFunctions.GetPlayerPos(playerId);
-
-            if (SAMPFunctions.IsPlayerInRangeOfPoint(playerId, 6, posShouldBe[0], posShouldBe[1], posShouldBe[2])) {
-                posVar.sync();
-                scm(playerId, "pos synced.");
-            } else {
-                int syncTries = posVar.increaseSyncTries();
-                if (syncTries == SYNC_SECONDS_TO_RESYNC) {
-                    SAMPFunctions.SetPlayerPos(playerId, posShouldBe[0], posShouldBe[1], posShouldBe[2]);
-                } else if (syncTries == SYNC_SECONDS_TO_GIVEUP) {
-                    if (reportUnsync(playerId, "SetPlayerPos unsynced.")) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            float distanceFromLastCheck = SAMPFunctions.GetPlayerDistanceFromPoint(playerId, posShouldBe[0], posShouldBe[1], posShouldBe[1]);
-
-            //scm(playerId, "distanceFromLastCheck: " + (int)distanceFromLastCheck);
-
-            posVar.setShouldBe(SAMPFunctions.GetPlayerPos(playerId));
+    private boolean checkForPositionTimeout(ACPlayer player) {
+        int unsyncSeconds = player.getPosition().increaseUnsyncedSecondsAndGet();
+        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+            return reportUnsyncTimeout(player.getId(), "position unsynced");
+        } else if (unsyncSeconds == getUnsyncSecondsToResync()) {
+            float[] posShouldBe = player.getPosition().getShouldBe();
+            SAMPFunctions.SetPlayerPos(player.getId(), posShouldBe[0], posShouldBe[1], posShouldBe[2]);
         }
-        return true;
+        return false;
+    }
+    
+    private static float distanceBetweenPoints(float[] xyz1, float[] xyz2) {
+        float dx = xyz1[0] - xyz2[0];
+        float dy = xyz1[1] - xyz2[1];
+        float dz = xyz1[2] - xyz2[2];
+        return (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
+    }
+
+    private boolean tryToSyncHealth(ACPlayer player) {
+        int playerId = player.getId();
+        int currentHealth = (int) SAMPFunctions.GetPlayerHealth(playerId);
+        if (player.getHealth().getShouldBe().intValue() == currentHealth) {
+            player.getHealth().sync();
+            return true;
+        }
+        return false;
     }
 
     private boolean checkHealth(ACPlayer player) {
-        int playerId = player.getId();
-        SynchronizableVar<Float> healthVar = player.getHealth();
-
-        int currentHealth = (int) SAMPFunctions.GetPlayerHealth(playerId);
-
+        int currentHealth = (int)SAMPFunctions.GetPlayerHealth(player.getId());
         if (currentHealth < 0 || currentHealth > 100) {
-            if (reportCheat(playerId, AccurateLevel.HIGH,
-                    "Invalid health: " + currentHealth)) {
+            if (reportCheat(player, AccurateLevel.HIGH, "Invalid health: " + currentHealth)) {
                 return true;
             }
         }
 
-        int healthShouldBe = healthVar.getShouldBe().intValue();
+        int healthShouldBe = player.getHealth().getShouldBe().intValue();
+        if (currentHealth > healthShouldBe) {
+            SAMPFunctions.SetPlayerHealth(player.getId(), healthShouldBe);
+            reportCheat(player, AccurateLevel.LOW,
+                    "Health is " + currentHealth + " - should be " + healthShouldBe);
+        }
+        return false;
+    }
 
-        if (!healthVar.isSynced()) {
-            if (currentHealth == healthShouldBe) {
-                healthVar.sync();
-            } else {
-                int syncTries = healthVar.increaseSyncTries();
-                if (syncTries == SYNC_SECONDS_TO_RESYNC) {
-                    SAMPFunctions.SetPlayerHealth(playerId, healthVar.getShouldBe());
-                } else if (syncTries == SYNC_SECONDS_TO_GIVEUP) {
-                    if (reportUnsync(playerId,
-                            "Health unsynced (is " + currentHealth + ", should be " + healthVar.getShouldBe())) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if (currentHealth > healthShouldBe) {
-                SAMPFunctions.SetPlayerHealth(playerId, healthVar.getShouldBe());
-                reportCheat(playerId, AccurateLevel.LOW,
-                        "Health increased from " + healthShouldBe + " to " + currentHealth +
-                                ". Attempting to resync.");
-            }
+    private boolean checkForHealthTimeout(ACPlayer player) {
+        int unsyncSeconds = player.getHealth().increaseUnsyncedSecondsAndGet();
+        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+            return reportUnsyncTimeout(player.getId(), "health unsynced");
+        } else if (unsyncSeconds == getUnsyncSecondsToResync()) {
+            SAMPFunctions.SetPlayerHealth(player.getId(), player.getHealth().getShouldBe());
+        }
+        return false;
+    }
+
+    private boolean tryToSyncArmour(ACPlayer player) {
+        int currentArmour = (int) SAMPFunctions.GetPlayerArmour(player.getId());
+        if (currentArmour == player.getArmour().getShouldBe().intValue()) {
+            player.getArmour().sync();
+            return true;
         }
         return false;
     }
 
     private boolean checkArmour(ACPlayer player) {
         int playerId = player.getId();
-        SynchronizableVar<Float> armourVar = player.getArmour();
+        int armourShouldBe = player.getArmour().getShouldBe().intValue();
+        int currentArmour = (int) SAMPFunctions.GetPlayerArmour(player.getId());
 
-        int currentArmour = (int) SAMPFunctions.GetPlayerArmour(playerId);
-
+        if ((currentArmour > 0 && !player.isArmourAllowed()) || currentArmour == 100) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, "Armour hack (" + currentArmour + ")")) {
+                return true;
+            }
+        }
         if (currentArmour < 0 || currentArmour > 100) {
-            if (reportCheat(playerId, AccurateLevel.HIGH,
-                    "Invalid armour: " + currentArmour)) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, "Invalid armour: " + currentArmour)) {
                 return true;
             }
         }
-
-        if (currentArmour > 0 && !player.isArmourAllowed() || currentArmour == 100) {
-            if (reportCheat(playerId, AccurateLevel.HIGH,
-                    "Armour hack (" + currentArmour + ")")) {
-                return true;
-            }
+        if (currentArmour > armourShouldBe) {
+            SAMPFunctions.SetPlayerArmour(playerId, armourShouldBe);
+            reportCheat(playerId, AccurateLevel.LOW,
+                    "Armour increased from " + armourShouldBe + " to " + currentArmour);
         }
+        return false;
+    }
 
-        int armourShouldBe = armourVar.getShouldBe().intValue();
-
-        if (!armourVar.isSynced()) {
-            if (currentArmour == armourShouldBe) {
-                armourVar.sync();
-            } else {
-                int syncTries = armourVar.increaseSyncTries();
-                if (syncTries == SYNC_SECONDS_TO_RESYNC) {
-                    SAMPFunctions.SetPlayerArmour(playerId, armourVar.getShouldBe());
-                } else if (syncTries == SYNC_SECONDS_TO_GIVEUP) {
-                    if (reportUnsync(playerId,
-                            "Armour unsynced (is " + currentArmour + ", should be " + armourVar.getShouldBe())) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            if (currentArmour > armourShouldBe) {
-                SAMPFunctions.SetPlayerArmour(playerId, armourVar.getShouldBe());
-                reportCheat(playerId, AccurateLevel.LOW,
-                        "Armour increased from " + armourShouldBe + " to " + currentArmour +
-                                ". Attempting to resync.");
-            }
+    private boolean checkForArmourTimeout(ACPlayer player) {
+        int unsyncSecs = player.getArmour().increaseUnsyncedSecondsAndGet();
+        if (unsyncSecs == getUnsyncSecondsToTimeout()) {
+            return reportUnsyncTimeout(player.getId(), "armour unsynced");
+        } else if (unsyncSecs == getUnsyncSecondsToResync()) {
+            SAMPFunctions.SetPlayerArmour(player.getId(), player.getArmour().getShouldBe());
         }
         return false;
     }
@@ -662,6 +736,8 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerTakeDamage(int playerid, int issuerId, float damage, int weaponid, int bodypart) {
+        // TODO: VALIDATE
+
         ACPlayer player = players[playerid];
         float healthShouldBe = player.getHealth().getShouldBe();
         float armourShouldBe = player.getArmour().getShouldBe();
@@ -688,11 +764,23 @@ public class AnticheatListener implements CallbackListener {
         return true;
     }
 
+    private boolean reportCheat(ACPlayer player, AccurateLevel level, String description) {
+        return gm.onAnticheatEvent(player.getId(), new CheatEvent(level, description));
+    }
+
     private boolean reportCheat(int playerId, AccurateLevel level, String description) {
         return gm.onAnticheatEvent(playerId, new CheatEvent(level, description));
     }
 
-    private boolean reportUnsync(int playerId, String description) {
+    private boolean reportUnsyncTimeout(int playerId, String description) {
         return gm.onAnticheatEvent(playerId, new UnsyncEvent(description));
+    }
+
+    private int getUnsyncSecondsToTimeout() {
+        return anticheat.getUnsyncSecondsToTimeout();
+    }
+
+    private int getUnsyncSecondsToResync() {
+        return getUnsyncSecondsToTimeout() / 2;
     }
 }

@@ -17,44 +17,44 @@ package com.lleps.jsamp.anticheat;
  * An abstraction of a value that can be synced. See http://forum.sa-mp.com/showthread.php?t=220089
  * @author spell
  */
-public class SynchronizableVar<T> {
+public class SynchronizableProperty<T> {
     private boolean synced;
     private T shouldBe;
-    private int syncTries;
+    private int unsyncedSeconds;
 
-    public SynchronizableVar(T initialValue) {
+    public SynchronizableProperty(T initialValue) {
         shouldBe = initialValue;
     }
 
     /**
-     * Sets synced to true and syncTries to 0
+     * Sets synced to true and unsyncedSeconds to 0
      */
     public void sync() {
         synced = true;
-        syncTries = 0;
+        unsyncedSeconds = 0;
     }
 
     /**
-     * Sets synced to false and syncTries to 0
+     * Sets synced to false and unsyncedSeconds to 0
      */
     public void unsync() {
         synced = false;
-        syncTries = 0;
+        unsyncedSeconds = 0;
     }
 
-    public void setSyncTries(int syncTries) {
-        this.syncTries = syncTries;
+    public void setUnsyncedSeconds(int unsyncedSeconds) {
+        this.unsyncedSeconds = unsyncedSeconds;
     }
 
-    public int getSyncTries() {
-        return syncTries;
+    public int getUnsyncedSeconds() {
+        return unsyncedSeconds;
     }
 
     /**
-     * @return Adds 1 to syncTries and return the increased value.
+     * @return Adds 1 to unsyncedSeconds and return the increased value.
      */
-    public int increaseSyncTries() {
-        return ++syncTries;
+    public int increaseUnsyncedSecondsAndGet() {
+        return ++unsyncedSeconds;
     }
 
     public boolean isSynced() {
