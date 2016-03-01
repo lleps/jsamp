@@ -618,7 +618,7 @@ public class AnticheatListener implements CallbackListener {
         float[] positionShouldBe = player.getPosition().getShouldBe();
 
         if (state == PLAYER_STATE_DRIVER || state == PLAYER_STATE_ONFOOT) {
-            float toMtsPerSecond = ((float)msSinceLastCheck / 1000f);
+            float toMtsPerSecond = (float)msSinceLastCheck / 1000f;
 
             float distanceToWarn = toMtsPerSecond*20;
             float distanceToFlagAsTeleport = toMtsPerSecond * 300f;
