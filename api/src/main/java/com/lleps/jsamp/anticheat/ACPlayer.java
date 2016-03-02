@@ -32,20 +32,16 @@ public class ACPlayer {
     private boolean jetpackAllowed;
     private boolean armourAllowed;
 
-    private final Map<Integer, Boolean> weaponIdsAllowed = new HashMap<>();
-
     private final SynchronizableProperty<Float> health = new SynchronizableProperty<>(0f);
     private final SynchronizableProperty<Float> armour = new SynchronizableProperty<>(0f);
     private final SynchronizableProperty<Integer> vehicleId = new SynchronizableProperty<>(0);
-    private final SynchronizableProperty<float[]> position = new SynchronizableProperty<>(new float[] {0, 0, 0});
 
     private long lastPositionCheck;
+    private final SynchronizableProperty<float[]> position = new SynchronizableProperty<>(new float[] {0, 0, 0});
 
     private final Map<Integer, SynchronizableProperty<Integer>> weaponIds = new HashMap<>();
-
-    private int weaponSlotsAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
-    private int weaponSlotsMaxAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
-    private long weaponSlotsAmmoLockTime[] = new long[SAMPConstants.MAX_WEAPON_SLOTS];
+    private final int weaponSlotsMaxAmmo[] = new int[SAMPConstants.MAX_WEAPON_SLOTS];
+    private boolean invalidAmmoPossible[] = new boolean[SAMPConstants.MAX_WEAPON_SLOTS]; // When users get negative ammo
 
     private boolean kickedOrBanned;
 
@@ -73,36 +69,12 @@ public class ACPlayer {
         return position;
     }
 
-    public void setWeaponSlotAmmo(int slot, int ammo) {
-        weaponSlotsAmmo[slot] = ammo;
-    }
-
-    public int getWeaponSlotAmmo(int slot) {
-        return weaponSlotsAmmo[slot];
-    }
-
     public void setWeaponSlotMaxAmmo(int slot, int ammo) {
         weaponSlotsMaxAmmo[slot] = ammo;
     }
 
     public int getWeaponSlotMaxAmmo(int slot) {
         return weaponSlotsMaxAmmo[slot];
-    }
-
-    public void setWeaponSlotAmmoLockTime(int slot, long time) {
-        weaponSlotsAmmoLockTime[slot] = time;
-    }
-
-    public long getWeaponSlotAmmoLockTime(int slot) {
-        return weaponSlotsAmmoLockTime[slot];
-    }
-
-    public void setLegalWeapon(int weaponId, boolean legal) {
-        weaponIdsAllowed.put(weaponId, legal);
-    }
-
-    public boolean isLegalWeapon(int weaponId) {
-        return weaponIdsAllowed.get(weaponId);
     }
 
     public SynchronizableProperty<Integer> getWeaponInSlot(int slot) {
@@ -175,5 +147,13 @@ public class ACPlayer {
 
     public boolean isSpawnAllowed() {
         return spawnAllowed;
+    }
+
+    public void setInvalidAmmoPossible(int slot, boolean invalidAmmoPossible) {
+        this.invalidAmmoPossible[slot] = invalidAmmoPossible;
+    }
+
+    public boolean isInvalidAmmoPossible(int slot) {
+        return invalidAmmoPossible[slot];
     }
 }

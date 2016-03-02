@@ -34,6 +34,13 @@ public class ACUtils {
         return 0;
     }
 
+    public static float distanceBetweenPoints(float[] xyz1, float[] xyz2) {
+        float dx = xyz1[0] - xyz2[0];
+        float dy = xyz1[1] - xyz2[1];
+        float dz = xyz1[2] - xyz2[2];
+        return (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
+    }
+
     public static boolean isPlaneModel(int modelId) {
         int planeModels[] = { 592, 577, 511, 512, 520, 593, 553, 476, 519, 460, 513, 548, 425, 417, 487, 488, 497, 563, 447, 469 };
         for (int model : planeModels) {
@@ -44,5 +51,45 @@ public class ACUtils {
 
     public static boolean weaponSlotHoldsAmmo(int slot) {
         return slot >= 2 && slot <= 8;
+    }
+
+    public static int getVehicleModelMaxSpeed(int modelId) {
+        return 1;
+    }
+
+    public static float get3DSpeed(float velocityX, float velocityY, float velocityZ) {
+        return (float)Math.sqrt(velocityX*velocityX + velocityY*velocityY + velocityZ*velocityZ) * 160.2f; // Magic constant!
+    }
+
+    private static final float modshopInteriors[][] = {
+            {617, -2, 1000}, //transfender
+            {615, -124, 997}, // wheelarchs
+            {616, -74, 997} // lowrider
+    };
+
+    private static final float modshopExteriors[][] = {
+            {-1936, 244, 34}, //transfender sf
+            {1041, -1021, 31}, //transfender ls
+            {2386, 1051, 10}, //transfender lv
+            {-2719, 216, 4}, //wheelarchs
+            {2644, -2043, 13} //lowrider
+    };
+
+    public static boolean isNearModshopInterior(float[] xyz, float ratio) {
+        for (float[] modshopXYZ : modshopInteriors) {
+            if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNearModshopExterior(float[] xyz, float ratio) {
+        for (float[] modshopXYZ : modshopExteriors) {
+            if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
+                return true;
+            }
+        }
+        return false;
     }
 }

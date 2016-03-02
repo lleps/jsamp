@@ -3,11 +3,11 @@
 
 :start
 
-set "PluginBuildType=Release"
 :: Release or Debug
+set "PluginBuildType=Release"
 
 copy "..\api\target\jsamp-1.0-SNAPSHOT.jar" "jsamp\jars\"
-copy "..\jsamp-plugin\Debug\jsamp-plugin.dll" "plugins\jsamp.dll"
+copy "..\jsamp-plugin\bin\windows\%PluginBuildType%\jsamp-plugin.dll" "plugins\jsamp.dll"
 
 startup.bat
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="5" failures="0" name="all.ColorTest" time="0.003" errors="0" skipped="0">
+<testsuite tests="5" failures="0" name="all.ColorTest" time="0.012" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="15.0"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -11,7 +11,7 @@
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) Client VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>
-    <property name="idea.launcher.port" value="7535"/>
+    <property name="idea.launcher.port" value="7533"/>
     <property name="user.script" value=""/>
     <property name="user.country" value="AR"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
@@ -63,9 +63,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
+  <testcase classname="all.ColorTest" name="testVehColors" time="0"/>
+  <testcase classname="all.ColorTest" name="testWithMethods" time="0"/>
   <testcase classname="all.ColorTest" name="testConstructors" time="0"/>
   <testcase classname="all.ColorTest" name="testImmutability" time="0"/>
   <testcase classname="all.ColorTest" name="testToHexMethods" time="0"/>
-  <testcase classname="all.ColorTest" name="testWithMethods" time="0"/>
-  <testcase classname="all.ColorTest" name="testVehColors" time="0"/>
 </testsuite>

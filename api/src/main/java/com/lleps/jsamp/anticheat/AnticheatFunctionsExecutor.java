@@ -117,26 +117,15 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
         players[playerid].getWeaponInSlot(slot).setShouldBe(weaponid);
         players[playerid].getWeaponInSlot(slot).unsync();
 
-        players[playerid].setLegalWeapon(weaponid, true);
-        if (weaponid == WEAPON_SATCHEL) {
-            // legalize detonator
-            players[playerid].setLegalWeapon(WEAPON_BOMB, true);
+        int currentMaxAmmo = players[playerid].getWeaponSlotMaxAmmo(slot);
+        int newMaxAmmo = currentMaxAmmo + ammo;
+
+        if (ammo < 0 || newMaxAmmo > 32_000) {
+            players[playerid].setInvalidAmmoPossible(slot, true);
         }
 
-        // Block bullet check times to wait player to sync
-        players[playerid].setWeaponSlotAmmoLockTime(slot, System.currentTimeMillis() + 5_000);
-
-        // Set ammo to what it should be. Note that this value may be desynced.
-        players[playerid].setWeaponSlotAmmo(slot, players[playerid].getWeaponSlotAmmo(slot) + ammo);
-
-        // This var holds maximum ammo given by server
         if (ammo >= 0) {
-            players[playerid].setWeaponSlotMaxAmmo(slot,
-                    players[playerid].getWeaponSlotMaxAmmo(slot) + ammo);
-        } else {
-            // negative ammo values invalidate "invalid ammo" checks, because players can get negative ammo.
-            // so we will set maximum ammo to a very high value to avoid ammo checks.
-            players[playerid].setWeaponSlotMaxAmmo(slot, Anticheat.AMMO_TO_INVALIDATE_CHECKS);
+            players[playerid].setWeaponSlotMaxAmmo(slot, newMaxAmmo);
         }
 
         return SAMPFunctions.GivePlayerWeapon(playerid, weaponid, ammo);
@@ -166,7 +155,7 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     public float[] GetPlayerPos(int playerid) {
         checkForValidPlayerId(playerid);
         if (players[playerid].isKickedOrBanned()) {
-            // In TP hacks, if a cheater gets a kick and come back they'll be on cheated pos
+            // In TP hacks, if a cheater gets kicked and come back they'll be on cheated pos
             return players[playerid].getPosition().getShouldBe();
         }
         return SAMPFunctions.GetPlayerPos(playerid);
@@ -175,34 +164,24 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     @Override
     public boolean SetPlayerAmmo(int playerid, int weaponid, int ammo) {
         checkForValidPlayerId(playerid);
-
+        Preconditions.checkArgument(weaponid >= 0 && weaponid < 47, "invalid weaponid: " + weaponid);
         int slot = ACUtils.getWeaponSlot(weaponid);
-        SynchronizableProperty<Integer> weaponAtThisSlot = players[playerid].getWeaponInSlot(slot);
-        if (weaponAtThisSlot.isSynced() && weaponAtThisSlot.getShouldBe() == weaponid) {
-            players[playerid].setWeaponSlotAmmoLockTime(slot, System.currentTimeMillis() + 5_000);
-            players[playerid].setWeaponSlotAmmo(slot, ammo);
 
-            if (ammo > players[playerid].getWeaponSlotMaxAmmo(slot)) {
+        if (players[playerid].getWeaponInSlot(slot).getShouldBe() == weaponid) {
+
+            if (ammo < 0) {
+                players[playerid].setInvalidAmmoPossible(slot, true);
+            }
+
+            int currentMaxAmmo = players[playerid].getWeaponSlotMaxAmmo(slot);
+            if (ammo >= currentMaxAmmo) {
                 players[playerid].setWeaponSlotMaxAmmo(slot, ammo);
             }
 
-            if (ammo < 0) {
-                // negative ammo values invalidate "invalid ammo" checks, because players can get negative ammo.
-                players[playerid].setWeaponSlotMaxAmmo(slot, Anticheat.AMMO_TO_INVALIDATE_CHECKS);
-            }
-            return SAMPFunctions.SetPlayerAmmo(playerid, weaponid, ammo);
+            SAMPFunctions.SetPlayerAmmo(playerid, weaponid, ammo);
         }
-        return false;
+        return true;
     }
-
-    @Override
-    public int GetPlayerWeaponSlot(int playerid, int slot) {
-        checkForValidPlayerId(playerid);
-        Preconditions.checkArgument(slot >= 0 && slot < MAX_WEAPON_SLOTS, "invalid slot: " + slot);
-
-        return players[playerid].getWeaponInSlot(slot).getShouldBe();
-    }
-
 
     @Override
     public int GetPlayerWeapon(int playerid) {
@@ -227,18 +206,41 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
         return SAMPFunctions.ResetPlayerWeapons(playerid);
     }
 
-    private void updateAmmoVariable(int slot, int playerId) {
-        int ammo = SAMPFunctions.GetPlayerWeaponSlot(playerId, slot);
-        int shouldBe = players[playerId].getWeaponSlotAmmo(slot);
-        if (ammo < shouldBe) {
-            shouldBe = ammo;
+    @Override
+    public int GetPlayerAmmo(int playerid) {
+        checkForValidPlayerId(playerid);
+
+        int weapon = SAMPFunctions.GetPlayerWeapon(playerid);
+        if (weapon != 0) {
+            int ammo = SAMPFunctions.GetPlayerAmmo(playerid);
+            int slot = ACUtils.getWeaponSlot(weapon);
+            // note that ammo cannot be higher than AMMO_TO_INVALIDATE!
+            if (ACUtils.weaponSlotHoldsAmmo(slot) && ammo > players[playerid].getWeaponSlotMaxAmmo(slot)) {
+                return players[playerid].getWeaponSlotMaxAmmo(slot);
+            }
+            return ammo;
         }
-        players[playerId].setWeaponSlotAmmo(slot, shouldBe);
+        return 0;
     }
 
     @Override
     public int GetPlayerAmmoSlot(int playerid, int slot) {
-        return 0;
+        checkForValidPlayerId(playerid);
+        Preconditions.checkArgument(slot >= 0 && slot <= 12, "invalid slot: " + slot);
+        int ammo = SAMPFunctions.GetPlayerAmmoSlot(playerid, slot);
+        // note that ammo cannot be higher than AMMO_TO_INVALIDATE!
+        if (ACUtils.weaponSlotHoldsAmmo(slot) && ammo > players[playerid].getWeaponSlotMaxAmmo(slot)) {
+            return players[playerid].getWeaponSlotMaxAmmo(slot);
+        }
+        return ammo;
+    }
+
+    @Override
+    public int GetPlayerWeaponSlot(int playerid, int slot) {
+        checkForValidPlayerId(playerid);
+        Preconditions.checkArgument(slot >= 0 && slot < MAX_WEAPON_SLOTS, "invalid slot: " + slot);
+
+        return players[playerid].getWeaponInSlot(slot).getShouldBe();
     }
 
     @Override
@@ -262,6 +264,7 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     @Override
     public boolean SetPlayerPosFindZ(int playerid, float x, float y, float z) {
         // there is no way to know which z pos will be set to player, so we will use standard SetPlayerPos
+        // it can be done by waiting x y for sync, then check z. However, it requires code that i don't want to write.
         return this.SetPlayerPos(playerid, x, y, z);
     }
 

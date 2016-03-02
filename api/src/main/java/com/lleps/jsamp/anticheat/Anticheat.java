@@ -25,8 +25,6 @@ public class Anticheat {
     private final GameMode gameMode;
     private int unsyncSecondsToTimeout = 12;
 
-    public static final int AMMO_TO_INVALIDATE_CHECKS = 32_000; // should be 0xFFFF / 2 (which is ~32k)
-
     public Anticheat(GameMode gameMode, ACPlayer[] players) {
         this.gameMode = gameMode;
         this.players = players;

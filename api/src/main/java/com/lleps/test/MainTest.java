@@ -26,6 +26,7 @@ public class MainTest extends GameMode {
         dispatcher.addCommandListener(new AnticheatWeaponsTest());
         dispatcher.addCommandListener(new AnticheatGetTests());
         dispatcher.addCommandListener(new AnticheatPosTests());
+        dispatcher.addCommandListener(new SavePositionTest());
 
         printLine("Loaded..");
     }

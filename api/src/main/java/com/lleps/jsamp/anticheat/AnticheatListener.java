@@ -244,13 +244,6 @@ public class AnticheatListener implements CallbackListener {
             players[playerId].getVehicleId().sync();
 
             int model = SAMPFunctions.GetVehicleModel(vehicleId);
-            if (ACUtils.isPlaneModel(model)) {
-                players[playerId].setLegalWeapon(WEAPON_PARACHUTE, true);
-            } else if (model == 457/*caddy*/) {
-                players[playerId].setLegalWeapon(WEAPON_GOLFCLUB, true);
-            } else if (model >= 596 && model <= 599 /*police cars*/) {
-                players[playerId].setLegalWeapon(WEAPON_SHOTGUN, true);
-            }
         } else {
             int lastVehicle = players[playerId].getVehicleId().getShouldBe();
             int lastVehicleModel = SAMPFunctions.GetVehicleModel(lastVehicle);
@@ -369,6 +362,7 @@ public class AnticheatListener implements CallbackListener {
             return true; // Discard update if player is not alive.
         }
 
+
         long currentMillis = System.currentTimeMillis();
 
         if (currentMillis > lockFor250ms[playerId]) {
@@ -450,7 +444,7 @@ public class AnticheatListener implements CallbackListener {
             }
         }
 
-        for (int slot = 1; slot < 12; slot++) { // slots 0 and 12 are ignored
+        for (int slot = 0; slot < 12; slot++) { // slot 12 is ignored.
             if (player.getWeaponInSlot(slot).isSynced()) {
                 if (checkWeaponSlot(player, slot)) {
                     return true;
@@ -464,8 +458,14 @@ public class AnticheatListener implements CallbackListener {
             }
         }
 
+        if (!player.getPosition().isSynced()) {
+            if (checkForPositionTimeout(player)) {
+                return true;
+            }
+        }
+
         if (checkOtherStuff(player)) {
-            return false;
+            return true;
         }
         return false;
     }
@@ -485,12 +485,6 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerWeaponShot(int playerid, int weaponid, int hittype, int hitid, float fX, float fY, float fZ) {
-        if (!players[playerid].isLegalWeapon(weaponid)) {
-            if (reportCheat(playerid, AccurateLevel.HIGH,
-                    "shooting with illegal weapon " + weaponid)) {
-                return true;
-            }
-        }
         return false;
     }
 
@@ -509,6 +503,15 @@ public class AnticheatListener implements CallbackListener {
         if (currentWeapon != weapon.getShouldBe()) {
             return reportCheat(player, AccurateLevel.MEDIUM, "weapon is " + currentWeapon + " - should be " + weapon.getShouldBe());
         }
+
+        if (ACUtils.weaponSlotHoldsAmmo(slot)) {
+            int ammo = SAMPFunctions.GetPlayerAmmoSlot(player.getId(), slot);
+            if (!player.isInvalidAmmoPossible(slot)) {
+                if (ammo < -1 || ammo > player.getWeaponSlotMaxAmmo(slot)) {
+                    return reportCheat(player, AccurateLevel.HIGH, "ammo hack: " + ammo);
+                }
+            }
+        }
         return false;
     }
 
@@ -516,86 +519,6 @@ public class AnticheatListener implements CallbackListener {
         int unsyncSeconds = player.getWeaponInSlot(slot).increaseUnsyncedSecondsAndGet();
         if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
             return reportUnsyncTimeout(player.getId(), "weapon slot unsynced");
-        }
-        return false;
-    }
-
-    private boolean checkWeapons(ACPlayer player) {
-        int playerId = player.getId();
-        for (int slot=0; slot < MAX_WEAPON_SLOTS; slot++) {
-            if (slot == 0 || slot == 12) continue; // we don't care about the hand and explosives control
-            // TODO: Check ammo only when the weapon uses ammo.
-            // TODO: Perform checks only when needed. Study every case!
-
-            SynchronizableProperty<Integer> weaponVar = player.getWeaponInSlot(slot);
-            int weaponId = SAMPFunctions.GetPlayerWeaponSlot(playerId, slot);
-            int ammo = SAMPFunctions.GetPlayerAmmoSlot(playerId, slot);
-            int weaponShouldBe = weaponVar.getShouldBe();
-
-            if (!weaponVar.isSynced()) {
-                if (weaponId == weaponShouldBe) {
-                    weaponVar.sync();
-                } else {
-                    int tries = weaponVar.increaseUnsyncedSecondsAndGet();
-                    if (tries == SYNC_SECONDS_TO_GIVEUP) {
-                        if (reportUnsyncTimeout(playerId, "weapon id is " + weaponId + " instead of " + weaponShouldBe)) {
-                            return true;
-                        }
-                    }
-                }
-            } else {
-                if (ammo != 0 && !players[playerId].isLegalWeapon(weaponId) && weaponId >= 22 && weaponId <= 38) {
-                    if (reportCheat(playerId, AccurateLevel.HIGH,
-                            "weapon hack: " + weaponId + " (ammo " + ammo + ")")) {
-                        return true;
-                    }
-                }
-
-                // no ammo!
-                if (weaponShouldBe > 0 && (weaponId == 0 || ammo == 0)) {
-                    weaponVar.setShouldBe(0);
-                    player.setWeaponSlotAmmo(slot, 0);
-                }
-
-                int maximumAmmo = player.getWeaponSlotMaxAmmo(slot);
-
-                // ammo values are 16-bit signed, so if the server gives the player more than ~32k bullets, the client
-                // will return negative ammo values. This is why we check the maximum ammo don't exceed this.
-                if (maximumAmmo < Anticheat.AMMO_TO_INVALIDATE_CHECKS && ACUtils.weaponSlotHoldsAmmo(slot)) {
-                    if (ammo < -1 /*sometimes weapon ammo returns -1*/ || ammo > maximumAmmo) {
-                        if (reportCheat(playerId,
-                                AccurateLevel.HIGH,
-                                "ammo hack (" + ammo + " but maximum " + maximumAmmo + " - w: " + weaponId + ")"
-                        )) {
-                            return true;
-                        }
-                    }
-                }
-
-                // player has a weapon
-                if (weaponId > 0 && ammo != 0 && weaponShouldBe != weaponId) {
-                    if (reportCheat(playerId, AccurateLevel.MEDIUM,
-                            "Weapon hack: " + weaponId + " instead of " + weaponVar.getShouldBe())) {
-                        return true;
-                    }
-                }
-
-                if (System.currentTimeMillis() > players[playerId].getWeaponSlotAmmoLockTime(slot)) {
-                    int ammoShouldBe = players[playerId].getWeaponSlotAmmo(slot);
-
-                    if (weaponShouldBe != 0 && ammo > 0 && ammo > ammoShouldBe) {
-                        reportCheat(playerId, AccurateLevel.LOW,
-                                "Ammo is " + ammo + " instead of " + ammoShouldBe + ". Attempting to resync!");
-                        SAMPFunctions.SetPlayerAmmo(playerId, weaponShouldBe, ammoShouldBe);
-                    }
-
-                    // if ammo is less than expected, player might used some ammo.
-                    else if (ammo < ammoShouldBe) {
-                        //scm(playerId, "you lost " + (ammoShouldBe - ammo) + " ammo! is " + ammo);
-                        players[playerId].setWeaponSlotAmmo(slot, ammo);
-                    }
-                }
-            }
         }
         return false;
     }
@@ -620,39 +543,58 @@ public class AnticheatListener implements CallbackListener {
         if (state == PLAYER_STATE_DRIVER || state == PLAYER_STATE_ONFOOT) {
             float toMtsPerSecond = (float)msSinceLastCheck / 1000f;
 
-            float distanceToWarn = toMtsPerSecond*20;
-            float distanceToFlagAsTeleport = toMtsPerSecond * 300f;
-            float distance = distanceBetweenPoints(position, positionShouldBe);
-
-            final float DISTANCE_TO_SAVE_YOUR_ASS = -1f; // This will be ignored on final check.
+            float toleranceDistToWarn = toMtsPerSecond * 20;
+            float toleranceDistToTeleport = toMtsPerSecond * 300f;
+            float distance = ACUtils.distanceBetweenPoints(position, positionShouldBe);
 
             final int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
 
             if (state == PLAYER_STATE_ONFOOT) {
                 float[] velocity = SAMPFunctions.GetPlayerVelocity(player.getId());
 
-                if (
-                        (positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) // Player fell from map (last z pos is below the map)
-                        || SAMPFunctions.GetPlayerSurfingVehicleID(player.getId()) != INVALID_VEHICLE_ID
-                        || SAMPFunctions.GetPlayerSurfingObjectID(player.getId()) != INVALID_OBJECT_ID
-                        || velocity[POS_INDEX_Z] < -0.4/*falling*/) {
-                    distance = DISTANCE_TO_SAVE_YOUR_ASS;
+                if (velocity[POS_INDEX_Z] < -0.4f/*falling*/) {
+                    toleranceDistToWarn += toMtsPerSecond * 60;
+                }
+
+                if (positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) { //  fell from map
+                    toleranceDistToWarn += 200; // 200 mts but may be even more.
+                }
+
+                if (SAMPFunctions.GetPlayerSurfingVehicleID(player.getId()) != INVALID_VEHICLE_ID
+                        || SAMPFunctions.GetPlayerSurfingObjectID(player.getId()) != INVALID_OBJECT_ID) {
+                    toleranceDistToWarn += toMtsPerSecond * 40;
                 }
             } else {// PLAYER_STATE_DRIVER
-                float[] velocity = SAMPFunctions.GetVehicleVelocity(SAMPFunctions.GetPlayerVehicleID(player.getId()));
+                int vehicleId = SAMPFunctions.GetPlayerVehicleID(player.getId());
+                float[] velocity = SAMPFunctions.GetVehicleVelocity(vehicleId);
+                float speedInMetersPerSecond = (ACUtils.get3DSpeed(velocity[0], velocity[1], velocity[2]) * 1000) / 3600;
 
-                if ((Math.abs(velocity[0]) > 0.001 || Math.abs(velocity[1]) > 0.001 || Math.abs(velocity[2]) > 0.005)
-                  || positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) {
-                    distance = DISTANCE_TO_SAVE_YOUR_ASS;
+                toleranceDistToWarn += speedInMetersPerSecond * toMtsPerSecond;
+
+                if (positionShouldBe[POS_INDEX_Z] < -20 && position[POS_INDEX_Z] > 0) {
+                    toleranceDistToWarn += 200;
                 }
             }
 
-            if (distance != DISTANCE_TO_SAVE_YOUR_ASS && distance > distanceToWarn) {
-                float toSeconds = msSinceLastCheck / 1000f;
+            if (distance > toleranceDistToWarn) {
+                boolean falsePositive = false;
 
-                AccurateLevel accurateLevel = distance > distanceToFlagAsTeleport ? AccurateLevel.MEDIUM : AccurateLevel.LOW;
-                if (reportCheat(player.getId(), accurateLevel, "moved " + distance + " in " + toSeconds + " secs.")) {
-                    return true;
+                final float ratioForModshopCheck = 30;
+                if (
+                        (ACUtils.isNearModshopExterior(positionShouldBe, ratioForModshopCheck)
+                                && ACUtils.isNearModshopInterior(position, ratioForModshopCheck))
+                        || (ACUtils.isNearModshopExterior(position, ratioForModshopCheck)
+                                && ACUtils.isNearModshopInterior(positionShouldBe, ratioForModshopCheck))) {
+                    falsePositive = true;
+                }
+
+                if (!falsePositive) {
+                    float toSeconds = msSinceLastCheck / 1000f;
+
+                    AccurateLevel accurateLevel = distance > toleranceDistToTeleport ? AccurateLevel.MEDIUM : AccurateLevel.LOW;
+                    if (reportCheat(player.getId(), accurateLevel, "moved " + distance + " in " + toSeconds + " secs.")) {
+                        return true;
+                    }
                 }
             }
         }
@@ -671,13 +613,6 @@ public class AnticheatListener implements CallbackListener {
             SAMPFunctions.SetPlayerPos(player.getId(), posShouldBe[0], posShouldBe[1], posShouldBe[2]);
         }
         return false;
-    }
-    
-    private static float distanceBetweenPoints(float[] xyz1, float[] xyz2) {
-        float dx = xyz1[0] - xyz2[0];
-        float dy = xyz1[1] - xyz2[1];
-        float dz = xyz1[2] - xyz2[2];
-        return (float)Math.sqrt(dx*dx + dy*dy + dz*dz);
     }
 
     private boolean tryToSyncHealth(ACPlayer player) {
