@@ -24,6 +24,8 @@ import com.lleps.jsamp.gamemode.GameMode;
 import static com.lleps.jsamp.SAMPConstants.*;
 
 /**
+ * TODO: To improve performance, reformat checks by only one function, example: checkArmour(bool 250msPassed, bool 500msPassed, bool 1000msPassed)
+ *
  * This class will perform anticheat checks. if a player is suspected to be cheater, an AnticheatEvent will
  * be thrown and dispatched to GameMode's onAnticheatEvent method, so the action should be taken here.
  * The anticheat will continue performing the check if onAnticheatEvent returns false. If true, the check
@@ -113,8 +115,6 @@ import static com.lleps.jsamp.SAMPConstants.*;
  * max_ammo_that_you_can_have is obtained by keeping track of given ammo per slot.
  * Process must be different for weapons with bullets and weapons without bullets.
  *
- * TODO: Rewrite ammo and anticheat checks.
- *
  *  design
  * Okay. Player has a synchronizableVar for each weapon slot.
  * When GivePlayerWeapon is called, the slot var is unsynced and will start waiting for sync on the 1-sec update.
@@ -167,7 +167,7 @@ import static com.lleps.jsamp.SAMPConstants.*;
  * - Player filled their health or armour.
  *
  * Or sending fake info:
- * - Player called a callback but their state isn't normal. For example, called OnPlayerDeath when is already death
+ * - Player called a callback but their state isn't appropiate. For example, called OnPlayerDeath when is already death
  * or OnPlayerSpawn without calling requestSpawn or beign manually spawned.
  * - Player sent invalid information to a callback. For example, sending fake weapons under OnPlayerWeaponShot or
  * using invalid killerid on OnPDeath. All parameters that can be changed by clients must be checked, for example
@@ -188,8 +188,7 @@ import static com.lleps.jsamp.SAMPConstants.*;
  *
  * Some simple check detection:
  *  A jetpack without calling SetPlayerSpecialAction
- *  TODO: Server-side money.
- *
+ *  Server-sided money
  * @author spell
  */
 public class AnticheatListener implements CallbackListener {
@@ -205,11 +204,14 @@ public class AnticheatListener implements CallbackListener {
     private static final int SYNC_SECONDS_TO_RESYNC = 10;
     private static final int SYNC_SECONDS_TO_GIVEUP = 20;
 
+    private final static int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
+
     public AnticheatListener(Anticheat anticheat) {
         this.anticheat = anticheat;
         this.gm = anticheat.getGameMode();
         this.players = anticheat.getPlayers();
 
+        SAMPFunctions.EnableStuntBonusForAll(false);
         SAMPFunctions.DisableInteriorEnterExits();
     }
 
@@ -243,13 +245,24 @@ public class AnticheatListener implements CallbackListener {
             players[playerId].getVehicleId().setShouldBe(vehicleId);
             players[playerId].getVehicleId().sync();
 
-            int model = SAMPFunctions.GetVehicleModel(vehicleId);
+            float vehicleHealth = SAMPFunctions.GetVehicleHealth(vehicleId);
+            players[playerId].getVehicleHealth().setShouldBe(vehicleHealth);
+            players[playerId].getVehicleHealth().sync();
+
         } else {
             int lastVehicle = players[playerId].getVehicleId().getShouldBe();
             int lastVehicleModel = SAMPFunctions.GetVehicleModel(lastVehicle);
 
-            players[playerId].getVehicleId().setShouldBe(0);
-            players[playerId].getVehicleId().sync();
+            boolean dieInVehicle = newState == PLAYER_STATE_WASTED &&
+                    (oldState == PLAYER_STATE_DRIVER || oldState == PLAYER_STATE_PASSENGER);
+
+            if (!dieInVehicle) { // when player die in veh, vehicle shouldn't be 0. Anyway, checks are performed when alive only.
+                players[playerId].getVehicleId().setShouldBe(0);
+                players[playerId].getVehicleId().sync();
+
+                players[playerId].getVehicleHealth().setShouldBe(0f);
+                players[playerId].getVehicleHealth().sync();
+            }
 
             // check caddy weaps
             if (oldState == PLAYER_STATE_DRIVER && newState == PLAYER_STATE_ONFOOT) {
@@ -319,9 +332,11 @@ public class AnticheatListener implements CallbackListener {
         players[playerId].getArmour().setShouldBe(0f);
         players[playerId].getArmour().sync();
 
-        // Sync vehicle id
+        // Sync vehicle
         players[playerId].getVehicleId().setShouldBe(0);
         players[playerId].getVehicleId().sync();
+        players[playerId].getVehicleHealth().setShouldBe(0f);
+        players[playerId].getVehicleHealth().sync();
 
         players[playerId].getPosition().setShouldBe(SAMPFunctions.GetPlayerPos(playerId));
         players[playerId].getPosition().sync();
@@ -382,22 +397,9 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean checkEveryUpdate(ACPlayer player) {
-        int playerId = player.getId();
-        int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
-        SynchronizableProperty<Integer> vehicleVar = player.getVehicleId();
-        if (!vehicleVar.isSynced()) {
-            if (vehicleId == vehicleVar.getShouldBe()) {
-                vehicleVar.sync();
-            } else {
-                // just desync them.
-                return false;
-            }
-        } else {
-            if (vehicleId != vehicleVar.getShouldBe()) {
-                if (reportCheat(playerId, AccurateLevel.MEDIUM,
-                        "Vehicle teleport")) {
-                    return true;
-                }
+        if (player.getVehicleId().isSynced()) {
+            if (checkVehicleId(player)) {
+                return true;
             }
         }
         return false;
@@ -413,6 +415,12 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkEvery500ms(ACPlayer player) {
         if (player.getPosition().isSynced()) {
             if (checkPosition(player)) {
+                return true;
+            }
+        }
+
+        if (player.getVehicleHealth().isSynced()) {
+            if (checkVehicleHealth(player)) {
                 return true;
             }
         }
@@ -439,6 +447,22 @@ public class AnticheatListener implements CallbackListener {
         } else {
             if (!tryToSyncArmour(player)) {
                 if (checkForArmourTimeout(player)) {
+                    return true;
+                }
+            }
+        }
+
+        if (!player.getVehicleId().isSynced()) {
+            if (!tryToSyncVehicleId(player)) {
+                if (checkForVehicleIdTimeout(player)) {
+                    return true;
+                }
+            }
+        }
+
+        if (!player.getVehicleHealth().isSynced()) {
+            if (!tryToSyncVehicleHealth(player)) {
+                if (checkForVehicleHealthTimeout(player)) {
                     return true;
                 }
             }
@@ -480,11 +504,54 @@ public class AnticheatListener implements CallbackListener {
                 }
             }
         }
+
+        if (SAMPFunctions.GetPlayerMoney(playerId) != player.getMoney()) {
+            SAMPFunctions.ResetPlayerMoney(playerId);
+            SAMPFunctions.GivePlayerMoney(playerId, player.getMoney());
+        }
         return false;
     }
 
     @Override
     public boolean OnPlayerWeaponShot(int playerid, int weaponid, int hittype, int hitid, float fX, float fY, float fZ) {
+        //Desync weapon IDs that don't fire bullets
+        if (weaponid < 22 || weaponid > 38)
+            return true;
+
+        int weaponAtThisSlot = ACUtils.getWeaponSlot(weaponid);
+        if (players[playerid].getWeaponInSlot(weaponAtThisSlot).getShouldBe() != weaponid) {
+            return true;
+        }
+
+        float[] playerPos = SAMPFunctions.GetPlayerPos(playerid);
+        //Desync shots with Z pos out of bounds
+        if (playerPos[POS_INDEX_Z] < -20_000 || playerPos[POS_INDEX_Z] > 20_000) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean tryToSyncVehicleId(ACPlayer player) {
+        if (SAMPFunctions.GetPlayerVehicleID(player.getId()) == player.getVehicleId().getShouldBe()) {
+            player.getVehicleId().sync();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkVehicleId(ACPlayer player) {
+        int vehicleId = SAMPFunctions.GetPlayerVehicleID(player.getId());
+        if (vehicleId > 0 && vehicleId != player.getVehicleId().getShouldBe()) {
+            return reportCheat(player, AccurateLevel.MEDIUM, "Invalid vehicle: " + vehicleId + "/" + player.getVehicleId().getShouldBe());
+        }
+        return false;
+    }
+
+    private boolean checkForVehicleIdTimeout(ACPlayer player) {
+        int unsyncSeconds = player.getVehicleId().increaseUnsyncedSecondsAndGet();
+        if (shouldTimeout(unsyncSeconds)) {
+            return reportUnsyncTimeout(player.getId(), "vehicle id");
+        }
         return false;
     }
 
@@ -508,7 +575,7 @@ public class AnticheatListener implements CallbackListener {
             int ammo = SAMPFunctions.GetPlayerAmmoSlot(player.getId(), slot);
             if (!player.isInvalidAmmoPossible(slot)) {
                 if (ammo < -1 || ammo > player.getWeaponSlotMaxAmmo(slot)) {
-                    return reportCheat(player, AccurateLevel.HIGH, "ammo hack: " + ammo);
+                    return reportCheat(player, AccurateLevel.HIGH, "ammo hack: " + ammo + "/" + player.getWeaponSlotMaxAmmo(slot));
                 }
             }
         }
@@ -517,7 +584,7 @@ public class AnticheatListener implements CallbackListener {
 
     private boolean checkForWeaponSlotTimeout(ACPlayer player, int slot) {
         int unsyncSeconds = player.getWeaponInSlot(slot).increaseUnsyncedSecondsAndGet();
-        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+        if (shouldTimeout(unsyncSeconds)) {
             return reportUnsyncTimeout(player.getId(), "weapon slot unsynced");
         }
         return false;
@@ -547,12 +614,10 @@ public class AnticheatListener implements CallbackListener {
             float toleranceDistToTeleport = toMtsPerSecond * 300f;
             float distance = ACUtils.distanceBetweenPoints(position, positionShouldBe);
 
-            final int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
-
             if (state == PLAYER_STATE_ONFOOT) {
                 float[] velocity = SAMPFunctions.GetPlayerVelocity(player.getId());
 
-                if (velocity[POS_INDEX_Z] < -0.4f/*falling*/) {
+                if (velocity[POS_INDEX_Z] < -0.3f/*falling*/) {
                     toleranceDistToWarn += toMtsPerSecond * 60;
                 }
 
@@ -606,9 +671,9 @@ public class AnticheatListener implements CallbackListener {
 
     private boolean checkForPositionTimeout(ACPlayer player) {
         int unsyncSeconds = player.getPosition().increaseUnsyncedSecondsAndGet();
-        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+        if (shouldTimeout(unsyncSeconds)) {
             return reportUnsyncTimeout(player.getId(), "position unsynced");
-        } else if (unsyncSeconds == getUnsyncSecondsToResync()) {
+        } else if (shouldResync(unsyncSeconds)) {
             float[] posShouldBe = player.getPosition().getShouldBe();
             SAMPFunctions.SetPlayerPos(player.getId(), posShouldBe[0], posShouldBe[1], posShouldBe[2]);
         }
@@ -644,9 +709,9 @@ public class AnticheatListener implements CallbackListener {
 
     private boolean checkForHealthTimeout(ACPlayer player) {
         int unsyncSeconds = player.getHealth().increaseUnsyncedSecondsAndGet();
-        if (unsyncSeconds == getUnsyncSecondsToTimeout()) {
+        if (shouldTimeout(unsyncSeconds)) {
             return reportUnsyncTimeout(player.getId(), "health unsynced");
-        } else if (unsyncSeconds == getUnsyncSecondsToResync()) {
+        } else if (shouldResync(unsyncSeconds)) {
             SAMPFunctions.SetPlayerHealth(player.getId(), player.getHealth().getShouldBe());
         }
         return false;
@@ -686,10 +751,71 @@ public class AnticheatListener implements CallbackListener {
 
     private boolean checkForArmourTimeout(ACPlayer player) {
         int unsyncSecs = player.getArmour().increaseUnsyncedSecondsAndGet();
-        if (unsyncSecs == getUnsyncSecondsToTimeout()) {
+        if (shouldTimeout(unsyncSecs)) {
             return reportUnsyncTimeout(player.getId(), "armour unsynced");
-        } else if (unsyncSecs == getUnsyncSecondsToResync()) {
+        } else if (shouldResync(unsyncSecs)) {
             SAMPFunctions.SetPlayerArmour(player.getId(), player.getArmour().getShouldBe());
+        }
+        return false;
+    }
+
+    private boolean tryToSyncVehicleHealth(ACPlayer player) {
+        int health = (int)SAMPFunctions.GetVehicleHealth(SAMPFunctions.GetPlayerVehicleID(player.getId()));
+        if (health == player.getVehicleHealth().getShouldBe().intValue()) {
+            player.getVehicleHealth().sync();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkVehicleHealth(ACPlayer player) {
+        if (SAMPFunctions.GetPlayerState(player.getId()) == PLAYER_STATE_DRIVER) {
+            int vehicleId = SAMPFunctions.GetPlayerVehicleID(player.getId());
+            float health = SAMPFunctions.GetVehicleHealth(vehicleId);
+            float healthShouldBe = player.getVehicleHealth().getShouldBe();
+
+            if (health > healthShouldBe) {
+                boolean repairedInPayNSprayOrModshop = false;
+                if (health == 1000) {
+                    if (ACUtils.isNearPayNSpray(SAMPFunctions.GetVehiclePos(vehicleId), 20)) {
+                        if (hasEnoughMoneyToPay(player, 100)) {
+                            player.setMoney(player.getMoney() - 100);
+                            repairedInPayNSprayOrModshop = true;
+                        }
+                    } else if (ACUtils.isNearModshopInterior(SAMPFunctions.GetVehiclePos(vehicleId), 20)) {
+                        if (hasEnoughMoneyToPay(player, 150)) {
+                            player.setMoney(player.getMoney() - 150);
+                            repairedInPayNSprayOrModshop = true;
+                        }
+                    }
+                }
+                if (!repairedInPayNSprayOrModshop && reportCheat(player.getId(), AccurateLevel.HIGH, "invalid vehicle health: " + health + "/" + healthShouldBe)) {
+                    SAMPFunctions.SetVehicleHealth(vehicleId, healthShouldBe);
+                    return true;
+                } else {
+                    player.getVehicleHealth().setShouldBe(health);
+                }
+            } else if (health < healthShouldBe) {
+                player.getVehicleHealth().setShouldBe(health);
+            }
+        }
+        return false;
+    }
+
+    private boolean hasEnoughMoneyToPay(ACPlayer player, int moneyToPay) {
+        return (player.getMoney() - moneyToPay) >= 0;
+    }
+
+    private boolean checkForVehicleHealthTimeout(ACPlayer player) {
+        int seconds = player.getVehicleHealth().increaseUnsyncedSecondsAndGet();
+        if (shouldTimeout(seconds)) {
+            return reportUnsyncTimeout(player.getId(), "vehicle health");
+        } else if (shouldResync(seconds)) {
+            if (SAMPFunctions.GetPlayerState(player.getId()) == PLAYER_STATE_DRIVER) {
+                SAMPFunctions.SetVehicleHealth(
+                        SAMPFunctions.GetPlayerVehicleID(player.getId()),
+                        player.getVehicleHealth().getShouldBe());
+            }
         }
         return false;
     }
@@ -740,11 +866,11 @@ public class AnticheatListener implements CallbackListener {
         return gm.onAnticheatEvent(playerId, new UnsyncEvent(description));
     }
 
-    private int getUnsyncSecondsToTimeout() {
-        return anticheat.getUnsyncSecondsToTimeout();
+    private boolean shouldResync(int seconds) {
+        return seconds == 10 || seconds == 15;
     }
 
-    private int getUnsyncSecondsToResync() {
-        return getUnsyncSecondsToTimeout() / 2;
+    private boolean shouldTimeout(int seconds) {
+        return seconds >= anticheat.getUnsyncSecondsToTimeout();
     }
 }

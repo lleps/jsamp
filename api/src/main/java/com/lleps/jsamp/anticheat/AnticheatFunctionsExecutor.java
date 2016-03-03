@@ -101,11 +101,93 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     @Override
     public boolean PutPlayerInVehicle(int playerid, int vehicleid, int seatid) {
         checkForValidPlayerId(playerid);
+        checkForValidVehicleId(vehicleid);
 
-        players[playerid].getVehicleId().setShouldBe(vehicleid);
+        boolean seatOccupied = false;
+        for (int i = 0, j = SAMPFunctions.GetPlayerPoolSize(); i <= j; i++) {
+            if (ac.isConnected(i) && players[i].getVehicleId().getShouldBe() == vehicleid) {
+                if (SAMPFunctions.GetPlayerVehicleSeat(i) == seatid) {
+                    seatOccupied = true;
+                }
+            }
+        }
+
+        if (!seatOccupied) {
+            players[playerid].getVehicleId().setShouldBe(vehicleid);
+            players[playerid].getVehicleId().unsync();
+
+            float[] vehiclePos = SAMPFunctions.GetVehiclePos(vehicleid);
+            players[playerid].getPosition().setShouldBe(vehiclePos);
+            players[playerid].getPosition().unsync();
+
+            return SAMPFunctions.PutPlayerInVehicle(playerid, vehicleid, seatid);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean SetVehicleHealth(int vehicleid, float health) {
+        checkForValidVehicleId(vehicleid);
+        Preconditions.checkArgument(health >= 0 && health <= 1000f, "invalid health: " + health);
+
+        SAMPFunctions.SetVehicleHealth(vehicleid, health);
+
+        for (int i = 0, max = SAMPFunctions.GetPlayerPoolSize(); i <= max; i++) {
+            if (ac.isConnected(i) && players[i].getVehicleId().getShouldBe() == vehicleid) {
+                players[i].getVehicleHealth().setShouldBe(health);
+                players[i].getVehicleHealth().unsync();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean SetVehiclePos(int vehicleid, float x, float y, float z) {
+        checkForValidVehicleId(vehicleid);
+
+        SAMPFunctions.SetVehiclePos(vehicleid, x, y, z);
+
+        float[] positionArray = null;
+        for (int i = 0, max = SAMPFunctions.GetPlayerPoolSize(); i <= max; i++) {
+            if (ac.isConnected(i) && players[i].getVehicleId().getShouldBe() == vehicleid) {
+                if (positionArray == null) positionArray = new float[] {x, y, z};
+                players[i].getPosition().setShouldBe(positionArray);
+                players[i].getPosition().unsync();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean RemovePlayerFromVehicle(int playerid) {
+        checkForValidPlayerId(playerid);
+
+        players[playerid].getVehicleId().setShouldBe(0);
         players[playerid].getVehicleId().unsync();
 
-        return SAMPFunctions.PutPlayerInVehicle(playerid, vehicleid, seatid);
+        return SAMPFunctions.RemovePlayerFromVehicle(playerid);
+    }
+
+    @Override
+    public boolean GivePlayerMoney(int playerid, int money) {
+        checkForValidPlayerId(playerid);
+        SAMPFunctions.GivePlayerMoney(playerid, money);
+        players[playerid].setMoney(players[playerid].getMoney() + money);
+        return false;
+    }
+
+    @Override
+    public boolean ResetPlayerMoney(int playerid) {
+        checkForValidPlayerId(playerid);
+        SAMPFunctions.ResetPlayerMoney(playerid);
+        players[playerid].setMoney(0);
+        return false;
+    }
+
+    @Override
+    public int GetPlayerMoney(int playerid) {
+        checkForValidPlayerId(playerid);
+        return players[playerid].getMoney();
     }
 
     @Override
@@ -302,5 +384,10 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
 
     private void checkForValidPlayerId(int playerId) {
         Preconditions.checkArgument(ac.isConnected(playerId), "invalid or disconnected player id: " + playerId);
+    }
+
+    private void checkForValidVehicleId(int vehicleId) {
+        // TODO: Maybe change that to java variables instead of native checking.
+        Preconditions.checkArgument(SAMPFunctions.IsValidVehicle(vehicleId), "invalid vehicle: " + vehicleId);
     }
 }

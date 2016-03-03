@@ -45,6 +45,10 @@ public class ACPlayer {
 
     private boolean kickedOrBanned;
 
+    private int money;
+
+    private final SynchronizableProperty<Float> vehicleHealth = new SynchronizableProperty<>(0f);
+
     public ACPlayer(int id) {
         this.id = id;
 
@@ -55,6 +59,18 @@ public class ACPlayer {
 
     public int getId() {
         return id;
+    }
+
+    public SynchronizableProperty<Float> getVehicleHealth() {
+        return vehicleHealth;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getMoney() {
+        return money;
     }
 
     public void setKickedOrBanned(boolean kickedOrBanned) {

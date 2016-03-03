@@ -75,9 +75,31 @@ public class ACUtils {
             {2644, -2043, 13} //lowrider
     };
 
+    private static final float payNSprays[][] = {
+            {719.8571f, -455.8376f, 16.0450f},
+            {-1420.4935f, 2584.8137f, 55.5545f},
+            {-99.8769f, 1116.7948f, 19.4567f},
+            {2065.9587f, -1831.2217f, 13.2568f},
+            {-2425.9490f, 1021.5446f, 50.1055f},
+            {1975.1755f, 2162.3755f, 10.7835f},
+            {487.7060f, -1739.6212f, 10.8601f},
+            {1025.0927f, -1023.5479f, 31.8119f},
+            {2393.4456f, 1491.5537f, 10.5616f},
+            {-1904.5793f, 283.9675f, 40.7533f}
+    };
+
     public static boolean isNearModshopInterior(float[] xyz, float ratio) {
         for (float[] modshopXYZ : modshopInteriors) {
             if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNearPayNSpray(float[] xyz, float ratio) {
+        for (float[] pointXYZ : payNSprays) {
+            if (distanceBetweenPoints(xyz, pointXYZ) < ratio) {
                 return true;
             }
         }
