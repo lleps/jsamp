@@ -242,10 +242,19 @@ public class AnticheatListener implements CallbackListener {
         return false;
     }
 
+    // TODO: Checks for players driving cars when engine is off.
+
     @Override
     public boolean OnPlayerStateChange(int playerId, int newState, int oldState) {
         if (newState == PLAYER_STATE_DRIVER || newState == PLAYER_STATE_PASSENGER) {
             int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
+
+            if (vehicles[vehicleId].isDoorsLocked()) {
+                if (reportCheat(playerId, AccurateLevel.MEDIUM, "entering vehicle with doors locked")) {
+                    return true;
+                }
+            }
+
             players[playerId].getVehicleId().setShouldBe(vehicleId);
             players[playerId].getVehicleId().sync();
 
@@ -291,6 +300,22 @@ public class AnticheatListener implements CallbackListener {
                     players[playerId].getWeaponInSlot(SLOT_PARACHUTE).setShouldBe(WEAPON_PARACHUTE);
                     players[playerId].getWeaponInSlot(SLOT_PARACHUTE).sync();
                 }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnPlayerEnterVehicle(int playerId, int vehicleId, boolean isPassenger) {
+        // TODO: Validate
+
+        if (isPassenger && vehicles[vehicleId].isDoorsLocked()) {
+            int modelId = SAMPFunctions.GetVehicleModel(vehicleId);
+            if (ACUtils.isBikeModel(modelId)) {
+                // You can enter bikes as pssenget even if locked, so we'll prevent players from entering
+                // bikes as passengers, to prevent false-positives.
+                float[] pos = SAMPFunctions.GetPlayerPos(playerId);
+                SAMPFunctions.SetPlayerPos(playerId, pos[0], pos[1], pos[2]);
             }
         }
         return false;

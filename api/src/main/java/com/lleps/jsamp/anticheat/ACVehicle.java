@@ -22,6 +22,8 @@ public class ACVehicle {
     private int color1;
     private int color2;
 
+    private boolean doorsLocked;
+
     public ACVehicle(int id, int color1, int color2) {
         this.id = id;
         this.color1 = color1;
@@ -30,6 +32,14 @@ public class ACVehicle {
 
     public int getId() {
         return id;
+    }
+
+    public void setDoorsLocked(boolean doorsLocked) {
+        this.doorsLocked = doorsLocked;
+    }
+
+    public boolean isDoorsLocked() {
+        return doorsLocked;
     }
 
     public void setColor1(int color1) {

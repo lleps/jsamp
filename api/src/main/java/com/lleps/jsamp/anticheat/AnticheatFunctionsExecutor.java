@@ -233,6 +233,14 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     }
 
     @Override
+    public boolean SetVehicleParamsEx(int vehicleid, boolean engine, boolean lights, boolean alarm, boolean doors, boolean bonnet, boolean boot, boolean objective) {
+        checkForValidVehicleId(vehicleid);
+        vehicles[vehicleid].setDoorsLocked(doors);
+        SAMPFunctions.SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
+        return false;
+    }
+
+    @Override
     public boolean RemovePlayerFromVehicle(int playerid) {
         checkForValidPlayerId(playerid);
 

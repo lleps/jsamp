@@ -343,6 +343,25 @@ public class ACUtils {
         return false;
     }
 
+
+
+    public static boolean isBikeModel(int modelid) {
+        return (modelid == 509
+                ||modelid ==510
+                ||modelid ==581
+                ||modelid ==522
+                ||modelid ==521
+                ||modelid ==523
+                ||modelid ==586
+                ||modelid ==481
+                ||modelid ==462
+                ||modelid ==448
+                ||modelid ==461
+                ||modelid ==463
+                ||modelid ==468
+                ||modelid ==471);
+    }
+
     public static boolean isNearModshopExterior(float[] xyz, float ratio) {
         for (float[] modshopXYZ : ACArraysStore.modshopExteriors) {
             if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
