@@ -38,8 +38,8 @@ public class ACUtils {
         return 0;
     }
 
-    public static int getComponentPrice(int componentid) {
-        switch(componentid) {
+    public static int getComponentPrice(int componentId) {
+        switch(componentId) {
             // exhaust
             case 1018: return 350;
             case 1019: return 300;
@@ -351,6 +351,4 @@ public class ACUtils {
         }
         return false;
     }
-
-
 }
