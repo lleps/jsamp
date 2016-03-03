@@ -5,12 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2e0b04d2-4dce-423b-bd3a-a1db3de2ec97" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/ACUtils.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/ACUtils.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatListener.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/anticheat/AnticheatListener.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/gamemode/GameMode$1.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/gamemode/GameMode$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/gamemode/GameMode.class" afterPath="$PROJECT_DIR$/target/classes/com/lleps/jsamp/gamemode/GameMode.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jsamp-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/target/jsamp-1.0-SNAPSHOT.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../server/jsamp/jars/jsamp-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/../server/jsamp/jars/jsamp-1.0-SNAPSHOT.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/constant/model/VehicleModel.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/constant/model/VehicleModel.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatVehicleTest.java" afterPath="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatVehicleTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.BitsTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.BitsTest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.ColorTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.ColorTest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.VectorTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.VectorTest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-all.VehicleDamageStateTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-all.VehicleDamageStateTest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.BitsTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.BitsTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.ColorTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.ColorTest.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/all.VectorTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/all.VectorTest.txt" />
     </list>
     <ignored path="jsamp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,9 +48,9 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="525" column="67" selection-start-line="525" selection-start-column="67" selection-end-line="525" selection-end-column="67" />
+              <caret line="880" column="36" selection-start-line="880" selection-start-column="36" selection-end-line="880" selection-end-column="36" />
               <folding>
-                <element signature="e#0#37133#0" expanded="true" />
+                <element signature="e#0#38402#0" expanded="true" />
                 <element signature="method#tryToSyncVehicleId#0;class#AnticheatListener#0" expanded="false" />
                 <element signature="method#checkVehicleId#0;class#AnticheatListener#0" expanded="false" />
                 <element signature="method#checkForVehicleIdTimeout#0;class#AnticheatListener#0" expanded="false" />
@@ -52,20 +64,22 @@
                 <element signature="method#tryToSyncArmour#0;class#AnticheatListener#0" expanded="false" />
                 <element signature="method#checkArmour#0;class#AnticheatListener#0" expanded="false" />
                 <element signature="method#checkForArmourTimeout#0;class#AnticheatListener#0" expanded="false" />
-                <element signature="e#36956#36957#0" expanded="true" />
-                <element signature="e#37009#37010#0" expanded="true" />
-                <element signature="e#37059#37060#0" expanded="true" />
-                <element signature="e#37130#37131#0" expanded="true" />
+                <element signature="e#37464#37465#0" expanded="true" />
+                <element signature="e#37492#37493#0" expanded="true" />
+                <element signature="e#38225#38226#0" expanded="true" />
+                <element signature="e#38278#38279#0" expanded="true" />
+                <element signature="e#38328#38329#0" expanded="true" />
+                <element signature="e#38399#38400#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameMode.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GameMode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.52098763">
-              <caret line="171" column="34" selection-start-line="171" selection-start-column="34" selection-end-line="171" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -85,14 +99,18 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding>
-                <element signature="e#2200#2201#0" expanded="true" />
-                <element signature="e#2236#2237#0" expanded="true" />
-                <element signature="e#2275#2276#0" expanded="true" />
-                <element signature="e#2309#2310#0" expanded="true" />
-                <element signature="e#2338#2339#0" expanded="true" />
-                <element signature="e#2366#2367#0" expanded="true" />
+                <element signature="e#2220#2221#0" expanded="true" />
+                <element signature="e#2262#2263#0" expanded="true" />
+                <element signature="e#2298#2299#0" expanded="true" />
+                <element signature="e#2330#2331#0" expanded="true" />
+                <element signature="e#2393#2394#0" expanded="true" />
+                <element signature="e#2429#2430#0" expanded="true" />
+                <element signature="e#2468#2469#0" expanded="true" />
+                <element signature="e#2502#2503#0" expanded="true" />
+                <element signature="e#2531#2532#0" expanded="true" />
+                <element signature="e#2559#2560#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,11 +139,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ACUtils.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ACUtils.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6493827">
+              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -193,13 +211,13 @@
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/Anticheat.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatMoneyTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatFunctionsExecutor.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/constant/model/VehicleModel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/test/AnticheatVehicleTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java" />
       </list>
     </option>
   </component>
@@ -858,7 +876,13 @@
       <option name="project" value="LOCAL" />
       <updated>1456969608218</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added vehicle speed check">
+      <created>1456975895135</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1456975895135</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -881,7 +905,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3170347" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3170347" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20497803" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -918,7 +942,8 @@
     <MESSAGE value="removed unnecesary parenthesis" />
     <MESSAGE value="updated AC: fixed pos checks, and added ammo checks." />
     <MESSAGE value="reformatted vehicle id checks and added vehicle health checks" />
-    <option name="LAST_COMMIT_MESSAGE" value="reformatted vehicle id checks and added vehicle health checks" />
+    <MESSAGE value="added vehicle speed check" />
+    <option name="LAST_COMMIT_MESSAGE" value="added vehicle speed check" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1242,29 +1267,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding>
-            <element signature="e#2200#2201#0" expanded="true" />
-            <element signature="e#2236#2237#0" expanded="true" />
-            <element signature="e#2275#2276#0" expanded="true" />
-            <element signature="e#2309#2310#0" expanded="true" />
-            <element signature="e#2338#2339#0" expanded="true" />
-            <element signature="e#2366#2367#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/test/MainTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1289,12 +1291,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="177" column="0" selection-start-line="177" selection-start-column="0" selection-end-line="177" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding>
+            <element signature="e#2220#2221#0" expanded="true" />
+            <element signature="e#2262#2263#0" expanded="true" />
+            <element signature="e#2298#2299#0" expanded="true" />
+            <element signature="e#2330#2331#0" expanded="true" />
+            <element signature="e#2393#2394#0" expanded="true" />
+            <element signature="e#2429#2430#0" expanded="true" />
+            <element signature="e#2468#2469#0" expanded="true" />
+            <element signature="e#2502#2503#0" expanded="true" />
+            <element signature="e#2531#2532#0" expanded="true" />
+            <element signature="e#2559#2560#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/AnticheatListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="525" column="67" selection-start-line="525" selection-start-column="67" selection-end-line="525" selection-end-column="67" />
+          <caret line="880" column="36" selection-start-line="880" selection-start-column="36" selection-end-line="880" selection-end-column="36" />
           <folding>
-            <element signature="e#0#37133#0" expanded="true" />
+            <element signature="e#0#38402#0" expanded="true" />
             <element signature="method#tryToSyncVehicleId#0;class#AnticheatListener#0" expanded="false" />
             <element signature="method#checkVehicleId#0;class#AnticheatListener#0" expanded="false" />
             <element signature="method#checkForVehicleIdTimeout#0;class#AnticheatListener#0" expanded="false" />
@@ -1308,18 +1337,20 @@
             <element signature="method#tryToSyncArmour#0;class#AnticheatListener#0" expanded="false" />
             <element signature="method#checkArmour#0;class#AnticheatListener#0" expanded="false" />
             <element signature="method#checkForArmourTimeout#0;class#AnticheatListener#0" expanded="false" />
-            <element signature="e#36956#36957#0" expanded="true" />
-            <element signature="e#37009#37010#0" expanded="true" />
-            <element signature="e#37059#37060#0" expanded="true" />
-            <element signature="e#37130#37131#0" expanded="true" />
+            <element signature="e#37464#37465#0" expanded="true" />
+            <element signature="e#37492#37493#0" expanded="true" />
+            <element signature="e#38225#38226#0" expanded="true" />
+            <element signature="e#38278#38279#0" expanded="true" />
+            <element signature="e#38328#38329#0" expanded="true" />
+            <element signature="e#38399#38400#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/gamemode/GameMode.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lleps/jsamp/anticheat/ACUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52098763">
-          <caret line="171" column="34" selection-start-line="171" selection-start-column="34" selection-end-line="171" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.6493827">
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding />
         </state>
       </provider>

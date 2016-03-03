@@ -47,6 +47,8 @@ public class ACPlayer {
 
     private int money;
 
+    private boolean inModshop;
+
     private final SynchronizableProperty<Float> vehicleHealth = new SynchronizableProperty<>(0f);
 
     public ACPlayer(int id) {
@@ -59,6 +61,14 @@ public class ACPlayer {
 
     public int getId() {
         return id;
+    }
+
+    public void setInModshop(boolean inModshop) {
+        this.inModshop = inModshop;
+    }
+
+    public boolean isInModshop() {
+        return inModshop;
     }
 
     public SynchronizableProperty<Float> getVehicleHealth() {

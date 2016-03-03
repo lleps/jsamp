@@ -57,6 +57,10 @@ public class ACUtils {
         return slot >= 2 && slot <= 8;
     }
 
+    public static int getVehicleComponentPrice(int componentId) {
+
+    }
+
     public static int getVehicleModelMaxSpeed(int modelId) {
         Preconditions.checkArgument(modelId >= 400 && modelId <= 611, "invalid model: " + modelId);
         return (int)vehicleModelData[modelId - 400][1/*max speed*/];

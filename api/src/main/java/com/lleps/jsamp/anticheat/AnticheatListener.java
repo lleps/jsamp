@@ -21,6 +21,8 @@ import com.lleps.jsamp.anticheat.event.UnsyncEvent;
 import com.lleps.jsamp.gamemode.CallbackListener;
 import com.lleps.jsamp.gamemode.GameMode;
 
+import java.util.Arrays;
+
 import static com.lleps.jsamp.SAMPConstants.*;
 
 /**
@@ -868,6 +870,34 @@ public class AnticheatListener implements CallbackListener {
         return false;
     }
 
+    @Override
+    public boolean OnEnterExitModShop(int playerId, int enterexit, int interiorId) {
+        if (SAMPFunctions.GetPlayerState(playerId) == PLAYER_STATE_DRIVER) {
+            int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
+            float[] vehiclePos = SAMPFunctions.GetVehiclePos(vehicleId);
+            if (enterexit == 1) {
+                if (!ACUtils.isNearModshopExterior(vehiclePos, 30)) {
+                    if (reportCheat(playerId, AccurateLevel.MEDIUM, "entering modshop from unknown position: " + Arrays.toString(vehiclePos))) {
+                        return true;
+                    }
+                }
+                players[playerId].setInModshop(true);
+            } else {
+                if (!ACUtils.isNearModshopInterior(vehiclePos, 30)) {
+                    if (reportCheat(playerId, AccurateLevel.MEDIUM, "exiting modshop from unknown position: " + Arrays.toString(vehiclePos))) {
+                        return true;
+                    }
+                }
+                players[playerId].setInModshop(false);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
+        return false;
+    }
 
     @Override
     public boolean OnPlayerRequestSpawn(int playerId) {
