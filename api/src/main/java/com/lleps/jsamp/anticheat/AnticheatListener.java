@@ -920,7 +920,7 @@ public class AnticheatListener implements CallbackListener {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
