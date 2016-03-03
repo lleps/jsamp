@@ -25,10 +25,12 @@ import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.constant.Weather;
 import com.lleps.jsamp.world.World;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.Duration;
@@ -67,7 +69,7 @@ public abstract class GameMode {
 
     /**
      * Called by MainCallbackListener, when GameMode instance is successfully created.
-     * @throws Exception if something wrong happens at initialization(normally by user code).
+     * @throws Exception if something wrong happens at initialization (normally by user code).
      * An error will shut down the server immediately.
      */
     public void onInit() throws Exception {
@@ -163,6 +165,10 @@ public abstract class GameMode {
         // output to jsamp_exceptions.txt
         final String JSAMP_EXCEPTIONS_FILE = "jsamp-exceptions.txt";
         try {
+            File file = new File(JSAMP_EXCEPTIONS_FILE);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
             Files.write(Paths.get(JSAMP_EXCEPTIONS_FILE), sw.toString().getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             FunctionAccess.logprintf("[warning] Cannot log exception to file " + JSAMP_EXCEPTIONS_FILE);

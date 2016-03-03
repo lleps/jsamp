@@ -413,6 +413,7 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean checkEvery500ms(ACPlayer player) {
+
         if (player.getPosition().isSynced()) {
             if (checkPosition(player)) {
                 return true;
@@ -424,6 +425,11 @@ public class AnticheatListener implements CallbackListener {
                 return true;
             }
         }
+
+        if (checkSpeedHack(player)) {
+            return true;
+        }
+
         return false;
     }
 
@@ -508,6 +514,21 @@ public class AnticheatListener implements CallbackListener {
         if (SAMPFunctions.GetPlayerMoney(playerId) != player.getMoney()) {
             SAMPFunctions.ResetPlayerMoney(playerId);
             SAMPFunctions.GivePlayerMoney(playerId, player.getMoney());
+        }
+        return false;
+    }
+
+    private boolean checkSpeedHack(ACPlayer player) {
+        if (SAMPFunctions.GetPlayerState(player.getId()) == PLAYER_STATE_DRIVER) {
+            int playerId = player.getId();
+            int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
+            float[] velocity = SAMPFunctions.GetVehicleVelocity(vehicleId);
+            float speed2d = ACUtils.get2DSpeed(velocity[0], velocity[1]);
+            int modelId = SAMPFunctions.GetVehicleModel(vehicleId);
+            float maxSpeed = ACUtils.getVehicleModelMaxSpeed(modelId);
+            if (speed2d > (maxSpeed + 5)) {
+                return reportCheat(playerId, AccurateLevel.MEDIUM, "speed hack: " + speed2d + "/" + maxSpeed);
+            }
         }
         return false;
     }

@@ -25,7 +25,7 @@ import java.util.Optional;
  * @author spell
  */
 public enum VehicleModel {
-
+    // TODO: Add max speed
     LANDSTALKER(400, "Landstalker", Type.CAR, 4),
     BRAVURA(401, "Bravura", Type.CAR, 2),
     BUFFALO(402, "Buffalo", Type.CAR, 2),

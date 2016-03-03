@@ -45,6 +45,11 @@ public class AnticheatVehicleTest implements CommandListener {
             FunctionAccess.SetVehicleHealth(Integer.parseInt(args[0]), Float.parseFloat(args[1]));
             return true;
         }
+        if (command.equals("/setvehiclevelocity")) {
+            FunctionAccess.SetVehicleVelocity(Integer.parseInt(args[0]), Float.parseFloat(args[1]),
+                    Float.parseFloat(args[2]), Float.parseFloat(args[3]));
+            return true;
+        }
         return false;
     }
 }
