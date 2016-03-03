@@ -50,6 +50,10 @@ public class AnticheatVehicleTest implements CommandListener {
                     Float.parseFloat(args[2]), Float.parseFloat(args[3]));
             return true;
         }
+        if (command.equals("/setvehiclecolor")) {
+            FunctionAccess.ChangeVehicleColor(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+            return true;
+        }
         return false;
     }
 }

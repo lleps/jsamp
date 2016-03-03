@@ -13,25 +13,32 @@
  */
 package com.lleps.jsamp.anticheat;
 
+import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.gamemode.GameMode;
 
 import static com.lleps.jsamp.SAMPConstants.MAX_PLAYERS;
+import static com.lleps.jsamp.SAMPConstants.MAX_VEHICLES;
 
 /**
  * @author spell
  */
 public class Anticheat {
-    private final ACPlayer[] players;
+    private final ACPlayer[] players = new ACPlayer[MAX_PLAYERS];
+    private final ACVehicle[] vehicles = new ACVehicle[MAX_VEHICLES];
+
     private final GameMode gameMode;
     private int unsyncSecondsToTimeout = 12;
 
-    public Anticheat(GameMode gameMode, ACPlayer[] players) {
+    public Anticheat(GameMode gameMode) {
         this.gameMode = gameMode;
-        this.players = players;
     }
 
     public ACPlayer[] getPlayers() {
         return players;
+    }
+
+    public ACVehicle[] getVehicles() {
+        return vehicles;
     }
 
     public GameMode getGameMode() {
@@ -47,6 +54,10 @@ public class Anticheat {
     }
 
     public boolean isConnected(int id) {
-        return id >= 0 && id < MAX_PLAYERS && players[id].isConnected();
+        return id >= 0 && id < MAX_PLAYERS && players[id] != null && players[id].isConnected();
+    }
+
+    public boolean isValidVehicle(int id) {
+        return id >= 0 && id < MAX_VEHICLES && players[id] != null;
     }
 }

@@ -16,6 +16,7 @@ package com.lleps.jsamp.anticheat;
 import com.google.common.base.Preconditions;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.SAMPFunctionsExecutor;
+import org.apache.commons.lang3.RandomUtils;
 
 import static com.lleps.jsamp.SAMPConstants.*;
 
@@ -25,10 +26,12 @@ import static com.lleps.jsamp.SAMPConstants.*;
 public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     private final Anticheat ac;
     private final ACPlayer[] players;
+    private final ACVehicle[] vehicles;
 
     public AnticheatFunctionsExecutor(Anticheat ac) {
         this.ac = ac;
         this.players = ac.getPlayers();
+        this.vehicles = ac.getVehicles();
     }
 
     @Override
@@ -142,6 +145,20 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     }
 
     @Override
+    public boolean SetVehicleVelocity(int vehicleid, float X, float Y, float Z) {
+        checkForValidVehicleId(vehicleid);
+
+        float speed = ACUtils.get3DSpeed(X, Y, Z);
+        float maxSpeed = ACUtils.getVehicleModelMaxSpeed(SAMPFunctions.GetVehicleModel(vehicleid));
+        if (speed > maxSpeed) {
+            X = maxSpeed * X / speed;
+            Y = maxSpeed * Y / speed;
+            Z = maxSpeed * Z / speed;
+        }
+        return SAMPFunctions.SetVehicleVelocity(vehicleid, X, Y, Z);
+    }
+
+    @Override
     public boolean SetVehiclePos(int vehicleid, float x, float y, float z) {
         checkForValidVehicleId(vehicleid);
 
@@ -155,6 +172,63 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
                 players[i].getPosition().unsync();
             }
         }
+        return false;
+    }
+
+    @Override
+    public int CreateVehicle(int vehicletype, float x, float y, float z, float rotation, int color1, int color2, int respawn_delay, boolean addsiren) {
+        if (color1 == -1) color1 = RandomUtils.nextInt(0, 128);
+        if (color2 == -1) color2 = RandomUtils.nextInt(0, 128);
+
+        int id = SAMPFunctions.CreateVehicle(vehicletype, x, y, z, rotation, color1, color2, respawn_delay, addsiren);
+        if (id != INVALID_VEHICLE_ID) {
+            initVehicle(id, color1, color2);
+        }
+        return id;
+    }
+
+    @Override
+    public int AddStaticVehicle(int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int color1, int color2) {
+        if (color1 == -1) color1 = RandomUtils.nextInt(0, 128);
+        if (color2 == -1) color2 = RandomUtils.nextInt(0, 128);
+
+        int id = SAMPFunctions.AddStaticVehicle(modelid, spawn_x, spawn_y, spawn_z, z_angle, color1, color2);
+        if (id != INVALID_VEHICLE_ID) {
+            initVehicle(id, color1, color2);
+        }
+        return id;
+    }
+
+    @Override
+    public int AddStaticVehicleEx(int modelid, float spawn_x, float spawn_y, float spawn_z, float z_angle, int color1, int color2, int respawn_delay, boolean addsiren) {
+        if (color1 == -1) color1 = RandomUtils.nextInt(0, 128);
+        if (color2 == -1) color2 = RandomUtils.nextInt(0, 128);
+
+        int id = SAMPFunctions.AddStaticVehicleEx(modelid, spawn_x, spawn_y, spawn_z, z_angle, color1, color2, respawn_delay, addsiren);
+        if (id != INVALID_VEHICLE_ID) {
+            initVehicle(id, color1, color2);
+        }
+        return id;
+    }
+
+    private void initVehicle(int vehicleId, int color1, int color2) {
+        vehicles[vehicleId] = new ACVehicle(vehicleId, color1, color2);
+    }
+
+    @Override
+    public boolean ChangeVehicleColor(int vehicleid, int color1, int color2) {
+        checkForValidVehicleId(vehicleid);
+        vehicles[vehicleid].setColor1(color1);
+        vehicles[vehicleid].setColor2(color2);
+        SAMPFunctions.ChangeVehicleColor(vehicleid, color1, color2);
+        return false;
+    }
+
+    @Override
+    public boolean DestroyVehicle(int vehicleid) {
+        checkForValidVehicleId(vehicleid);
+        SAMPFunctions.DestroyVehicle(vehicleid);
+        vehicles[vehicleid] = null;
         return false;
     }
 
@@ -387,7 +461,6 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     }
 
     private void checkForValidVehicleId(int vehicleId) {
-        // TODO: Maybe change that to java variables instead of native checking.
-        Preconditions.checkArgument(SAMPFunctions.IsValidVehicle(vehicleId), "invalid vehicle: " + vehicleId);
+        Preconditions.checkArgument(ac.isValidVehicle(vehicleId), "invalid vehicle: " + vehicleId);
     }
 }

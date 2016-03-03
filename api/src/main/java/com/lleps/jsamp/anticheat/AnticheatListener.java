@@ -195,6 +195,7 @@ import static com.lleps.jsamp.SAMPConstants.*;
  */
 public class AnticheatListener implements CallbackListener {
     private final ACPlayer[] players;
+    private final ACVehicle[] vehicles;
 
     private final long[] lockFor1000ms = new long[SAMPConstants.MAX_PLAYERS];
     private final long[] lockFor500ms = new long[SAMPConstants.MAX_PLAYERS];
@@ -212,6 +213,7 @@ public class AnticheatListener implements CallbackListener {
         this.anticheat = anticheat;
         this.gm = anticheat.getGameMode();
         this.players = anticheat.getPlayers();
+        this.vehicles = anticheat.getVehicles();
 
         SAMPFunctions.EnableStuntBonusForAll(false);
         SAMPFunctions.DisableInteriorEnterExits();
@@ -537,6 +539,7 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerWeaponShot(int playerid, int weaponid, int hittype, int hitid, float fX, float fY, float fZ) {
+        // TODO: Validate.
         //Desync weapon IDs that don't fire bullets
         if (weaponid < 22 || weaponid > 38)
             return true;
@@ -812,7 +815,7 @@ public class AnticheatListener implements CallbackListener {
                         }
                     }
                 }
-                if (!repairedInPayNSprayOrModshop && reportCheat(player.getId(), AccurateLevel.HIGH, "invalid vehicle health: " + health + "/" + healthShouldBe)) {
+                if (!repairedInPayNSprayOrModshop && reportCheat(player.getId(), AccurateLevel.MEDIUM, "invalid vehicle health: " + health + "/" + healthShouldBe)) {
                     SAMPFunctions.SetVehicleHealth(vehicleId, healthShouldBe);
                     return true;
                 } else {
@@ -882,7 +885,7 @@ public class AnticheatListener implements CallbackListener {
                     }
                 }
                 players[playerId].setInModshop(true);
-            } else {
+            } else if (enterexit == 0){
                 if (!ACUtils.isNearModshopInterior(vehiclePos, 30)) {
                     if (reportCheat(playerId, AccurateLevel.MEDIUM, "exiting modshop from unknown position: " + Arrays.toString(vehiclePos))) {
                         return true;
@@ -896,6 +899,8 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
+        // TODO: Validate
+
         ACPlayer player = players[playerId];
 
         if (!player.isInModshop()) {
@@ -924,6 +929,47 @@ public class AnticheatListener implements CallbackListener {
     }
 
     @Override
+    public boolean OnVehiclePaintjob(int playerId, int vehicleId, int paintjobId) {
+        // TODO: Validate
+
+        SAMPFunctions.SendClientMessage(playerId, -1, "OnVehiclePaintjob " + paintjobId);
+        return false;
+    }
+
+    @Override
+    public boolean OnUnoccupiedVehicleUpdate(int vehicleId, int playerId, int passengerSeat, float newX, float newY, float newZ, float vel_x, float vel_y, float vel_z) {
+        if (
+                ACUtils.get3DSpeed(vel_x, vel_y, vel_z) < 10
+                && SAMPFunctions.GetVehicleDistanceFromPoint(vehicleId, newX, newY, newZ) < 1
+                && SAMPFunctions.IsPlayerInRangeOfPoint(playerId, 5, newX, newY, newZ)
+
+                ) {
+
+            // Sync only if player is closer to vehicle, speed is low, and vehicle is closer to last position.
+            SAMPFunctions.SendClientMessage(playerId, 0x00FF00FF, "synced.");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean OnVehicleRespray(int playerId, int vehicleId, int color1, int color2) {
+        // TODO: Validate
+        ACPlayer player = players[playerId];
+
+        if (!player.isInModshop() && !ACUtils.isNearModshopExterior(SAMPFunctions.GetPlayerPos(playerId), 30)) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, "vehicle colour hacks (colours " + color1 + ", " + color2 + ")")) {
+                return true;
+            }
+        }
+        // Money is not set here, see vehicle health checks.
+        ACVehicle vehicle = vehicles[vehicleId];
+        vehicle.setColor1(color1);
+        vehicle.setColor2(color2);
+        return false;
+    }
+
+    @Override
     public boolean OnPlayerRequestSpawn(int playerId) {
         // This SA-MP spawn system is also disabled on JSAMP.
         return true;
@@ -942,7 +988,7 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean shouldResync(int seconds) {
-        return seconds == 10 || seconds == 15;
+        return seconds == 7 || seconds == 17;
     }
 
     private boolean shouldTimeout(int seconds) {

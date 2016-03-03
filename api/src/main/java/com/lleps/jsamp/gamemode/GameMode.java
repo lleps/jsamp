@@ -80,7 +80,7 @@ public abstract class GameMode {
         setWeather(Weather.get(0));
         setTime(LocalTime.of(14, 30));
 
-        Anticheat anticheat = new Anticheat(this, new ACPlayer[SAMPConstants.MAX_PLAYERS]);
+        Anticheat anticheat = new Anticheat(this);
 
         AnticheatListener acListener = new AnticheatListener(anticheat);
         MainCallbackListener.addCallbackListener(acListener, MainCallbackListener.ListenerPriority.LOW);
