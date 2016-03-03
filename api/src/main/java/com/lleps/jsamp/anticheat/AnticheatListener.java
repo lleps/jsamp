@@ -896,7 +896,31 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
-        return false;
+        ACPlayer player = players[playerId];
+
+        if (!player.isInModshop()) {
+            if (reportCheat(player, AccurateLevel.HIGH, "tunning without beign on a modshop: " + componentId)) {
+                return true;
+            }
+        }
+        int modelId = SAMPFunctions.GetVehicleModel(vehicleId);
+        boolean compatibleComponent = ACUtils.isValidComponent(modelId, componentId);
+        if (!compatibleComponent) {
+            if (reportCheat(player, AccurateLevel.HIGH, "adding to vehicle model "+modelId+" invalid component " + componentId)) {
+                return true;
+            }
+        }
+
+        int componentPrice = ACUtils.getComponentPrice(componentId);
+        if (hasEnoughMoneyToPay(player, componentPrice)) {
+            player.setMoney(player.getMoney() - componentPrice);
+            return false;
+        } else {
+            if (reportCheat(player, AccurateLevel.MEDIUM, "bought component "+componentId+" without enough money: $" + componentPrice)) {
+                return true;
+            }
+        }
+        return true;
     }
 
     @Override

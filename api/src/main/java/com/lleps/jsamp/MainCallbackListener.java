@@ -281,10 +281,10 @@ public class MainCallbackListener {
         return 1;
     }
 
-    public static int OnVehicleMod(int playerId, int vehicleId, int componentId ) {
+    public static int OnVehicleMod(int playerId, int vehicleId, int componentId) {
         for (CallbackListener listener : listeners) {
             if (listener.OnVehicleMod(playerId, vehicleId, componentId ))
-                break;
+                return 0;
         }
         return 1;
     }
@@ -308,7 +308,7 @@ public class MainCallbackListener {
     public static int OnVehicleRespray(int playerId, int vehicleId, int color1, int color2 ) {
         for (CallbackListener listener : listeners) {
             if (listener.OnVehicleRespray(playerId, vehicleId, color1, color2 ))
-                break;
+                return 0;
         }
         return 1;
     }

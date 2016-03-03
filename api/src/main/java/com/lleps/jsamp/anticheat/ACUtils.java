@@ -38,6 +38,217 @@ public class ACUtils {
         return 0;
     }
 
+    public static int getComponentPrice(int componentid) {
+        switch(componentid) {
+            // exhaust
+            case 1018: return 350;
+            case 1019: return 300;
+            case 1020: return 250;
+            case 1021: return 200;
+            case 1022: return 150;
+            case 1028: return 770;
+            case 1029: return 680;
+            case 1034: return 790;
+            case 1037: return 690;
+            case 1043: return 500;
+            case 1044: return 500;
+            case 1045: return 510;
+            case 1046: return 710;
+            case 1059: return 720;
+            case 1064: return 830;
+            case 1065: return 850;
+            case 1066: return 750;
+            case 1089: return 650;
+            case 1092: return 750;
+            case 1104: return 1610;
+            case 1105: return 1540;
+            case 1113: return 3340;
+            case 1114: return 3250;
+            case 1126: return 3340;
+            case 1127: return 3250;
+            case 1129: return 1650;
+            case 1132: return 1590;
+            case 1135: return 1500;
+            case 1136: return 1000;
+            // hood
+            case 1004: return 100;
+            case 1005: return 150;
+            case 1011: return 220;
+            case 1012: return 250;
+            // front_bumper
+            case 1117: return 2130;
+            case 1152: return 910;
+            case 1153: return 1200;
+            case 1155: return 1030;
+            case 1157: return 930;
+            case 1160: return 1050;
+            case 1165: return 850;
+            case 1166: return 950;
+            case 1169: return 970;
+            case 1170: return 880;
+            case 1171: return 990;
+            case 1172: return 900;
+            case 1173: return 950;
+            case 1174: return 1000;
+            case 1175: return 900;
+            case 1179: return 2150;
+            case 1181: return 2050;
+            case 1182: return 2130;
+            case 1185: return 2040;
+            case 1188: return 2080;
+            case 1189: return 2200;
+            case 1190: return 1200;
+            case 1191: return 1040;
+            // rear_bumper
+            case 1140: return 870;
+            case 1141: return 980;
+            case 1148: return 890;
+            case 1149: return 1000;
+            case 1150: return 1090;
+            case 1151: return 840;
+            case 1154: return 1030;
+            case 1156: return 920;
+            case 1159: return 1050;
+            case 1161: return 950;
+            case 1167: return 850;
+            case 1168: return 950;
+            case 1176: return 1000;
+            case 1177: return 900;
+            case 1178: return 2050;
+            case 1180: return 2130;
+            case 1183: return 2040;
+            case 1184: return 2150;
+            case 1186: return 2095;
+            case 1187: return 2175;
+            case 1192: return 940;
+            case 1193: return 1100;
+            // Roof
+            case 1006: return 80;
+            case 1128: return 3340;
+            case 1130: return 3380;
+            case 1131: return 3290;
+            case 1103: return 3250;
+            case 1032: return 170;
+            case 1033: return 120;
+            case 1035: return 150;
+            case 1038: return 190;
+            case 1053: return 130;
+            case 1054: return 210;
+            case 1055: return 230;
+            case 1061: return 180;
+            case 1067: return 250;
+            case 1068: return 200;
+            case 1088: return 150;
+            case 1091: return 100;
+            // spoilers
+            case 1000: return 400;
+            case 1001: return 550;
+            case 1002: return 200;
+            case 1003: return 250;
+            case 1014: return 400;
+            case 1015: return 500;
+            case 1016: return 200;
+            case 1023: return 350;
+            case 1049: return 810;
+            case 1050: return 620;
+            case 1058: return 620;
+            case 1060: return 530;
+            case 1138: return 580;
+            case 1139: return 470;
+            case 1146: return 490;
+            case 1147: return 600;
+            case 1158: return 550;
+            case 1162: return 650;
+            case 1163: return 550;
+            case 1164: return 450;
+            // sideskirts
+            case 1007: return 500;
+            case 1017: return 500;
+            case 1026: return 480;
+            case 1027: return 480;
+            case 1030: return 37;
+            case 1031: return 370;
+            case 1036: return 500;
+            case 1039: return 390;
+            case 1040: return 500;
+            case 1041: return 390;
+            case 1042: return 1000;
+            case 1047: return 670;
+            case 1048: return 530;
+            case 1051: return 670;
+            case 1052: return 530;
+            case 1056: return 520;
+            case 1057: return 430;
+            case 1062: return 250;
+            case 1063: return 430;
+            case 1069: return 550;
+            case 1070: return 450;
+            case 1071: return 550;
+            case 1072: return 450;
+            case 1090: return 450;
+            case 1093: return 350;
+            case 1094: return 450;
+            case 1095: return 350;
+            case 1099: return 1000;
+            case 1101: return 780;
+            case 1102: return 830;
+            case 1106: return 780;
+            case 1107: return 780;
+            case 1108: return 780;
+            case 1118: return 780;
+            case 1119: return 940;
+            case 1120: return 780;
+            case 1121: return 940;
+            case 1122: return 780;
+            case 1124: return 780;
+            case 1133: return 830;
+            case 1134: return 800;
+            case 1137: return 800;
+            // lamps
+            case 1013: return 100;
+            case 1024: return 50;
+            // vents
+            case 1142: return 150;
+            case 1143: return 150;
+            case 1144: return 100;
+            case 1145: return 100;
+            // wheels
+            case 1025: return 1000;
+            case 1073: return 1100;
+            case 1074: return 1030;
+            case 1075: return 980;
+            case 1076: return 1560;
+            case 1077: return 1620;
+            case 1078: return 1200;
+            case 1079: return 1030;
+            case 1080: return 900;
+            case 1081: return 1230;
+            case 1082: return 820;
+            case 1083: return 1560;
+            case 1084: return 1350;
+            case 1085: return 770;
+            case 1096: return 1000;
+            case 1097: return 620;
+            case 1098: return 1140;
+            // nitro
+            case 1008: return 200;
+            case 1009: return 500;
+            case 1010: return 1000;
+            // stereo & hydraulics
+            case 1086: return 100;
+            case 1087: return 1500;
+            // misc
+            case 1100: return 940;
+            case 1123: return 860;
+            case 1125: return 1120;
+            case 1109: return 1610;
+            case 1110: return 1540;
+            case 1115: return 2130;
+            case 1116: return 2050;
+        }
+        return 0;
+    }
+
     public static float distanceBetweenPoints(float[] xyz1, float[] xyz2) {
         float dx = xyz1[0] - xyz2[0];
         float dy = xyz1[1] - xyz2[1];
@@ -46,7 +257,7 @@ public class ACUtils {
     }
 
     public static boolean isPlaneModel(int modelId) {
-        int planeModels[] = { 592, 577, 511, 512, 520, 593, 553, 476, 519, 460, 513, 548, 425, 417, 487, 488, 497, 563, 447, 469 };
+        final int planeModels[] = { 592, 577, 511, 512, 520, 593, 553, 476, 519, 460, 513, 548, 425, 417, 487, 488, 497, 563, 447, 469 };
         for (int model : planeModels) {
             if (model == modelId) return true;
         }
@@ -57,13 +268,53 @@ public class ACUtils {
         return slot >= 2 && slot <= 8;
     }
 
-    public static int getVehicleComponentPrice(int componentId) {
+    private static boolean isOrdinaryVehicleModel(int modelid) {
+        final int nonOrdinaryVehicleModels[] = { 581, 523, 462, 521, 463, 522, 461, 448, 468, 586, 509, 481, 510, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454, 590, 569, 537, 538, 570, 449 };
+        for (int nonOrdinaryVehicleModel : nonOrdinaryVehicleModels) {
+            if (modelid == nonOrdinaryVehicleModel) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    private static boolean isWheelComponent(int componentid) {
+        final int wheelComponents[] = {1025,1073,1074,1075,1076,1077,1078,1079,1080,1081,1082,1083,1084,1085,1096,1097,1098};
+        for (int wheelComponent : wheelComponents) {
+            if (componentid == wheelComponent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isOrdinaryComponent(int componentid) {
+        return isWheelComponent(componentid) || componentid == 1086 || componentid == 1087 || (componentid >= 1008 && componentid <= 1010);
+    }
+
+    public static boolean isValidComponent(int modelid, int componentid) {
+        if (isOrdinaryComponent(componentid)) {
+            return isOrdinaryVehicleModel(modelid);
+        }
+
+        final int rows = ACArraysStore.validModelComponents.length;
+        final int columns = ACArraysStore.validModelComponents[0].length;
+        for (int i = 0; i < rows; i++) {
+            if (ACArraysStore.validModelComponents[i][0] == modelid) {
+                for (int j = 1; j < columns; j++) {
+                    if (ACArraysStore.validModelComponents[i][j] == componentid) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        return false;
     }
 
     public static int getVehicleModelMaxSpeed(int modelId) {
         Preconditions.checkArgument(modelId >= 400 && modelId <= 611, "invalid model: " + modelId);
-        return (int)vehicleModelData[modelId - 400][1/*max speed*/];
+        return (int)ACArraysStore.vehicleModelData[modelId - 400][1/*max speed*/];
     }
 
     public static float get3DSpeed(float velocityX, float velocityY, float velocityZ) {
@@ -74,35 +325,8 @@ public class ACUtils {
         return (float)Math.sqrt(velocityX*velocityX + velocityY*velocityY) * 160.2f;
     }
 
-    private static final float modshopInteriors[][] = {
-            {617, -2, 1000}, //transfender
-            {615, -124, 997}, // wheelarchs
-            {616, -74, 997} // lowrider
-    };
-
-    private static final float modshopExteriors[][] = {
-            {-1936, 244, 34}, //transfender sf
-            {1041, -1021, 31}, //transfender ls
-            {2386, 1051, 10}, //transfender lv
-            {-2719, 216, 4}, //wheelarchs
-            {2644, -2043, 13} //lowrider
-    };
-
-    private static final float payNSprays[][] = {
-            {719.8571f, -455.8376f, 16.0450f},
-            {-1420.4935f, 2584.8137f, 55.5545f},
-            {-99.8769f, 1116.7948f, 19.4567f},
-            {2065.9587f, -1831.2217f, 13.2568f},
-            {-2425.9490f, 1021.5446f, 50.1055f},
-            {1975.1755f, 2162.3755f, 10.7835f},
-            {487.7060f, -1739.6212f, 10.8601f},
-            {1025.0927f, -1023.5479f, 31.8119f},
-            {2393.4456f, 1491.5537f, 10.5616f},
-            {-1904.5793f, 283.9675f, 40.7533f}
-    };
-
     public static boolean isNearModshopInterior(float[] xyz, float ratio) {
-        for (float[] modshopXYZ : modshopInteriors) {
+        for (float[] modshopXYZ : ACArraysStore.modshopInteriors) {
             if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
                 return true;
             }
@@ -111,7 +335,7 @@ public class ACUtils {
     }
 
     public static boolean isNearPayNSpray(float[] xyz, float ratio) {
-        for (float[] pointXYZ : payNSprays) {
+        for (float[] pointXYZ : ACArraysStore.payNSprays) {
             if (distanceBetweenPoints(xyz, pointXYZ) < ratio) {
                 return true;
             }
@@ -120,7 +344,7 @@ public class ACUtils {
     }
 
     public static boolean isNearModshopExterior(float[] xyz, float ratio) {
-        for (float[] modshopXYZ : modshopExteriors) {
+        for (float[] modshopXYZ : ACArraysStore.modshopExteriors) {
             if (distanceBetweenPoints(modshopXYZ, xyz) < ratio) {
                 return true;
             }
@@ -128,220 +352,5 @@ public class ACUtils {
         return false;
     }
 
-
-    private final static Object vehicleModelData[][] = {
-        {"Landstalker", 140, 120, 10, 1},
-        {"Bravura", 131, 60, 6, 1},
-        {"Buffalo", 166, 65, 6, 1},
-        {"Linerunner", 98, 150, 0, 1},
-        {"Pereniel", 118, 60, 8, 1},
-        {"Sentinel", 146, 60, 6, 1},
-        {"Dumper", 98, 120, 0, 1},
-        {"Firetruck", 132, 110, 0, 1},
-        {"Trashmaster", 89, 120, 0, 1},
-        {"Stretch", 140, 85, 6, 1},
-        {"Manana", 115, 60, 4, 1},
-        {"Infernus", 197, 80, 0, 1},
-        {"Voodoo", 150, 75, 6, 1},
-        {"Pony", 98, 90, 12, 1},
-        {"Mule", 94, 90, 12, 2},
-        {"Cheetah", 171, 70, 4, 1},
-        {"Ambulancia", 137, 120, 10, 1},
-        {"Leviathan", 399, 300, 12, 1},
-        {"Moonbeam", 103, 95, 6, 1},
-        {"Esperanto", 133, 70, 4, 1},
-        {"Taxi", 129, 65, 6, 2},
-        {"Washington", 137, 70, 6, 1},
-        {"Bobcat", 124, 90, 10, 1},
-        {"Mr Whoopee", 88, 90, 6, 1},
-        {"BF Injection", 120, 50, 0, 1},
-        {"Hunter", 399, 450, 0, 1},
-        {"Premier", 154, 65, 6, 1},
-        {"Enforcer", 147, 100, 10, 1},
-        {"Securicar", 139, 100, 12, 1},
-        {"Banshee", 179, 70, 0, 1},
-        {"Predator", 399, 300, 0, 1},
-        {"Bus", 116, 200, 0, 1},
-        {"Rhino", 84, 500, 0, 1},
-        {"Barracks", 98, 250, 20, 1},
-        {"Hotknife", 148, 50, 4, 1},
-        {"Trailer", 0, 9999, 0, 1},
-        {"Previon", 133, 60, 4, 1},
-        {"Coach", 140, 200, 0, 1},
-        {"Cabbie", 127, 75, 6, 1},
-        {"Stallion", 150, 60, 4, 1},
-        {"Rumpo", 121, 90, 12, 2},
-        {"RC Bandit", 67, 40, 0, 1},
-        {"Romero", 124, 70, 10, 1},
-        {"Packer", 112, 200, 0, 1},
-        {"Monster Truck A", 98, 100, 0, 1},
-        {"Admiral", 146, 65, 6, 1},
-        {"Squalo", 399, 300, 0, 1},
-        {"Seasparrow", 399, 200, 0, 1},
-        {"Pizzaboy", 162, 50, 1, 1},
-        {"Tram", 399, 100, 0, 1},
-        {"Trailer", 399, 9999, 0, 1},
-        {"Turismo", 172, 75, 0, 1},
-        {"Speeder", 399, 300, 0, 1},
-        {"Reefer", 399, 500, 0, 1},
-        {"Tropic", 399, 500, 0, 1},
-        {"Flatbed", 140, 200, 20, 1},
-        {"Yankee", 94, 150, 17, 1},
-        {"Caddy", 84, 40, 3, 1},
-        {"Solair", 140, 70, 6, 1},
-        {"Berkley's RC Van", 121, 85, 10, 1},
-        {"Skimmer", 399, 100, 0, 1},
-        {"PCJ-600", 180, 70, 0, 1},
-        {"Faggio", 155, 50, 0, 1},
-        {"Freeway", 180, 60, 0, 1},
-        {"RC Baron", 399, 100, 0, 1},
-        {"RC Raider", 399, 100, 0, 1},
-        {"Glendale", 131, 70, 6, 1},
-        {"Oceanic", 125, 70, 6, 1},
-        {"Sanchez", 164, 50, 3, 1},
-        {"Sparrow", 399, 150, 0, 1},
-        {"Patriot", 139, 100, 8, 1},
-        {"Quad", 98, 70, 0, 1},
-        {"Coastguard", 399, 300, 17, 1},
-        {"Dinghy", 399, 100, 0, 1},
-        {"Hermes", 133, 70, 4, 1},
-        {"Sabre", 154, 70, 8, 1},
-        {"Rustler", 399, 120, 0, 1},
-        {"ZR-350", 166, 60, 4, 1},
-        {"Walton", 105, 80, 10, 1},
-        {"Regina", 124, 70, 4, 1},
-        {"Comet", 164, 60, 4, 1},
-        {"BMX", 86, 9999, 0, 1},
-        {"Burrito", 139, 85, 12, 2},
-        {"Camper", 109, 85, 12, 1},
-        {"Marquis", 399, 350, 7, 1},
-        {"Baggage", 88, 60, 0, 1},
-        {"Dozer", 56, 150, 0, 1},
-        {"Maverick", 399, 200, 6, 1},
-        {"Maverick (LSTV)", 399, 100, 0, 1},
-        {"Rancher", 124, 80, 6, 1},
-        {"FBI Rancher", 139, 90, 7, 1},
-        {"Virgo", 132, 70, 4, 1},
-        {"Greenwood", 125, 70, 6, 1},
-        {"Jetmax", 399, 300, 0, 1},
-        {"Hotring", 191, 90, 4, 1},
-        {"Sandking", 157, 80, 8, 1},
-        {"Blista Compact", 145, 60, 6, 1},
-        {"Maverick (SAPD)", 399, 200, 6, 1},
-        {"Boxville", 96, 120, 17, 1},
-        {"Benson", 109, 150, 17, 2},
-        {"Mesa", 125, 60, 5, 1},
-        {"RC Goblin", 399, 100, 0, 1},
-        {"Hotring Racer", 191, 90, 0, 1},
-        {"Hotring Racer", 191, 90, 0, 1},
-        {"Bloodring Banger", 154, 90, 6, 1},
-        {"Rancher", 124, 80, 7, 1},
-        {"Super GT", 159, 75, 6, 1},
-        {"Elegant", 148, 75, 6, 1},
-        {"Journey", 96, 90, 12, 1},
-        {"Bicicleta", 93, 9999, 0, 1},
-        {"Mountain Bike", 117, 9999, 0, 1},
-        {"Beagle", 399, 150, 0, 1},
-        {"Cropdust", 399, 150, 0, 1},
-        {"Stunt", 399, 150, 0, 1},
-        {"Tanker", 107, 200, 0, 1},
-        {"RoadTrain", 126, 200, 0, 3},
-        {"Nebula", 140, 70, 6, 1},
-        {"Majestic", 140, 60, 4, 1},
-        {"Buccaneer", 146, 70, 4, 1},
-        {"Shamal", 399, 500, 0, 1},
-        {"Hydra", 399, 750, 0, 1},
-        {"FCR-900", 190, 70, 0, 1},
-        {"NRG-500", 200, 90, 0, 1},
-        {"HPV1000", 172, 80, 4, 1},
-        {"Cement Truck", 116, 0, 0, 1},
-        {"Tow Truck", 143, 100, 0, 1},
-        {"Fortune", 140, 60, 4, 1},
-        {"Cadrona", 133, 60, 4, 1},
-        {"FBI Truck", 157, 80, 7, 1},
-        {"Willard", 133, 70, 6, 1},
-        {"Forklift", 54, 70, 0, 1},
-        {"Tractor", 62, 80, 0, 1},
-        {"Combine", 98, 100, 0, 1},
-        {"Feltzer", 148, 70, 6, 1},
-        {"Remington", 150, 70, 4, 1},
-        {"Slamvan", 140, 75, 8, 1},
-        {"Blade", 154, 70, 6, 1},
-        {"Freight", 399, 1000, 0, 1},
-        {"Streak", 399, 700, 0, 1},
-        {"Vortex", 89, 100, 0, 1},
-        {"Vincent", 136, 70, 6, 1},
-        {"Bullet", 180, 75, 4, 1},
-        {"Clover", 146, 65, 6, 1},
-        {"Sadler", 134, 80, 10, 1},
-        {"Firetruck", 132, 100, 0, 1},
-        {"Hustler", 131, 70, 0, 1},
-        {"Intruder", 133, 70, 6, 1},
-        {"Primo", 127, 65, 6, 1},
-        {"Cargobob", 399, 450, 17, 1},
-        {"Tampa", 136, 65, 6, 1},
-        {"Sunrise", 128, 70, 5, 1},
-        {"Merit", 140, 70, 9, 1},
-        {"Utility", 108, 90, 0, 1},
-        {"Nevada", 399, 100, 0, 1},
-        {"Yosemite", 128, 90, 12, 1},
-        {"Windsor", 141, 60, 4, 1},
-        {"Monster Truck B", 98, 90, 0, 1},
-        {"Monster Truck C", 98, 90, 0, 1},
-        {"Uranus", 139, 70, 4, 1},
-        {"Jester", 158, 70, 6, 1},
-        {"Sultan", 150, 85, 8, 1},
-        {"Stratum", 137, 70, 6, 1},
-        {"Elegy", 158, 70, 6, 1},
-        {"Raindance", 399, 300, 17, 1},
-        {"RC Tiger", 79, 300, 0, 1},
-        {"Flash", 146, 70, 6, 1},
-        {"Tahoma", 142, 70, 6, 1},
-        {"Savanna", 154, 65, 4, 1},
-        {"Bandito", 130, 60, 0, 1},
-        {"Freight", 399, 100, 0, 1},
-        {"Trailer", 399, 9999, 0, 1},
-        {"Kart", 83, 40, 0, 1},
-        {"Mower", 54, 90, 0, 1},
-        {"Duneride", 98, 120, 20, 1},
-        {"Sweeper", 53, 60, 0, 1},
-        {"Broadway", 140, 70, 6, 1},
-        {"Tornado", 140, 70, 8, 1},
-        {"AT-400", 399, 1000, 0, 1},
-        {"DFT-30", 116, 150, 20, 1},
-        {"Huntley", 140, 90, 10, 1},
-        {"Stafford", 136, 80, 6, 1},
-        {"BF-400", 170, 70, 3, 1},
-        {"Newsvan", 121, 100, 0, 1},
-        {"Tug", 76, 100, 0, 1},
-        {"Trailer", 399, 9999, 0, 1},
-        {"Emperor", 136, 70, 6, 1},
-        {"Wayfarer", 175, 75, 0, 1},
-        {"Euros", 147, 70, 5, 1},
-        {"Hotdog", 96, 80, 0, 1},
-        {"Club", 145, 75, 6, 1},
-        {"Trailer", 399, 9999, 0, 1},
-        {"Trailer", 399, 9999, 0, 1},
-        {"Andromada", 399, 2000, 0, 1},
-        {"Dodo", 399, 500, 0, 1},
-        {"RC Cam", 54, 10, 0, 1},
-        {"Launch", 399, 90, 14, 1},
-        {"Patrulla (LSPD)", 210, 90, 8, 1},
-        {"Patrulla (SFPD)", 156, 90, 8, 1},
-        {"Patrulla (LVPD)", 156, 90, 8, 1},
-        {"Police Ranger", 140, 120, 8, 1},
-        {"Picador", 134, 70, 10, 1},
-        {"S.W.A.T. Van", 98, 200, 0, 1},
-        {"Alpha", 150, 70, 4, 1},
-        {"Phoenix", 152, 75, 4, 1},
-        {"Glendale (Chocado)", 131, 40, 6, 1},
-        {"Sadler (Chocada)", 134, 40, 10, 1},
-        {"Luggage Trailer", 399, 50, 0, 1},
-        {"Luggage Trailer", 399, 50, 0, 1},
-        {"Stair Trailer", 399, 50, 0, 1},
-        {"Boxville", 96, 120, 12, 1},
-        {"Farm Plow", 399, 200, 0, 1},
-        {"Utility Trailer", 399, 50, 0, 1}
-    };
 
 }
