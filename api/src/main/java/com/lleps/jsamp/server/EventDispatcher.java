@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.gamemode;
+package com.lleps.jsamp.server;
 
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.SAMPConstants;
@@ -25,17 +25,17 @@ import com.lleps.jsamp.world.Pickup;
  * @author spell
  */
 public class EventDispatcher implements CallbackListener {
-    private GameMode gameMode;
+    private SAMPServer server;
     private ObjectNativeIDS arrays = ObjectNativeIDS.getInstance();
 
-    public EventDispatcher(GameMode gameMode) {
-        this.gameMode = gameMode;
+    public EventDispatcher(SAMPServer server) {
+        this.server = server;
     }
 
     @Override
     public boolean OnPlayerConnect(int playerId) {
         Player newPlayer = new Player(playerId);
-        gameMode.onPlayerConnect(newPlayer);
+        server.onPlayerConnect(newPlayer);
         return false;
     }
 

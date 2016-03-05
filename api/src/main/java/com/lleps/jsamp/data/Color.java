@@ -22,8 +22,6 @@ import java.util.HashMap;
  * @author Leandro on 25/1/2016.
  */
 public final class Color {
-    // TODO: This Color implementation is a bit redundant and complex. Change it later.
-
     private final static HashMap<Integer, Color> instances = new HashMap<>();
 
     public static Color ofRGBA(int red, int green, int blue, int alpha) {

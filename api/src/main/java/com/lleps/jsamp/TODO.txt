@@ -1,1 +1,43 @@
 TODO: Built-in support for enterable interiors.
+
+TODO: Create methods setWorld in world entities for set only reference.
+
+Come back to think on this sheet's abstraction.
+
+GameMode
+    getEventHandler
+
+
+EventHandler
+    addOnXListener
+    removeOnXListener
+
+World
+    entites
+        setPos
+        getPos
+        setOnXListener
+
+    Body
+    Vehicle
+    Label
+    Pickup
+    Actor
+
+NoStreamingWorld
+CellStreamingWorld
+DistanceStreamingWorld
+
+player
+    setWorld
+    getWorld
+    addOnXListener
+    removeOnXListener
+
+dialogs - done.
+
+textdraws
+
+checkpoint
+
+timer

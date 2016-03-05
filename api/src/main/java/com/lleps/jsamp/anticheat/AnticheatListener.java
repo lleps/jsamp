@@ -19,24 +19,25 @@ import com.lleps.jsamp.anticheat.event.AccurateLevel;
 import com.lleps.jsamp.anticheat.event.CheatEvent;
 import com.lleps.jsamp.anticheat.event.InvalidCallEvent;
 import com.lleps.jsamp.anticheat.event.UnsyncEvent;
-import com.lleps.jsamp.gamemode.CallbackListener;
-import com.lleps.jsamp.gamemode.GameMode;
-import com.lleps.jsamp.gamemode.Timer;
+import com.lleps.jsamp.server.CallbackListener;
+import com.lleps.jsamp.server.SAMPServer;
 
-import java.time.Duration;
 import java.util.Arrays;
 
 import static com.lleps.jsamp.SAMPConstants.*;
 
 /**
- * TODO: To improve performance, reformat checks by only one function, example: checkArmour(bool 250msPassed, bool 500msPassed, bool 1000msPassed)
  *
  * This class will perform anticheat checks. if a player is suspected to be cheater, an AnticheatEvent will
- * be thrown and dispatched to GameMode's onAnticheatEvent method, so the action should be taken here.
+ * be thrown and dispatched to SAMPServer's onAnticheatEvent method, so the action should be taken here.
  * The anticheat will continue performing the check if onAnticheatEvent returns false. If true, the check
  * will stop immediately.
  *
  * Tips taken from: http://forum.sa-mp.com/showthread.php?t=220089 by cessil.
+ *
+ *
+ * TO-DO?
+ * To improve performance, reformat checks by only one function, example: checkArmour(bool 250msPassed, bool 500msPassed, bool 1000msPassed)
  *
  * Some non-detected cheats:
  * * Infinite ammo
@@ -126,14 +127,14 @@ public class AnticheatListener implements CallbackListener {
     private final long[] lockFor500ms = new long[SAMPConstants.MAX_PLAYERS];
     private final long[] lockFor250ms = new long[SAMPConstants.MAX_PLAYERS];
 
-    private final GameMode gm;
+    private final SAMPServer sv;
     private final Anticheat anticheat;
 
     private final static int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
 
     public AnticheatListener(Anticheat anticheat) {
         this.anticheat = anticheat;
-        this.gm = anticheat.getGameMode();
+        this.sv = anticheat.getServer();
         this.players = anticheat.getPlayers();
         this.vehicles = anticheat.getVehicles();
 
@@ -969,19 +970,19 @@ public class AnticheatListener implements CallbackListener {
     }
 
     private boolean reportCheat(ACPlayer player, AccurateLevel level, String description) {
-        return gm.onAnticheatEvent(player.getId(), new CheatEvent(level, description));
+        return sv.onAnticheatEvent(player.getId(), new CheatEvent(level, description));
     }
 
     private boolean reportCheat(int playerId, AccurateLevel level, String description) {
-        return gm.onAnticheatEvent(playerId, new CheatEvent(level, description));
+        return sv.onAnticheatEvent(playerId, new CheatEvent(level, description));
     }
 
     private boolean reportUnsyncTimeout(int playerId, String description) {
-        return gm.onAnticheatEvent(playerId, new UnsyncEvent(description));
+        return sv.onAnticheatEvent(playerId, new UnsyncEvent(description));
     }
 
     private boolean reportInvalidCall(int playerId, String callbackNameFormatted, Object... arguments) {
-        return gm.onAnticheatEvent(playerId, new InvalidCallEvent(String.format(callbackNameFormatted, arguments)));
+        return sv.onAnticheatEvent(playerId, new InvalidCallEvent(String.format(callbackNameFormatted, arguments)));
     }
 
     private boolean shouldResync(int seconds) {

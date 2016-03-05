@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.gamemode;
+package com.lleps.jsamp.server;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class Timer {
             } catch (InterruptedException ignored) {
             }
 
-            GameMode.runLater(timerExecutorFunction);
+            SAMPServer.runLater(timerExecutorFunction);
         }).start();
     }
 

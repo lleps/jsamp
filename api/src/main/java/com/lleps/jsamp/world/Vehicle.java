@@ -28,7 +28,7 @@ import com.lleps.jsamp.data.vehicle.DoorState;
 import com.lleps.jsamp.data.vehicle.VehicleDamageState;
 import com.lleps.jsamp.data.vehicle.VehicleParams;
 import com.lleps.jsamp.data.vehicle.WindowState;
-import com.lleps.jsamp.gamemode.ObjectNativeIDS;
+import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.player.Player;
 
 import java.util.*;

@@ -28,14 +28,14 @@ import java.util.Collection;
  */
 public interface World {
     /**
-     * Called when GameMode's weather changes.
+     * Called when SAMPServer's weather changes.
      *
      * @param weather new weather.
      */
     void onParentWeatherChange(Weather weather);
 
     /**
-     * Called when GameMode's time changes.
+     * Called when SAMPServer's time changes.
      *
      * @param time new time.
      */
@@ -85,7 +85,7 @@ public interface World {
     void setWeather(Weather weather);
 
     /**
-     * Get world weather, or GameMode's weather if null.
+     * Get world weather, or SAMPServer's weather if null.
      *
      * @return This world's weather
      */
@@ -99,7 +99,7 @@ public interface World {
     void setTime(LocalTime time);
 
     /**
-     * Get world time, or GameMode's time if null.
+     * Get world time, or SAMPServer's time if null.
      *
      * @return time.
      */

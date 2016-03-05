@@ -19,7 +19,7 @@ import com.lleps.jsamp.constant.model.WeaponModel;
 import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.data.bodymaterial.BodyMaterial;
-import com.lleps.jsamp.gamemode.ObjectNativeIDS;
+import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.player.Player;
 
 import java.util.*;

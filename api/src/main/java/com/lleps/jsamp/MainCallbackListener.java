@@ -13,8 +13,8 @@
  */
 package com.lleps.jsamp;
 
-import com.lleps.jsamp.gamemode.CallbackListener;
-import com.lleps.jsamp.gamemode.GameMode;
+import com.lleps.jsamp.server.CallbackListener;
+import com.lleps.jsamp.server.SAMPServer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Properties;
  *
  * This static class will do two things:
  *
- * 1. Initialize GameMode instance.
+ * 1. Initialize SAMPServer instance.
  * 2. Report events to all added listeners. To add or remove listeners, use
  * {@link #addCallbackListener(CallbackListener, ListenerPriority)} and
  * {@link #removeCallbackListener(CallbackListener)}
@@ -39,9 +39,10 @@ import java.util.Properties;
  *
  * @author spell
  */
+@SuppressWarnings("unused") // These methods are called from JNI.
 public class MainCallbackListener {
     private static List<CallbackListener> listeners = new ArrayList<>();
-    private static GameMode gameMode;
+    private static SAMPServer SAMPServer;
 
     public enum ListenerPriority {
         /**
@@ -51,7 +52,7 @@ public class MainCallbackListener {
         /**
          * Will be added at the end of the list.
          */
-        LOW};
+        LOW}
 
     private final static String JSAMP_PROPERTIES_PATH = "./jsamp/jsamp.properties";
     private final static String PROPERTY_MAINCLASS = "main.class";
@@ -76,25 +77,25 @@ public class MainCallbackListener {
     }
 
     public static void ProcessTick() {
-        gameMode.onTick();
+        SAMPServer.onTick();
     }
 
     public static void OnGameModeInit() {
-        // Initialize GameMode instance using reflection, based on JSAMP_PROPERTIES_PATH PROPERTY_MAINCLASS line.
+        // Initialize SAMPServer instance using reflection, based on JSAMP_PROPERTIES_PATH PROPERTY_MAINCLASS line.
         try (InputStream inputStream = new FileInputStream(new File(JSAMP_PROPERTIES_PATH))) {
             Properties properties = new Properties();
             properties.load(inputStream);
 
             String mainClassName = properties.getProperty(PROPERTY_MAINCLASS);
             Class mainClass = Class.forName(mainClassName);
-            if (!GameMode.class.isAssignableFrom(mainClass)) {
-                throw new Exception(PROPERTY_MAINCLASS + " must be a subclass of " + GameMode.class.toString());
+            if (!SAMPServer.class.isAssignableFrom(mainClass)) {
+                throw new Exception(PROPERTY_MAINCLASS + " must be a subclass of " + SAMPServer.class.toString());
             }
 
-            gameMode = (GameMode) mainClass.newInstance();
-            gameMode.onInit();
+            SAMPServer = (SAMPServer) mainClass.newInstance();
+            SAMPServer.onInit();
         } catch (Exception e) {
-            FunctionAccess.logprintf("Error: Cannot initialize GameMode instance:");
+            FunctionAccess.logprintf("Error: Cannot initialize SAMPServer instance:");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             SAMPFunctions.logprintf(sw.toString());
@@ -104,13 +105,13 @@ public class MainCallbackListener {
     }
 
     public static void OnGameModeExit() {
-        if (gameMode != null) {
-            gameMode.onExit();
+        if (SAMPServer != null) {
+            SAMPServer.onExit();
         }
     }
 
     public static void OnExceptionOccurred(Throwable throwable) {
-        gameMode.onExceptionOccurred(throwable);
+        SAMPServer.onExceptionOccurred(throwable);
     }
 
     public static int OnPlayerConnect(int playerId ) {
@@ -369,48 +370,15 @@ public class MainCallbackListener {
         return 1;
     }
 
-    private static long minOPUTime, maxOPUTime;
-    private static long secCounterLock;
-    private static long nsAccumulator, updateCounter;
-
     public static int OnPlayerUpdate(int playerId ) {
         boolean shouldReturnZero = false;
-
-        /*
-        long secCounter = System.currentTimeMillis();
-        if (secCounter > secCounterLock) {
-            secCounterLock = secCounter + 1_000;
-            double min = nsToMS(minOPUTime);
-            double max = nsToMS(maxOPUTime);
-            double average = (min + max) / 2.0;
-            SAMPFunctions.SendClientMessage(playerId, -1, "min: " + min + " | max: " + max + " | average: " + average);
-            minOPUTime = Long.MAX_VALUE;
-            maxOPUTime = 0;
-
-            double average2 = nsToMS(nsAccumulator / updateCounter);
-            SAMPFunctions.SendClientMessage(playerId, 0xFF0000FF,
-                    "the ultimate result! {ffffff}average time: " + average2
-                            + " for total " + nsToMS(updateCounter) + " (updates: " + updateCounter + ")");
-
-            updateCounter = 0;
-            nsAccumulator = 0;
-        }
-
-
-        long clockStart = System.nanoTime();*/
         for (CallbackListener listener : listeners) {
-            if (listener.OnPlayerUpdate(playerId ))
+            if (listener.OnPlayerUpdate(playerId)) {
                 shouldReturnZero = true;
-                break; // TODO: CHANGE IT TO 'return 0' IF YOU ARE NOT BENCHMARKING
+                break;
+            }
         }
-        /*long timeSpentUpdating = System.nanoTime() - clockStart;
-        nsAccumulator += timeSpentUpdating;
-        updateCounter++;*/
         return shouldReturnZero ? 0 : 1;
-    }
-
-    static double nsToMS(long nano) {
-        return nano / 1_000_000.0;
     }
 
     public static int OnPlayerStreamIn(int playerId, int forPlayerId ) {

@@ -16,7 +16,7 @@ package com.lleps.jsamp.world;
 import com.google.common.base.Preconditions;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.constant.Interior;
-import com.lleps.jsamp.gamemode.GameMode;
+import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.constant.Weather;
 import org.apache.commons.lang3.RandomUtils;
@@ -96,7 +96,7 @@ public class NoStreamingWorld implements World {
 
     @Override
     public Weather getWeather() {
-        return weather != null ? weather : GameMode.getWeather();
+        return weather != null ? weather : SAMPServer.getWeather();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class NoStreamingWorld implements World {
 
     @Override
     public LocalTime getTime() {
-        return time != null ? time : GameMode.getTime();
+        return time != null ? time : SAMPServer.getTime();
     }
 
     @Override

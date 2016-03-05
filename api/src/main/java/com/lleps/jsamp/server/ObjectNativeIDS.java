@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.gamemode;
+package com.lleps.jsamp.server;
 
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.SAMPConstants;

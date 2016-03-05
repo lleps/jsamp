@@ -13,7 +13,7 @@
  */
 package com.lleps.jsamp.world;
 
-import com.lleps.jsamp.gamemode.ObjectNativeIDS;
+import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.data.Color;

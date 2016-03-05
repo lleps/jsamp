@@ -13,9 +13,7 @@
  */
 package com.lleps.jsamp.anticheat;
 
-import com.lleps.jsamp.SAMPConstants;
-import com.lleps.jsamp.gamemode.GameMode;
-import com.lleps.jsamp.gamemode.Timer;
+import com.lleps.jsamp.server.SAMPServer;
 
 import static com.lleps.jsamp.SAMPConstants.MAX_PLAYERS;
 import static com.lleps.jsamp.SAMPConstants.MAX_VEHICLES;
@@ -27,11 +25,11 @@ public class Anticheat {
     private final ACPlayer[] players = new ACPlayer[MAX_PLAYERS];
     private final ACVehicle[] vehicles = new ACVehicle[MAX_VEHICLES];
 
-    private final GameMode gameMode;
+    private final SAMPServer server;
     private int unsyncSecondsToTimeout = 12;
 
-    public Anticheat(GameMode gameMode) {
-        this.gameMode = gameMode;
+    public Anticheat(SAMPServer server) {
+        this.server = server;
     }
 
     public ACPlayer[] getPlayers() {
@@ -42,8 +40,8 @@ public class Anticheat {
         return vehicles;
     }
 
-    public GameMode getGameMode() {
-        return gameMode;
+    public SAMPServer getServer() {
+        return server;
     }
 
     public void setUnsyncSecondsToTimeout(int unsyncSecondsToTimeout) {

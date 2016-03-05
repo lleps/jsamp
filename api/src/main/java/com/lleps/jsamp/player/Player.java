@@ -19,11 +19,10 @@ import com.lleps.jsamp.constant.Weather;
 import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
-import com.lleps.jsamp.gamemode.ObjectNativeIDS;
+import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.world.World;
 
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Optional;
 
 /**

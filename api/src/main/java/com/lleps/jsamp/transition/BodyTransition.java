@@ -92,7 +92,7 @@ public class BodyTransition {
         .setTime(Duration.seconds(2))
         .setOnFinishListener(b -> {
             player.sendMessage("la barrera se abrió, puede pasar");
-            GameMode.runLater(Duration.seconds(7), () -> {
+            SAMPServer.runLater(Duration.seconds(7), () -> {
                 closeAnimation.play();
             });
         }

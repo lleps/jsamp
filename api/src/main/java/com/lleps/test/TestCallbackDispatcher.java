@@ -13,13 +13,12 @@
  */
 package com.lleps.test;
 
-import com.lleps.jsamp.gamemode.CallbackListener;
+import com.lleps.jsamp.server.CallbackListener;
 import com.lleps.jsamp.player.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @author spell

@@ -3,18 +3,18 @@ package com.lleps.test;
 import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.anticheat.event.AnticheatEvent;
-import com.lleps.jsamp.gamemode.GameMode;
+import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
 
 /**
  * @author leandro on 28/01/16.
  */
-public class MainTest extends GameMode {
+public class MainTest extends SAMPServer {
     @Override
     public void onInit() throws Exception {
         super.onInit();
 
-        printLine("Loading MainTest gamemode..");
+        printLine("Loading MainTest server..");
 
         TestCallbackDispatcher dispatcher = new TestCallbackDispatcher();
         MainCallbackListener.addCallbackListener(dispatcher, MainCallbackListener.ListenerPriority.LOW);
