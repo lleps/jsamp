@@ -26,7 +26,7 @@ import java.util.Properties;
  *
  * This static class will do two things:
  *
- * 1. Initialize SAMPServer instance.
+ * 1. Initialize server instance.
  * 2. Report events to all added listeners. To add or remove listeners, use
  * {@link #addCallbackListener(CallbackListener, ListenerPriority)} and
  * {@link #removeCallbackListener(CallbackListener)}
@@ -42,7 +42,7 @@ import java.util.Properties;
 @SuppressWarnings("unused") // These methods are called from JNI.
 public class MainCallbackListener {
     private static List<CallbackListener> listeners = new ArrayList<>();
-    private static SAMPServer SAMPServer;
+    private static SAMPServer server;
 
     public enum ListenerPriority {
         /**
@@ -77,11 +77,11 @@ public class MainCallbackListener {
     }
 
     public static void ProcessTick() {
-        SAMPServer.onTick();
+        server.onTick();
     }
 
     public static void OnGameModeInit() {
-        // Initialize SAMPServer instance using reflection, based on JSAMP_PROPERTIES_PATH PROPERTY_MAINCLASS line.
+        // Initialize server instance using reflection, based on JSAMP_PROPERTIES_PATH PROPERTY_MAINCLASS line.
         try (InputStream inputStream = new FileInputStream(new File(JSAMP_PROPERTIES_PATH))) {
             Properties properties = new Properties();
             properties.load(inputStream);
@@ -92,10 +92,10 @@ public class MainCallbackListener {
                 throw new Exception(PROPERTY_MAINCLASS + " must be a subclass of " + SAMPServer.class.toString());
             }
 
-            SAMPServer = (SAMPServer) mainClass.newInstance();
-            SAMPServer.onInit();
+            server = (SAMPServer) mainClass.newInstance();
+            server.onInit();
         } catch (Exception e) {
-            FunctionAccess.logprintf("Error: Cannot initialize SAMPServer instance:");
+            FunctionAccess.logprintf("Error: Cannot initialize server instance:");
             StringWriter sw = new StringWriter();
             e.printStackTrace(new PrintWriter(sw));
             SAMPFunctions.logprintf(sw.toString());
@@ -105,13 +105,13 @@ public class MainCallbackListener {
     }
 
     public static void OnGameModeExit() {
-        if (SAMPServer != null) {
-            SAMPServer.onExit();
+        if (server != null) {
+            server.onExit();
         }
     }
 
     public static void OnExceptionOccurred(Throwable throwable) {
-        SAMPServer.onExceptionOccurred(throwable);
+        server.onExceptionOccurred(throwable);
     }
 
     public static int OnPlayerConnect(int playerId ) {

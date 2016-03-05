@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Main class. Will be initialized by MainCallbackListener which is the entry point. Will handle SAMPServer lifecycle.
  * User main class must extends SAMPServer, for example:
  *
- *      public class RolePlayGameMode extends SAMPServer {
+ *      public class RolePlayServer extends SAMPServer {
  *          public void onInit() {
  *              super.onInit(); // Always call super methods when overriding, to do internal work correctly.
  *              printLine("Role play initialized");
