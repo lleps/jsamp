@@ -14,6 +14,7 @@
 package com.lleps.jsamp.anticheat;
 
 import com.google.common.base.Preconditions;
+import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.SAMPFunctionsExecutor;
 import org.apache.commons.lang3.RandomUtils;
@@ -167,10 +168,16 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
 
         float[] positionArray = null;
         for (int i = 0, max = SAMPFunctions.GetPlayerPoolSize(); i <= max; i++) {
-            if (ac.isConnected(i) && players[i].getVehicleId().getShouldBe() == vehicleid) {
-                if (positionArray == null) positionArray = new float[] {x, y, z};
-                players[i].getPosition().setShouldBe(positionArray);
-                players[i].getPosition().unsync();
+            if (ac.isConnected(i)) {
+                if (players[i].getVehicleId().getShouldBe() == vehicleid) {
+                    if (positionArray == null) positionArray = new float[]{x, y, z};
+                    players[i].getPosition().setShouldBe(positionArray);
+                    players[i].getPosition().unsync();
+                } else if (SAMPFunctions.GetPlayerSurfingVehicleID(i) == vehicleid) {
+                    float[] playerPos = SAMPFunctions.GetPlayerPos(i);
+                    // Prevent players surfing from teleporting with vehicles.
+                    FunctionAccess.SetPlayerPos(i, playerPos[0], playerPos[1], playerPos[2]);
+                }
             }
         }
         return false;
