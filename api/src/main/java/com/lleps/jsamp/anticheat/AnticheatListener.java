@@ -286,7 +286,6 @@ public class AnticheatListener implements CallbackListener {
             float vehicleHealth = SAMPFunctions.GetVehicleHealth(vehicleId);
             player.getVehicleHealth().setShouldBe(vehicleHealth);
             player.getVehicleHealth().sync();
-
         } else {
             int lastVehicle = player.getVehicleId().getShouldBe();
             int lastVehicleModel = SAMPFunctions.GetVehicleModel(lastVehicle);
@@ -333,7 +332,8 @@ public class AnticheatListener implements CallbackListener {
     @Override
     public boolean OnPlayerEnterVehicle(int playerId, int vehicleId, boolean isPassenger) {
         if (!SAMPFunctions.IsValidVehicle(vehicleId)) {
-            if (reportInvalidCall(playerId, "OnPlayerEnterVehicle")) {
+            if (reportInvalidCall(playerId,
+                    "OnPlayerEnterVehicle(pid=%d,vid=%d,passenger=%b)", playerId, vehicleId, isPassenger)) {
                 return true;
             }
         }
@@ -594,15 +594,11 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerWeaponShot(int playerid, int weaponid, int hittype, int hitid, float fX, float fY, float fZ) {
-        if (weaponid < 22 || weaponid > 38 && reportInvalidCall(playerid, "OnPlayerWeaponShot"))
-            return true;
+        if (weaponid < 22 || weaponid > 38) {
+            if (reportInvalidCall(playerid,
+                    "OnPlayerWeaponShot(pid=%d,weap=%d,hittype=%d,hitid=%d,x=%f,y=%f,z=%f)", playerid, weaponid,
+                    hittype, hitid, fX, fY, fZ)) {
 
-        if (
-                (hittype == BULLET_HIT_TYPE_PLAYER && !anticheat.isConnected(hitid))
-                || (hittype == BULLET_HIT_TYPE_OBJECT && !SAMPFunctions.IsValidObject(hitid)
-                || (hittype == BULLET_HIT_TYPE_PLAYER_OBJECT && !SAMPFunctions.IsValidPlayerObject(playerid, hitid))
-                || (hittype == BULLET_HIT_TYPE_VEHICLE && !anticheat.isValidVehicle(hitid)))) {
-            if (reportInvalidCall(playerid, "OnPlayerWeaponShot")) {
                 return true;
             }
         }
@@ -909,13 +905,14 @@ public class AnticheatListener implements CallbackListener {
         return false;
     }
 
-    private void scm(int id, String msg) {
-        SAMPFunctions.SendClientMessage(id, -1, msg);
-    }
-
     @Override
     public boolean OnPlayerTakeDamage(int playerid, int issuerId, float damage, int weaponid, int bodypart) {
-        // TODO: validate issuerid, playerid.
+        if (damage < 0 || (issuerId != INVALID_PLAYER_ID && !anticheat.isConnected(issuerId))) {
+            if (reportInvalidCall(playerid, "OnPlayerTakeDamage(pid=%d,issuer=%d,damage=%f,weap=%d,bodypart=%d",
+                    playerid, issuerId, damage, weaponid, bodypart)) {
+                return true;
+            }
+        }
 
         ACPlayer player = players[playerid];
         float healthShouldBe = player.getHealth().getShouldBe();
@@ -962,7 +959,10 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
-
+        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehicleRespray(pid=%d,veh=%d,comp=%d)",
+                playerId, vehicleId, componentId)) {
+            return true;
+        }
 
         ACPlayer player = players[playerId];
 
@@ -993,7 +993,8 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehiclePaintjob(int playerId, int vehicleId, int paintjobId) {
-        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "v")) {
+        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehiclePaintjob(p=%d,v=%d,paintjob=%d)",
+                playerId, vehicleId, paintjobId)) {
             return true;
         }
 
@@ -1009,14 +1010,10 @@ public class AnticheatListener implements CallbackListener {
     @Override
     public boolean OnUnoccupiedVehicleUpdate(int vehicleId, int playerId, int passengerSeat, float newX, float newY, float newZ, float vel_x, float vel_y, float vel_z) {
         if (
-                ACUtils.get3DSpeed(vel_x, vel_y, vel_z) < 10
-                && SAMPFunctions.GetVehicleDistanceFromPoint(vehicleId, newX, newY, newZ) < 1
+                ACUtils.get3DSpeed(vel_x, vel_y, vel_z) < 20
+                && SAMPFunctions.GetVehicleDistanceFromPoint(vehicleId, newX, newY, newZ) < 2
                 && SAMPFunctions.IsPlayerInRangeOfPoint(playerId, 5, newX, newY, newZ)
-
                 ) {
-
-            // Sync only if player is closer to vehicle, speed is low, and vehicle is closer to last position.
-            SAMPFunctions.SendClientMessage(playerId, 0x00FF00FF, "synced.");
             return false;
         }
         return true;
@@ -1024,7 +1021,8 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehicleRespray(int playerId, int vehicleId, int color1, int color2) {
-        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehicleRespray")) {
+        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehicleRespray(p=%d,v=%d,col1=%d,col2=%d",
+                playerId, vehicleId, color1, color2)) {
             return true;
         }
 
@@ -1060,8 +1058,8 @@ public class AnticheatListener implements CallbackListener {
         return gm.onAnticheatEvent(playerId, new UnsyncEvent(description));
     }
 
-    private boolean reportInvalidCall(int playerId, String callbackName) {
-        return gm.onAnticheatEvent(playerId, new InvalidCallEvent(callbackName));
+    private boolean reportInvalidCall(int playerId, String callbackNameFormatted, Object... arguments) {
+        return gm.onAnticheatEvent(playerId, new InvalidCallEvent(String.format(callbackNameFormatted, arguments)));
     }
 
     private boolean shouldResync(int seconds) {
