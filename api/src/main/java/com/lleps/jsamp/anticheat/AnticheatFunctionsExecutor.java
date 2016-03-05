@@ -116,6 +116,7 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
         }
 
         if (!seatOccupied) {
+            players[playerid].setEnteringVehicleId(vehicleid);
             players[playerid].getVehicleId().setShouldBe(vehicleid);
             players[playerid].getVehicleId().unsync();
 

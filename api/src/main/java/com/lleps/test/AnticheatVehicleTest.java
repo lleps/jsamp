@@ -15,6 +15,9 @@ package com.lleps.test;
 
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
+import com.lleps.jsamp.constant.model.VehicleModel;
+import com.lleps.jsamp.data.Color;
+import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.world.Vehicle;
 import com.lleps.jsamp.world.World;
@@ -29,6 +32,21 @@ public class AnticheatVehicleTest implements CommandListener {
 
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
+        if (command.equals("/createvehicle")) {
+            try {
+                VehicleModel model = VehicleModel.getById(Integer.parseInt(args[0]));
+                Color color1 = Color.ofVehicleColor(Integer.parseInt(args[1]));
+                Color color2 = Color.ofVehicleColor(Integer.parseInt(args[2]));
+                float[] xyz = FunctionAccess.GetPlayerPos(player.getId());
+                int id = FunctionAccess.CreateVehicle(model.getModelId(), xyz[0], xyz[1], xyz[2], 0, color1.getVehicleColorID(),
+                        color2.getVehicleColorID(), -1, false);
+                FunctionAccess.SetVehicleVirtualWorld(id, FunctionAccess.GetPlayerVirtualWorld(player.getId()));
+            } catch (Exception e) {
+                player.sendMessage("/createvehicle model col1 col2");
+                player.sendMessage("Exception: " + e);
+            }
+            return true;
+        }
         if (command.equals("/putinvehicle")) {
             FunctionAccess.PutPlayerInVehicle(player.getId(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
             return true;
@@ -52,6 +70,20 @@ public class AnticheatVehicleTest implements CommandListener {
         }
         if (command.equals("/setvehiclecolor")) {
             FunctionAccess.ChangeVehicleColor(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+            return true;
+        }
+        if (command.equals("/setvehiclepaintjob")) {
+            FunctionAccess.ChangeVehiclePaintjob(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+            return true;
+        }
+        if (command.equals("/setvehicleparamsex")) {
+            FunctionAccess.SetVehicleParamsEx(Integer.parseInt(args[0]), Integer.parseInt(args[1]) == 1,
+                    Integer.parseInt(args[2]) == 1,
+                    Integer.parseInt(args[3]) == 1,
+                    Integer.parseInt(args[4]) == 1,
+                    Integer.parseInt(args[5]) == 1,
+                    Integer.parseInt(args[6]) == 1,
+                    Integer.parseInt(args[7]) == 1);
             return true;
         }
         return false;

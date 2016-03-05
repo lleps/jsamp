@@ -15,6 +15,7 @@ package com.lleps.jsamp.anticheat;
 
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.gamemode.GameMode;
+import com.lleps.jsamp.gamemode.Timer;
 
 import static com.lleps.jsamp.SAMPConstants.MAX_PLAYERS;
 import static com.lleps.jsamp.SAMPConstants.MAX_VEHICLES;
@@ -58,6 +59,6 @@ public class Anticheat {
     }
 
     public boolean isValidVehicle(int id) {
-        return id >= 0 && id < MAX_VEHICLES && players[id] != null;
+        return id >= 0 && id < MAX_VEHICLES && vehicles[id] != null;
     }
 }

@@ -19,8 +19,8 @@ public class MainTest extends GameMode {
         TestCallbackDispatcher dispatcher = new TestCallbackDispatcher();
         MainCallbackListener.addCallbackListener(dispatcher, MainCallbackListener.ListenerPriority.LOW);
 
-        dispatcher.addCommandListener(new DialogTest());
-        dispatcher.addCommandListener(new VehicleTest());
+        //dispatcher.addCommandListener(new DialogTest());
+        //dispatcher.addCommandListener(new VehicleTest());
         dispatcher.addCommandListener(new AnticheatAliveTest());
         dispatcher.addCommandListener(new AnticheatHealthArmourTest());
         dispatcher.addCommandListener(new AnticheatWeaponsTest());

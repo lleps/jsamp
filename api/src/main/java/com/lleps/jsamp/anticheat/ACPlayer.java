@@ -34,6 +34,9 @@ public class ACPlayer {
 
     private final SynchronizableProperty<Float> health = new SynchronizableProperty<>(0f);
     private final SynchronizableProperty<Float> armour = new SynchronizableProperty<>(0f);
+
+    private int enteringVehicleId;
+
     private final SynchronizableProperty<Integer> vehicleId = new SynchronizableProperty<>(0);
 
     private long lastPositionCheck;
@@ -44,6 +47,9 @@ public class ACPlayer {
     private boolean invalidAmmoPossible[] = new boolean[SAMPConstants.MAX_WEAPON_SLOTS]; // When users get negative ammo
 
     private boolean kickedOrBanned;
+
+    private long lastStateChange;
+    private int stateChangeWarns;
 
     private int money;
 
@@ -63,12 +69,36 @@ public class ACPlayer {
         return id;
     }
 
+    public void setLastStateChange(long lastStateChange) {
+        this.lastStateChange = lastStateChange;
+    }
+
+    public long getLastStateChange() {
+        return lastStateChange;
+    }
+
+    public void setStateChangeWarns(int stateChangeWarns) {
+        this.stateChangeWarns = stateChangeWarns;
+    }
+
+    public int getStateChangeWarns() {
+        return stateChangeWarns;
+    }
+
     public void setInModshop(boolean inModshop) {
         this.inModshop = inModshop;
     }
 
     public boolean isInModshop() {
         return inModshop;
+    }
+
+    public void setEnteringVehicleId(int enteringVehicleId) {
+        this.enteringVehicleId = enteringVehicleId;
+    }
+
+    public int getEnteringVehicleId() {
+        return enteringVehicleId;
     }
 
     public SynchronizableProperty<Float> getVehicleHealth() {

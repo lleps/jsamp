@@ -46,9 +46,7 @@ public class VehicleTest implements CommandListener {
             world = new NoStreamingWorld(new Interior(0));
         }
 
-        if (player.getWorld() != world) {
-            player.setWorld(world);
-        }
+        player.setWorld(world);
 
         if (command.equals("/veh_new")) {
             try {
