@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.world;
+package com.lleps.jsamp.world.entity;
 
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.player.Player;

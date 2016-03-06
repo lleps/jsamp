@@ -19,6 +19,7 @@ import com.lleps.jsamp.constant.Interior;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.constant.Weather;
+import com.lleps.jsamp.world.entity.WorldEntity;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.time.LocalTime;
@@ -27,7 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This world implementation don't stream nothing. For obviously reasons, is the faster implementation.
+ * This world implementation don't stream nothing. For obviously reasons, is the fastest.
  * Useful when you know the world wont have too many entities.
  *
  * @author spell
@@ -36,7 +37,7 @@ public class NoStreamingWorld implements World {
 
     private Set<WorldEntity> entities;
     private Set<Player> players;
-    private final int id;
+    private final int worldId;
 
     private Weather weather;
     private LocalTime time;
@@ -45,7 +46,7 @@ public class NoStreamingWorld implements World {
 
     public NoStreamingWorld(Interior interior) {
         this.interior = Preconditions.checkNotNull(interior);
-        this.id = RandomUtils.nextInt(0, Integer.MAX_VALUE);
+        this.worldId = RandomUtils.nextInt(0, Integer.MAX_VALUE);
         entities = new HashSet<>();
         players = new HashSet<>();
     }
@@ -57,10 +58,14 @@ public class NoStreamingWorld implements World {
 
     @Override
     public void onPlayerEnter(Player player) {
+        int playerId = player.getId();
+        int interiorId = interior.getId();
+        int worldId = this.worldId;
+
         for (WorldEntity entity : entities) {
-            if (!entity.isCreated(player)) entity.create(player, this);
+            if (!entity.isCreated(playerId)) entity.create(playerId, worldId, interiorId);
         }
-        FunctionAccess.SetPlayerVirtualWorld(player.getId(), id);
+        FunctionAccess.SetPlayerVirtualWorld(player.getId(), this.worldId);
         players.add(player);
         player.onParentTimeChange(getTime());
         player.onParentWeatherChange(getWeather());
@@ -68,8 +73,9 @@ public class NoStreamingWorld implements World {
 
     @Override
     public void onPlayerExit(Player player) {
+        int playerId = player.getId();
         for (WorldEntity entity : entities) {
-            entity.destroy(player);
+            entity.destroy(playerId);
         }
         players.remove(player);
     }
@@ -113,7 +119,7 @@ public class NoStreamingWorld implements World {
     @Override
     public void addEntity(WorldEntity entity) {
         for (Player player : players) {
-            if (!entity.isCreated(player)) entity.create(player, this);
+            entity.create(player.getId(), worldId, interior.getId());
         }
         entities.add(entity);
     }
@@ -121,7 +127,7 @@ public class NoStreamingWorld implements World {
     @Override
     public void removeEntity(WorldEntity entity) {
         for (Player player : players) {
-            entity.destroy(player);
+            entity.destroy(player.getId());
         }
         entities.remove(entity);
     }
@@ -131,10 +137,8 @@ public class NoStreamingWorld implements World {
         return players;
     }
 
-
-
     @Override
     public int getId() {
-        return id;
+        return worldId;
     }
 }

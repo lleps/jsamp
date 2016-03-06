@@ -17,7 +17,7 @@ import com.lleps.jsamp.constant.model.VehicleModel;
 import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.data.vehicle.VehicleDamageState;
-import com.lleps.jsamp.world.Vehicle;
+import com.lleps.jsamp.world.entity.Vehicle;
 import junit.framework.TestCase;
 
 import java.io.FileOutputStream;

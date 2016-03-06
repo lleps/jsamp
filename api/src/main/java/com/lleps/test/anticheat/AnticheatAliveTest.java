@@ -11,11 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.anticheat;
 
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.player.Player;
+import com.lleps.test.CommandListener;
 
 /**
  * @author spell

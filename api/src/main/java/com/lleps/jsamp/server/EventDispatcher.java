@@ -18,8 +18,8 @@ import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.constant.model.WeaponModel;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
-import com.lleps.jsamp.world.Body;
-import com.lleps.jsamp.world.Pickup;
+import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Pickup;
 
 /**
  * @author spell

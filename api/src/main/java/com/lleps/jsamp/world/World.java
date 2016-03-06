@@ -16,13 +16,13 @@ package com.lleps.jsamp.world;
 import com.lleps.jsamp.constant.Interior;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.constant.Weather;
+import com.lleps.jsamp.world.entity.WorldEntity;
 
 import java.time.LocalTime;
 import java.util.Collection;
 
 /**
  * World is an abstraction of SA:MP virtualWorld, linked to a worldId.
- * Note that world must deal with SA:MP limits (for example, through streaming).
  *
  * @author spell
  */
@@ -106,14 +106,14 @@ public interface World {
     LocalTime getTime();
 
     /**
-     * Get this world SA:MP id.
+     * Get this world's SA:MP id.
      *
      * @return this world id.
      */
     int getId();
 
     /**
-     * Get this world interior.
+     * Get this world's interior.
      *
      * @return world interior.
      */

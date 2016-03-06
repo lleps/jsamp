@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.world;
 
-import com.lleps.jsamp.constant.Interior;
+import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.constant.Paintjob;
 import com.lleps.jsamp.constant.model.VehicleComponent;
 import com.lleps.jsamp.constant.model.VehicleModel;
@@ -23,9 +23,8 @@ import com.lleps.jsamp.data.vehicle.DoorState;
 import com.lleps.jsamp.data.vehicle.VehicleDamageState;
 import com.lleps.jsamp.data.vehicle.WindowState;
 import com.lleps.jsamp.player.Player;
-import com.lleps.jsamp.world.NoStreamingWorld;
-import com.lleps.jsamp.world.Vehicle;
-import com.lleps.jsamp.world.World;
+import com.lleps.jsamp.world.entity.Vehicle;
+import com.lleps.test.CommandListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,18 +33,10 @@ import java.util.Map;
  * @author spell
  */
 public class VehicleTest implements CommandListener {
-    World world;
-
     Map<String, Vehicle> vehiclesByKeys = new HashMap<>();
 
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
-        if (world == null) {
-            world = new NoStreamingWorld(new Interior(0));
-        }
-
-        player.setWorld(world);
-
         if (command.equals("/veh_new")) {
             try {
                 String key = args[0];
@@ -69,7 +60,9 @@ public class VehicleTest implements CommandListener {
                 String key = args[0];
 
                 Vehicle vehicle = vehiclesByKeys.get(key);
-                vehicle.create(player, world);
+                vehicle.create(player.getId(),
+                        FunctionAccess.GetPlayerVirtualWorld(player.getId()),
+                        FunctionAccess.GetPlayerInterior(player.getId()));
             } catch (Exception e) {
                 player.sendMessage("exc " + e);
             }
@@ -81,7 +74,7 @@ public class VehicleTest implements CommandListener {
                 String key = args[0];
 
                 Vehicle vehicle = vehiclesByKeys.get(key);
-                vehicle.destroy(player);
+                vehicle.destroy(player.getId());
             } catch (Exception e) {
                 player.sendMessage("exc " + e);
             }
@@ -267,28 +260,13 @@ public class VehicleTest implements CommandListener {
 
         //veh_secondaryColor key color
         if (command.equals("/veh_secondaryColor")) {
-            try {
-                String key = args[0];
-                Color color = Color.ofVehicleColor(Integer.parseInt(args[1]));
-                Vehicle v = vehiclesByKeys.get(key);
-                    v.setSecondaryColor(color);
-            } catch (Exception e) {
-            }
+            String key = args[0];
+            Color color = Color.ofVehicleColor(Integer.parseInt(args[1]));
+            Vehicle v = vehiclesByKeys.get(key);
+            v.setSecondaryColor(color);
             return true;
         }
 
         return false;
-    }
-
-    interface vehAction {
-        void apply(Vehicle vehicle);
-    }
-
-    void applyAction(String key, vehAction action) {
-        Vehicle vehicle = vehiclesByKeys.get(key);
-        if (vehicle != null) {
-            System.out.println("applying action..");
-            action.apply(vehicle);
-        }
     }
 }

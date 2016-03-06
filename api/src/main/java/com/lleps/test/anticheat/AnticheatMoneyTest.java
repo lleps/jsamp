@@ -11,23 +11,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.anticheat;
 
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.player.Player;
+import com.lleps.test.CommandListener;
 
 /**
- * This test proves that all get functions (that are hooked to make them server-side) works property.
- * Commands are equal to function to check, but all letters are lowercase.
- * All commands will get the sender as the player id, functions that need extra params should be passed as
- * normal command params.
  * @author spell
  */
-public class AnticheatPosTests implements CommandListener {
+public class AnticheatMoneyTest implements CommandListener {
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
-        if (command.equals("/setpos")) {
-            FunctionAccess.SetPlayerPos(player.getId(), Float.parseFloat(args[0]), Float.parseFloat(args[1]), Float.parseFloat(args[2]));
+        int id = player.getId();
+        if (command.equals("/givemoney")) {
+            FunctionAccess.GivePlayerMoney(id, Integer.parseInt(args[0]));
+            return true;
+        }
+        if (command.equals("/getmoney")) {
+            FunctionAccess.SendClientMessage(id, -1, "money: " + FunctionAccess.GetPlayerMoney(id));
+            return true;
+        }
+        if (command.equals("/resetmoney")) {
+            FunctionAccess.ResetPlayerMoney(player.getId());
             return true;
         }
         return false;

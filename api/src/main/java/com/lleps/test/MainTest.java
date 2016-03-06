@@ -5,6 +5,8 @@ import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.anticheat.event.AnticheatEvent;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
+import com.lleps.test.anticheat.*;
+import com.lleps.test.world.VehicleTest;
 
 /**
  * @author leandro on 28/01/16.
@@ -19,8 +21,6 @@ public class MainTest extends SAMPServer {
         TestCallbackDispatcher dispatcher = new TestCallbackDispatcher();
         MainCallbackListener.addCallbackListener(dispatcher, MainCallbackListener.ListenerPriority.LOW);
 
-        //dispatcher.addCommandListener(new DialogTest());
-        //dispatcher.addCommandListener(new VehicleTest());
         dispatcher.addCommandListener(new AnticheatAliveTest());
         dispatcher.addCommandListener(new AnticheatHealthArmourTest());
         dispatcher.addCommandListener(new AnticheatWeaponsTest());
@@ -29,6 +29,9 @@ public class MainTest extends SAMPServer {
         dispatcher.addCommandListener(new AnticheatPosTests());
         dispatcher.addCommandListener(new AnticheatMoneyTest());
         dispatcher.addCommandListener(new SavePositionTest());
+
+        dispatcher.addCommandListener(new DialogTest());
+        dispatcher.addCommandListener(new VehicleTest());
 
         printLine("Loaded..");
     }

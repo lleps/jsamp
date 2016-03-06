@@ -1,6 +1,11 @@
-TODO: Built-in support for enterable interiors.
 
-TODO: Create methods setWorld in world entities for set only reference.
+Built-in support for enterable interiors.
+Create methods setWorld in world entities for set only reference.
+
+First, i'll write all about worlds.
+ * Refactor Entity to make independent of worlds. "Single responsibility principle - Do one thing."
+ * Write and test all entities.
+ * Write and test all world implementations.
 
 Come back to think on this sheet's abstraction.
 

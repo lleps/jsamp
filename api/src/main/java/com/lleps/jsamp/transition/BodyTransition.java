@@ -14,9 +14,7 @@
 package com.lleps.jsamp.transition;
 
 import com.lleps.jsamp.data.Vector3D;
-import com.lleps.jsamp.world.Body;
-
-import java.time.Duration;
+import com.lleps.jsamp.world.entity.Body;
 
 /**
  * A class for add movement to a body.

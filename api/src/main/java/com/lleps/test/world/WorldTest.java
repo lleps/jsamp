@@ -11,30 +11,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.world;
 
-import com.lleps.jsamp.FunctionAccess;
-import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.world.World;
+import com.lleps.test.CommandListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author spell
  */
-public class AnticheatMoneyTest implements CommandListener {
+public class WorldTest implements CommandListener {
+    public static final Map<String, World> worlds = new HashMap<>();
+
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
-        int id = player.getId();
-        if (command.equals("/givemoney")) {
-            FunctionAccess.GivePlayerMoney(id, Integer.parseInt(args[0]));
-            return true;
-        }
-        if (command.equals("/getmoney")) {
-            FunctionAccess.SendClientMessage(id, -1, "money: " + FunctionAccess.GetPlayerMoney(id));
-            return true;
-        }
-        if (command.equals("/resetmoney")) {
-            FunctionAccess.ResetPlayerMoney(player.getId());
-            return true;
+        if (command.equals("/world_create")) {
+            String name = args[0];
+            String type = args[1];
+            if (type == "NoStreamingWorld") {
+
+            }
         }
         return false;
     }

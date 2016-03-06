@@ -3,7 +3,7 @@ package com.lleps.jsamp.worldindexing;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.world.World;
-import com.lleps.jsamp.world.WorldEntity;
+import com.lleps.jsamp.world.entity.WorldEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -22,29 +22,15 @@ import com.lleps.jsamp.data.Vector3D;
  * @author spell
  */
 public final class Interior {
+    public static final Interior NONE = new Interior(0);
+
     private final int id;
-    private final Vector3D spawnPosition;
-    private final Float spawnAngle;
 
-    public Interior(int id) {
-        this(id, null, null);
-    }
-
-    public Interior(int id, Vector3D spawnPosition, Float spawnAngle) {
+    private Interior(int id) {
         this.id = id;
-        this.spawnPosition = spawnPosition;
-        this.spawnAngle = spawnAngle;
     }
 
     public int getId() {
         return id;
-    }
-
-    public Float getSpawnAngle() {
-        return spawnAngle;
-    }
-
-    public Vector3D getSpawnPosition() {
-        return spawnPosition;
     }
 }

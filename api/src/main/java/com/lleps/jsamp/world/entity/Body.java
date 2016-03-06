@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.world;
+package com.lleps.jsamp.world.entity;
 
 import com.lleps.jsamp.*;
 import com.lleps.jsamp.constant.model.BodyModel;
@@ -21,6 +21,7 @@ import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.data.bodymaterial.BodyMaterial;
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.world.World;
 
 import java.util.*;
 

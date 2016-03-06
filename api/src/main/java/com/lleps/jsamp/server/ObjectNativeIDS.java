@@ -15,10 +15,10 @@ package com.lleps.jsamp.server;
 
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.SAMPConstants;
-import com.lleps.jsamp.world.Body;
-import com.lleps.jsamp.world.Label;
-import com.lleps.jsamp.world.Vehicle;
-import com.lleps.jsamp.world.Pickup;
+import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Label;
+import com.lleps.jsamp.world.entity.Vehicle;
+import com.lleps.jsamp.world.entity.Pickup;
 
 import java.util.Collection;
 import java.util.LinkedList;

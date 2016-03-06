@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.anticheat;
 
 import com.lleps.jsamp.FunctionAccess;
-import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.player.Player;
+import com.lleps.test.CommandListener;
 
 /**
  * This test proves that all get functions (that are hooked to make them server-side) works property.
@@ -24,24 +24,11 @@ import com.lleps.jsamp.player.Player;
  * normal command params.
  * @author spell
  */
-public class AnticheatGetTests implements CommandListener {
+public class AnticheatPosTests implements CommandListener {
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
-        if (command.equals("/getplayerhealth")) {
-            player.sendMessage("health: " + FunctionAccess.GetPlayerHealth(player.getId()));
-            return true;
-        }
-        if (command.equals("/getplayerarmour")) {
-            player.sendMessage("armour: " + FunctionAccess.GetPlayerArmour(player.getId()));
-            return true;
-        }
-        if (command.equals("/getplayerweaponslot")) {
-            int slot = Integer.parseInt(args[0]);
-            player.sendMessage("getplayerweaponslot("+slot+": " + FunctionAccess.GetPlayerWeaponSlot(player.getId(), slot));
-            return true;
-        }
-        if (command.equals("/getplayerweapon")) {
-            player.sendMessage("getplayerweapon: " + FunctionAccess.GetPlayerWeapon(player.getId()));
+        if (command.equals("/setpos")) {
+            FunctionAccess.SetPlayerPos(player.getId(), Float.parseFloat(args[0]), Float.parseFloat(args[1]), Float.parseFloat(args[2]));
             return true;
         }
         return false;

@@ -11,22 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.test;
+package com.lleps.test.anticheat;
 
 import com.lleps.jsamp.FunctionAccess;
-import com.lleps.jsamp.constant.Interior;
-import com.lleps.jsamp.constant.Paintjob;
-import com.lleps.jsamp.constant.model.VehicleComponent;
-import com.lleps.jsamp.constant.model.VehicleModel;
-import com.lleps.jsamp.data.Color;
-import com.lleps.jsamp.data.Vector3D;
-import com.lleps.jsamp.data.vehicle.DoorState;
-import com.lleps.jsamp.data.vehicle.VehicleDamageState;
-import com.lleps.jsamp.data.vehicle.WindowState;
 import com.lleps.jsamp.player.Player;
-import com.lleps.jsamp.world.NoStreamingWorld;
-import com.lleps.jsamp.world.Vehicle;
+import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.jsamp.world.World;
+import com.lleps.test.CommandListener;
 
 import java.util.HashMap;
 import java.util.Map;

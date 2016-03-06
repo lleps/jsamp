@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.world;
+package com.lleps.jsamp.world.entity;
 
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.SAMPConstants;
@@ -19,6 +19,7 @@ import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
+import com.lleps.jsamp.world.entity.PerPlayerEntity;
 
 /**
  * @author spell

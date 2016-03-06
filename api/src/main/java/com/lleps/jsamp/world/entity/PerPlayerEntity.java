@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lleps.jsamp.world;
+package com.lleps.jsamp.world.entity;
 
 import com.google.common.collect.Sets;
 import com.lleps.jsamp.player.Player;
@@ -25,44 +25,36 @@ import java.util.Map;
  *
  * @author spell
  */
-public abstract class PerPlayerEntity extends BaseEntity {
+public abstract class PerPlayerEntity extends WorldEntity {
     /**
      * This map contains references player id -> entity id.
      */
-    protected final Map<Integer, Integer> idsByPlayerIds;
-
-    protected World world;
+    protected final Map<Integer, Integer> idsByPlayerIds = new HashMap<>();
 
     protected PerPlayerEntity() {
-        idsByPlayerIds = new HashMap<>();
     }
 
     @Override
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public final boolean create(Player player, World world) {
-        int playerId = player.getId();
+    public final boolean create(int playerId, int worldId, int interiorId) {
         if (idsByPlayerIds.containsKey(playerId)) {
             return true;
         }
+
         int entityId = createNatively(playerId);
         if (entityId == getInvalidId()) {
             return false;
         }
-        getArrayNativeIDS()[playerId][entityId] = this;
 
         idsByPlayerIds.put(playerId, entityId);
+
+        getArrayNativeIDS()[playerId][entityId] = this;
 
         applyState(playerId, entityId);
         return true;
     }
 
     @Override
-    public final void destroy(Player player) {
-        int playerId = player.getId();
+    public final void destroy(int playerId) {
         Integer entityId = idsByPlayerIds.get(playerId);
         if (entityId != null) {
             saveState(playerId, entityId);
@@ -75,10 +67,9 @@ public abstract class PerPlayerEntity extends BaseEntity {
     }
 
     @Override
-    public final boolean isCreated(Player player) {
-        return idsByPlayerIds.containsKey(player.getId());
+    public final boolean isCreated(int playerId) {
+        return idsByPlayerIds.containsKey(playerId);
     }
-
 
     /**
      * In case this entity is created, this method will destroy it and create it again. It is used for
@@ -88,10 +79,8 @@ public abstract class PerPlayerEntity extends BaseEntity {
     public void recreate() {
         // Copied to avoid ConcurrentModificationException
         for (int playerId : Sets.newHashSet(idsByPlayerIds.keySet())) {
-            Player.getById(playerId).ifPresent(player -> {
-                destroy(player);
-                create(player, world);
-            });
+            destroy(playerId);
+            create(playerId, 0, 0); // world and interior arent used for per-player entities.
         }
     }
 

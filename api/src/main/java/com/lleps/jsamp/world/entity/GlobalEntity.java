@@ -10,10 +10,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */package com.lleps.jsamp.world;
+ */package com.lleps.jsamp.world.entity;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.world.World;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,35 +23,36 @@ import java.util.Set;
 /**
  * @author spell
  */
-public abstract class GlobalEntity extends BaseEntity {
+public abstract class GlobalEntity extends WorldEntity {
     /**
      * This set will store all player ids with this entity streamed.
      * No matters if the entity creation was successfully or not, the
      * player will be in the list if you call create(player) and will
      * be removed if you call destroy.
      */
-    protected final Set<Integer> playerIds;
+    protected final Set<Integer> playerIds = new HashSet<>();
+    protected int id = getInvalidId();
 
-    protected int id;
-    protected World world;
+    protected int worldId;
+    protected int interiorId;
 
     protected GlobalEntity() {
-        id = getInvalidId();
-        playerIds = new HashSet<>();
     }
 
     @Override
-    public final boolean create(Player player, World world) {
-        this.world = world;
-
-        playerIds.add(player.getId());
+    public final boolean create(int playerId, int worldId, int interiorId) {
+        playerIds.add(playerId);
 
         if (isCreated()) return true;
 
-        id = createNatively(world.getId());
+        id = createNatively(worldId);
         if (isCreated()) {
+
+            this.worldId = worldId;
+            this.interiorId = interiorId;
+
             getIDSArray()[id] = this;
-            applyState(id, world.getId(), world.getInterior().getId());
+            applyState(id, worldId, interiorId);
             return true;
         }
 
@@ -57,19 +60,22 @@ public abstract class GlobalEntity extends BaseEntity {
     }
 
     @Override
-    public final void destroy(Player player) {
-        playerIds.remove(player.getId());
+    public final void destroy(int playerId) {
+        playerIds.remove(playerId);
 
         if (isCreated() && playerIds.isEmpty()) {
             saveState(id);
             destroyNatively(id);
             getIDSArray()[id] = null;
             id = getInvalidId();
+
+            worldId = -1;
+            interiorId = -1;
         }
     }
 
     @Override
-    public final boolean isCreated(Player player) {
+    public final boolean isCreated(int playerId) {
         return isCreated();
     }
 
@@ -143,16 +149,14 @@ public abstract class GlobalEntity extends BaseEntity {
     public void recreate() {
         if (isCreated()) {
             for (int playerId : Sets.newHashSet(playerIds)) {
-                Player.getById(playerId).ifPresent(player -> {
-                    destroy(player);
-                    create(player, world);
-                });
+                destroy(playerId);
+                create(playerId, worldId, interiorId);
             }
         }
     }
 
     /**
-     * Get this entity id. May be invalid.
+     * Get this entity id. Can be invalid.
      *
      * @return this entity id.
      */
