@@ -14,26 +14,49 @@
 package com.lleps.jsamp.data.vehicle;
 
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.constant.VehiclePart;
+
+import java.util.Arrays;
 
 /**
  * @author spell
  */
-public class DoorState extends BaseVehiclePartState {
-
-    public DoorState() {
-    }
-
-    public DoorState(boolean[] opened) {
-        super(opened);
-    }
+public class DoorState implements VehicleProperty, Cloneable {
+    private boolean[] doorOpened = new boolean[4];
 
     @Override
     public void apply(int vehicleId) {
-        FunctionAccess.SetVehicleParamsCarDoors(vehicleId, state[0], state[1], state[2], state[3]);
+        FunctionAccess.SetVehicleParamsCarDoors(vehicleId, doorOpened[0], doorOpened[1], doorOpened[2], doorOpened[3]);
+    }
+
+    public void setDoorOpened(VehiclePart door, boolean opened) {
+        doorOpened[door.getId()] = opened;
+    }
+
+    public boolean isDoorOpened(VehiclePart door) {
+        return doorOpened[door.getId()];
+    }
+
+    public void setAllOpened(boolean opened) {
+        Arrays.fill(doorOpened, opened);
+    }
+
+    /**
+     * @return true if all doors are closed, false otherwise.
+     */
+    public boolean isDefaultState() {
+        for (boolean doorOpened : this.doorOpened) {
+            if (doorOpened) return false;
+        }
+        return true;
     }
 
     @Override
     public DoorState clone() {
-        return (DoorState) super.clone();
+        try {
+            return (DoorState) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

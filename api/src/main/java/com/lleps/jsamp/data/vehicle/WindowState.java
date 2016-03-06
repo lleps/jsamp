@@ -14,26 +14,50 @@
 package com.lleps.jsamp.data.vehicle;
 
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.constant.VehiclePart;
+
+import java.util.Arrays;
 
 /**
  * @author spell
  */
-public class WindowState extends BaseVehiclePartState {
-
-    public WindowState() {
-    }
-
-    public WindowState(boolean[] opened) {
-        super(opened);
-    }
+public class WindowState implements VehicleProperty, Cloneable {
+    private boolean[] windowOpened = new boolean[4];
 
     @Override
     public void apply(int vehicleId) {
-        FunctionAccess.SetVehicleParamsCarWindows(vehicleId, !state[0], !state[1], !state[2], !state[3]);
+        // Revert state, since for SA-MP, true is "closed" and false is "opened".
+        FunctionAccess.SetVehicleParamsCarWindows(vehicleId, !windowOpened[0], !windowOpened[1], !windowOpened[2], !windowOpened[3]);
+    }
+
+    public void setWindowOpened(VehiclePart window, boolean opened) {
+        windowOpened[window.getId()] = opened;
+    }
+
+    public boolean isWindowOpened(VehiclePart window) {
+        return windowOpened[window.getId()];
+    }
+
+    public void setAllOpened(boolean opened) {
+        Arrays.fill(windowOpened, opened);
     }
 
     @Override
     public WindowState clone() {
-        return (WindowState) super.clone();
+        try {
+            return (WindowState)super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+
+    /**
+     * @return true if all windows are closed, false otherwise.
+     */
+    public boolean isDefaultState() {
+        for (boolean windowOpened : this.windowOpened) {
+            if (windowOpened) return false;
+        }
+        return true;
     }
 }

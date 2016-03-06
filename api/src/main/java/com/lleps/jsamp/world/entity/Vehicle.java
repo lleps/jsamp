@@ -388,9 +388,9 @@ public class Vehicle extends GlobalEntity {
 
         if (!params.isAllOff()) params.apply(id);
 
-        if (!doorState.isAllClosed()) doorState.apply(id);
+        if (!doorState.isDefaultState()) doorState.apply(id);
 
-        if (!windowState.isAllClosed()) windowState.apply(id);
+        if (!windowState.isDefaultState()) windowState.apply(id);
 
         if (health != VEHICLE_MAX_HEALTH) FunctionAccess.SetVehicleHealth(id, health);
 
