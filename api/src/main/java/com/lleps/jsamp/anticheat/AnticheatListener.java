@@ -23,6 +23,8 @@ import com.lleps.jsamp.server.CallbackListener;
 import com.lleps.jsamp.server.SAMPServer;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import static com.lleps.jsamp.SAMPConstants.*;
 
@@ -130,6 +132,10 @@ public class AnticheatListener implements CallbackListener {
     private final SAMPServer sv;
     private final Anticheat anticheat;
 
+    private Map<String, Long> ipConnectionTimes = new WeakHashMap<>();
+
+    private final static int MIN_IP_CONNECTION_TIME_MS = 10000;
+
     private final static int POS_INDEX_X = 0, POS_INDEX_Y = 1, POS_INDEX_Z = 2;
 
     public AnticheatListener(Anticheat anticheat) {
@@ -144,19 +150,28 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnPlayerConnect(int playerId) {
-        if (players[playerId] != null) {
-            return true;
-        }
+        String ip = SAMPFunctions.GetPlayerIp(playerId);
 
         if (SAMPFunctions.IsPlayerNPC(playerId)) {
-            String ip = SAMPFunctions.GetPlayerIp(playerId);
-            if (!ip.startsWith("127.0.0") && !ip.startsWith("10.0.0")) {
+            if (!isLocalIp(ip)) {
                 if (reportCheat(playerId, AccurateLevel.HIGH,
                         "Connection as NPC from non-local IP " + ip)) {
                     return true;
                 }
             }
         }
+
+        long now = System.currentTimeMillis();
+        long lastIpConnection = ipConnectionTimes.getOrDefault(ip, 0L);
+        if ((now - lastIpConnection) < MIN_IP_CONNECTION_TIME_MS) {
+            if (reportCheat(playerId, AccurateLevel.MEDIUM,
+                    "time since " + ip + " last connection is "
+                            + (now - lastIpConnection) + "ms, of min " + MIN_IP_CONNECTION_TIME_MS + "ms")) {
+                return true;
+            }
+        }
+
+        ipConnectionTimes.put(ip, now);
 
         ACPlayer player = new ACPlayer(playerId);
         player.setConnected(true);
@@ -991,5 +1006,9 @@ public class AnticheatListener implements CallbackListener {
 
     private boolean shouldTimeout(int seconds) {
         return seconds >= anticheat.getUnsyncSecondsToTimeout();
+    }
+
+    private boolean isLocalIp(String ip) {
+        return ip.startsWith("127.0.0") || ip.startsWith("10.0.0");
     }
 }

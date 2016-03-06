@@ -49,7 +49,6 @@ public class SAMPConstants {
     public static final int INVALID_GANG_ZONE = (-1);
     public static final int INVALID_3DTEXT_ID = (0xFFFF);
 
-
     // Text Draw
     public static final int TEXT_DRAW_FONT_SPRITE_DRAW =  4;
     public static final int TEXT_DRAW_FONT_MODEL_PREVIEW = 5;
