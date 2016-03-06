@@ -19,12 +19,43 @@ package com.lleps.jsamp.anticheat.event;
  * @author spell
  */
 public class CheatEvent extends AnticheatEvent {
-    private AccurateLevel accurateLevel;
-    private String description;
+    public enum Type {
+        CONNECT_AS_NPC,
+        CONNECTION_FLOOD,
+        STATECHANGE_FLOOD,
+        ENTER_LOCKED_VEHICLE,
+        ENTER_UNREQUESTED_VEHICLE,
+        INVALID_SPAWN,
+        SPAWN_WHEN_ALIVE,
+        DEATH_WHEN_NOT_ALIVE,
+        JETPACK,
+        SPEED_HACK,
+        VEHICLE_TELEPORT,
+        WEAPON_HACK,
+        AMMO_HACK,
+        POSITION_HACK,
+        HEALTH_HACK,
+        ARMOUR_HACK,
+        VEHICLE_HEALTH_HACK,
+        INVALID_MODSHOP_ENTER,
+        INVALID_MODSHOP_EXIT,
+        TUNNING_HACK,
+        PAINTJOB_HACK,
+        RESPRAY_HACK,
+    }
 
-    public CheatEvent(AccurateLevel accurateLevel, String description) {
+    private final AccurateLevel accurateLevel;
+    private final Type type;
+    private final String description;
+
+    public CheatEvent(AccurateLevel accurateLevel, Type type, String description) {
         this.accurateLevel = accurateLevel;
+        this.type = type;
         this.description = description;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public AccurateLevel getAccurateLevel() {

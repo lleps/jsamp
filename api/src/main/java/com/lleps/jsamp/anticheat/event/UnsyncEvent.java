@@ -18,10 +18,25 @@ package com.lleps.jsamp.anticheat.event;
  * @author spell
  */
 public class UnsyncEvent extends AnticheatEvent {
-    private String description;
+    public enum Type {
+        POSITION,
+        HEALTH,
+        ARMOUR,
+        VEHICLE_ID,
+        VEHICLE_HEALTH,
+        WEAPON_ID
+    }
 
-    public UnsyncEvent(String description) {
+    private final Type type;
+    private final String description;
+
+    public UnsyncEvent(Type type, String description) {
+        this.type = type;
         this.description = description;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     @Override

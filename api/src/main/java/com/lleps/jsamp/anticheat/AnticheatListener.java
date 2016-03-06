@@ -154,7 +154,7 @@ public class AnticheatListener implements CallbackListener {
 
         if (SAMPFunctions.IsPlayerNPC(playerId)) {
             if (!isLocalIp(ip)) {
-                if (reportCheat(playerId, AccurateLevel.HIGH,
+                if (reportCheat(playerId, AccurateLevel.HIGH, CheatEvent.Type.CONNECT_AS_NPC,
                         "Connection as NPC from non-local IP " + ip)) {
                     return true;
                 }
@@ -164,7 +164,7 @@ public class AnticheatListener implements CallbackListener {
         long now = System.currentTimeMillis();
         long lastIpConnection = ipConnectionTimes.getOrDefault(ip, 0L);
         if ((now - lastIpConnection) < MIN_IP_CONNECTION_TIME_MS) {
-            if (reportCheat(playerId, AccurateLevel.MEDIUM,
+            if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.CONNECTION_FLOOD,
                     "time since " + ip + " last connection is "
                             + (now - lastIpConnection) + "ms, of min " + MIN_IP_CONNECTION_TIME_MS + "ms")) {
                 return true;
@@ -191,7 +191,7 @@ public class AnticheatListener implements CallbackListener {
             if ((currentMillis - lastStateChange) < 1000) {
                 player.setStateChangeWarns(player.getStateChangeWarns() + 1);
                 if (player.getStateChangeWarns() >= 3) {
-                    if (reportCheat(player, AccurateLevel.MEDIUM, "state change flood")) {
+                    if (reportCheat(player, AccurateLevel.MEDIUM, CheatEvent.Type.STATECHANGE_FLOOD, "state change flood")) {
                         return true;
                     }
                 }
@@ -206,13 +206,15 @@ public class AnticheatListener implements CallbackListener {
             int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
 
             if (vehicles[vehicleId].isDoorsLocked()) {
-                if (reportCheat(playerId, AccurateLevel.MEDIUM, "entering vehicle with doors locked")) {
+                if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.ENTER_LOCKED_VEHICLE,
+                        "entering vehicle with doors locked")) {
                     return true;
                 }
             }
 
             if (player.getEnteringVehicleId() != vehicleId) {
-                if (reportCheat(playerId, AccurateLevel.MEDIUM, "entering " + player.getEnteringVehicleId() + ", but entered " + vehicleId)) {
+                if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.ENTER_UNREQUESTED_VEHICLE,
+                        "entering " + player.getEnteringVehicleId() + ", but entered " + vehicleId)) {
                     return true;
                 }
             }
@@ -293,7 +295,7 @@ public class AnticheatListener implements CallbackListener {
     public boolean OnPlayerSpawn(int playerId) {
         if (!players[playerId].isSpawnAllowed()) {
             // the only way of spawning is through SpawnPlayer (that will set this var to true)
-            if (reportCheat(playerId, AccurateLevel.MEDIUM, "Spawning without SpawnPlayer")) {
+            if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.INVALID_SPAWN, "Spawning without SpawnPlayer")) {
                 return true;
             }
         }
@@ -315,7 +317,7 @@ public class AnticheatListener implements CallbackListener {
         // SpawnPlayer is called two times. The first message is received, then player spawns and alive sets to true.
         // The second SpawnPlayer is received, but player has alive = true, so the player gets kicked.
         if (players[playerId].isAlive()) {
-            if (reportCheat(playerId, AccurateLevel.MEDIUM, "Spawning when is alive")) {
+            if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.SPAWN_WHEN_ALIVE, "Spawning when is alive")) {
                 return true;
             }
         }
@@ -349,7 +351,7 @@ public class AnticheatListener implements CallbackListener {
     public boolean OnPlayerDeath(int playerId, int killerId, int reason) {
         if (!players[playerId].isAlive()) {
             // it can be due to fake-kill or some desync.
-            if (reportCheat(playerId, AccurateLevel.MEDIUM,
+            if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.DEATH_WHEN_NOT_ALIVE,
                     "Player die when is not alive")) {
                 return true;
             }
@@ -502,7 +504,7 @@ public class AnticheatListener implements CallbackListener {
 
         if (SAMPFunctions.GetPlayerSpecialAction(playerId) == SPECIAL_ACTION_USEJETPACK) {
             if (!player.isJetpackAllowed()) {
-                if (reportCheat(playerId, AccurateLevel.HIGH, "Using a jetpack")) {
+                if (reportCheat(playerId, AccurateLevel.HIGH, CheatEvent.Type.JETPACK, "Using a jetpack")) {
                     return true;
                 }
             }
@@ -524,7 +526,7 @@ public class AnticheatListener implements CallbackListener {
             int modelId = SAMPFunctions.GetVehicleModel(vehicleId);
             float maxSpeed = ACUtils.getVehicleModelMaxSpeed(modelId);
             if (speed2d > (maxSpeed + 5)) {
-                return reportCheat(playerId, AccurateLevel.MEDIUM, "speed hack: " + speed2d + "/" + maxSpeed);
+                return reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.SPEED_HACK, "speed hack: " + speed2d + "/" + maxSpeed);
             }
         }
         return false;
@@ -565,7 +567,8 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkVehicleId(ACPlayer player) {
         int vehicleId = SAMPFunctions.GetPlayerVehicleID(player.getId());
         if (vehicleId > 0 && vehicleId != player.getVehicleId().getShouldBe()) {
-            return reportCheat(player, AccurateLevel.MEDIUM, "Invalid vehicle: " + vehicleId + "/" + player.getVehicleId().getShouldBe());
+            return reportCheat(player, AccurateLevel.MEDIUM, CheatEvent.Type.VEHICLE_TELEPORT,
+                    "Invalid vehicle: " + vehicleId + "/" + player.getVehicleId().getShouldBe());
         }
         return false;
     }
@@ -573,7 +576,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForVehicleIdTimeout(ACPlayer player) {
         int unsyncSeconds = player.getVehicleId().increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(unsyncSeconds)) {
-            return reportUnsyncTimeout(player.getId(), "vehicle id");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.VEHICLE_ID, "vehicle id");
         }
         return false;
     }
@@ -591,14 +594,16 @@ public class AnticheatListener implements CallbackListener {
         int currentWeapon = SAMPFunctions.GetPlayerWeaponSlot(player.getId(), slot);
         SynchronizableProperty<Integer> weapon = player.getWeaponInSlot(slot);
         if (currentWeapon != weapon.getShouldBe()) {
-            return reportCheat(player, AccurateLevel.MEDIUM, "weapon is " + currentWeapon + " - should be " + weapon.getShouldBe());
+            return reportCheat(player, AccurateLevel.MEDIUM, CheatEvent.Type.WEAPON_HACK,
+                    "weapon is " + currentWeapon + " - should be " + weapon.getShouldBe());
         }
 
         if (ACUtils.weaponSlotHoldsAmmo(slot)) {
             int ammo = SAMPFunctions.GetPlayerAmmoSlot(player.getId(), slot);
             if (!player.isInvalidAmmoPossible(slot)) {
                 if (ammo < -1 || ammo > player.getWeaponSlotMaxAmmo(slot)) {
-                    return reportCheat(player, AccurateLevel.HIGH, "ammo hack: " + ammo + "/" + player.getWeaponSlotMaxAmmo(slot));
+                    return reportCheat(player, AccurateLevel.HIGH, CheatEvent.Type.AMMO_HACK,
+                            "ammo hack: " + ammo + "/" + player.getWeaponSlotMaxAmmo(slot));
                 }
             }
         }
@@ -608,7 +613,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForWeaponSlotTimeout(ACPlayer player, int slot) {
         int unsyncSeconds = player.getWeaponInSlot(slot).increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(unsyncSeconds)) {
-            return reportUnsyncTimeout(player.getId(), "weapon slot unsynced");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.WEAPON_ID, "weapon slot unsynced");
         }
         return false;
     }
@@ -680,7 +685,8 @@ public class AnticheatListener implements CallbackListener {
                     float toSeconds = msSinceLastCheck / 1000f;
 
                     AccurateLevel accurateLevel = distance > toleranceDistToTeleport ? AccurateLevel.MEDIUM : AccurateLevel.LOW;
-                    if (reportCheat(player.getId(), accurateLevel, "moved " + distance + " in " + toSeconds + " secs.")) {
+                    if (reportCheat(player.getId(), accurateLevel, CheatEvent.Type.POSITION_HACK,
+                            "moved " + distance + " in " + toSeconds + " secs.")) {
                         return true;
                     }
                 }
@@ -695,7 +701,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForPositionTimeout(ACPlayer player) {
         int unsyncSeconds = player.getPosition().increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(unsyncSeconds)) {
-            return reportUnsyncTimeout(player.getId(), "position unsynced");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.POSITION, "position unsynced");
         } else if (shouldResync(unsyncSeconds)) {
             float[] posShouldBe = player.getPosition().getShouldBe();
             SAMPFunctions.SetPlayerPos(player.getId(), posShouldBe[0], posShouldBe[1], posShouldBe[2]);
@@ -716,7 +722,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkHealth(ACPlayer player) {
         int currentHealth = (int)SAMPFunctions.GetPlayerHealth(player.getId());
         if (currentHealth < 0 || currentHealth > 100) {
-            if (reportCheat(player, AccurateLevel.HIGH, "Invalid health: " + currentHealth)) {
+            if (reportCheat(player, AccurateLevel.HIGH, CheatEvent.Type.HEALTH_HACK, "Invalid health: " + currentHealth)) {
                 return true;
             }
         }
@@ -724,7 +730,7 @@ public class AnticheatListener implements CallbackListener {
         int healthShouldBe = player.getHealth().getShouldBe().intValue();
         if (currentHealth > healthShouldBe) {
             SAMPFunctions.SetPlayerHealth(player.getId(), healthShouldBe);
-            reportCheat(player, AccurateLevel.LOW,
+            reportCheat(player, AccurateLevel.LOW, CheatEvent.Type.HEALTH_HACK,
                     "Health is " + currentHealth + " - should be " + healthShouldBe);
         }
         return false;
@@ -733,7 +739,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForHealthTimeout(ACPlayer player) {
         int unsyncSeconds = player.getHealth().increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(unsyncSeconds)) {
-            return reportUnsyncTimeout(player.getId(), "health unsynced");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.HEALTH, "health unsynced");
         } else if (shouldResync(unsyncSeconds)) {
             SAMPFunctions.SetPlayerHealth(player.getId(), player.getHealth().getShouldBe());
         }
@@ -755,18 +761,20 @@ public class AnticheatListener implements CallbackListener {
         int currentArmour = (int) SAMPFunctions.GetPlayerArmour(player.getId());
 
         if ((currentArmour > 0 && !player.isArmourAllowed()) || currentArmour == 100) {
-            if (reportCheat(playerId, AccurateLevel.HIGH, "Armour hack (" + currentArmour + ")")) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, CheatEvent.Type.ARMOUR_HACK,
+                    "Armour hack (" + currentArmour + ")")) {
                 return true;
             }
         }
         if (currentArmour < 0 || currentArmour > 100) {
-            if (reportCheat(playerId, AccurateLevel.HIGH, "Invalid armour: " + currentArmour)) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, CheatEvent.Type.ARMOUR_HACK,
+                    "Invalid armour: " + currentArmour)) {
                 return true;
             }
         }
         if (currentArmour > armourShouldBe) {
             SAMPFunctions.SetPlayerArmour(playerId, armourShouldBe);
-            reportCheat(playerId, AccurateLevel.LOW,
+            reportCheat(playerId, AccurateLevel.LOW, CheatEvent.Type.ARMOUR_HACK,
                     "Armour increased from " + armourShouldBe + " to " + currentArmour);
         }
         return false;
@@ -775,7 +783,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForArmourTimeout(ACPlayer player) {
         int unsyncSecs = player.getArmour().increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(unsyncSecs)) {
-            return reportUnsyncTimeout(player.getId(), "armour unsynced");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.ARMOUR, "armour unsynced");
         } else if (shouldResync(unsyncSecs)) {
             SAMPFunctions.SetPlayerArmour(player.getId(), player.getArmour().getShouldBe());
         }
@@ -812,7 +820,8 @@ public class AnticheatListener implements CallbackListener {
                         }
                     }
                 }
-                if (!repairedInPayNSprayOrModshop && reportCheat(player.getId(), AccurateLevel.MEDIUM, "invalid vehicle health: " + health + "/" + healthShouldBe)) {
+                if (!repairedInPayNSprayOrModshop && reportCheat(player.getId(), AccurateLevel.MEDIUM,
+                        CheatEvent.Type.VEHICLE_HEALTH_HACK, "invalid vehicle health: " + health + "/" + healthShouldBe)) {
                     SAMPFunctions.SetVehicleHealth(vehicleId, healthShouldBe);
                     return true;
                 } else {
@@ -832,7 +841,7 @@ public class AnticheatListener implements CallbackListener {
     private boolean checkForVehicleHealthTimeout(ACPlayer player) {
         int seconds = player.getVehicleHealth().increaseUnsyncedSecondsAndGet();
         if (shouldTimeout(seconds)) {
-            return reportUnsyncTimeout(player.getId(), "vehicle health");
+            return reportUnsyncTimeout(player.getId(), UnsyncEvent.Type.VEHICLE_HEALTH, "vehicle health");
         } else if (shouldResync(seconds)) {
             if (SAMPFunctions.GetPlayerState(player.getId()) == PLAYER_STATE_DRIVER) {
                 SAMPFunctions.SetVehicleHealth(
@@ -878,14 +887,16 @@ public class AnticheatListener implements CallbackListener {
             float[] vehiclePos = SAMPFunctions.GetVehiclePos(vehicleId);
             if (enterexit == 1) {
                 if (!ACUtils.isNearModshopExterior(vehiclePos, 30)) {
-                    if (reportCheat(playerId, AccurateLevel.MEDIUM, "entering modshop from unknown position: " + Arrays.toString(vehiclePos))) {
+                    if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.INVALID_MODSHOP_ENTER,
+                            "entering modshop from unknown position: " + Arrays.toString(vehiclePos))) {
                         return true;
                     }
                 }
                 players[playerId].setInModshop(true);
             } else if (enterexit == 0){
                 if (!ACUtils.isNearModshopInterior(vehiclePos, 30)) {
-                    if (reportCheat(playerId, AccurateLevel.MEDIUM, "exiting modshop from unknown position: " + Arrays.toString(vehiclePos))) {
+                    if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.INVALID_MODSHOP_EXIT,
+                            "exiting modshop from unknown position: " + Arrays.toString(vehiclePos))) {
                         return true;
                     }
                 }
@@ -905,14 +916,16 @@ public class AnticheatListener implements CallbackListener {
         ACPlayer player = players[playerId];
 
         if (!player.isInModshop()) {
-            if (reportCheat(player, AccurateLevel.HIGH, "tunning without beign on a modshop: " + componentId)) {
+            if (reportCheat(player, AccurateLevel.HIGH, CheatEvent.Type.TUNNING_HACK,
+                    "tunning without beign on a modshop: " + componentId)) {
                 return true;
             }
         }
         int modelId = SAMPFunctions.GetVehicleModel(vehicleId);
         boolean compatibleComponent = ACUtils.isValidComponent(modelId, componentId);
         if (!compatibleComponent) {
-            if (reportCheat(player, AccurateLevel.HIGH, "adding to vehicle model "+modelId+" invalid component " + componentId)) {
+            if (reportCheat(player, AccurateLevel.HIGH, CheatEvent.Type.TUNNING_HACK,
+                    "adding to vehicle model "+modelId+" invalid component " + componentId)) {
                 return true;
             }
         }
@@ -922,7 +935,8 @@ public class AnticheatListener implements CallbackListener {
             player.setMoney(player.getMoney() - componentPrice);
             return false;
         } else {
-            if (reportCheat(player, AccurateLevel.MEDIUM, "bought component "+componentId+" without enough money: $" + componentPrice)) {
+            if (reportCheat(player, AccurateLevel.MEDIUM, CheatEvent.Type.TUNNING_HACK,
+                    "bought component "+componentId+" without enough money: $" + componentPrice)) {
                 return true;
             }
         }
@@ -937,7 +951,7 @@ public class AnticheatListener implements CallbackListener {
         }
 
         if (!players[playerId].isInModshop()) {
-            if (reportCheat(playerId, AccurateLevel.MEDIUM, "Paintjob without beign on modshop")) {
+            if (reportCheat(playerId, AccurateLevel.MEDIUM, CheatEvent.Type.PAINTJOB_HACK, "Paintjob without beign on modshop")) {
                 if (paintjobId >= 0 && paintjobId <= 3) SAMPFunctions.ChangeVehiclePaintjob(vehicleId, 255);
                 return true;
             }
@@ -967,7 +981,7 @@ public class AnticheatListener implements CallbackListener {
         ACPlayer player = players[playerId];
 
         if (!player.isInModshop() && !ACUtils.isNearModshopExterior(SAMPFunctions.GetPlayerPos(playerId), 30)) {
-            if (reportCheat(playerId, AccurateLevel.HIGH, "vehicle colour hacks (colours " + color1 + ", " + color2 + ")")) {
+            if (reportCheat(playerId, AccurateLevel.HIGH, CheatEvent.Type.RESPRAY_HACK, "vehicle colour hacks (colours " + color1 + ", " + color2 + ")")) {
                 return true;
             }
         }
@@ -984,16 +998,16 @@ public class AnticheatListener implements CallbackListener {
         return true;
     }
 
-    private boolean reportCheat(ACPlayer player, AccurateLevel level, String description) {
-        return sv.onAnticheatEvent(player.getId(), new CheatEvent(level, description));
+    private boolean reportCheat(ACPlayer player, AccurateLevel level, CheatEvent.Type type, String description) {
+        return sv.onAnticheatEvent(player.getId(), new CheatEvent(level, type, description));
     }
 
-    private boolean reportCheat(int playerId, AccurateLevel level, String description) {
-        return sv.onAnticheatEvent(playerId, new CheatEvent(level, description));
+    private boolean reportCheat(int playerId, AccurateLevel level, CheatEvent.Type type, String description) {
+        return sv.onAnticheatEvent(playerId, new CheatEvent(level, type, description));
     }
 
-    private boolean reportUnsyncTimeout(int playerId, String description) {
-        return sv.onAnticheatEvent(playerId, new UnsyncEvent(description));
+    private boolean reportUnsyncTimeout(int playerId, UnsyncEvent.Type type, String description) {
+        return sv.onAnticheatEvent(playerId, new UnsyncEvent(type, description));
     }
 
     private boolean reportInvalidCall(int playerId, String callbackNameFormatted, Object... arguments) {
