@@ -118,6 +118,7 @@ public class NoStreamingWorld implements World {
 
     @Override
     public void addEntity(WorldEntity entity) {
+        entity.setWorldReference(this);
         for (Player player : players) {
             entity.create(player.getId(), worldId, interior.getId());
         }
@@ -126,6 +127,7 @@ public class NoStreamingWorld implements World {
 
     @Override
     public void removeEntity(WorldEntity entity) {
+        entity.setWorldReference(null);
         for (Player player : players) {
             entity.destroy(player.getId());
         }
