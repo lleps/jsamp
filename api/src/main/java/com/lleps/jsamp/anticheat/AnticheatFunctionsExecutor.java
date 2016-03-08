@@ -184,6 +184,12 @@ public class AnticheatFunctionsExecutor implements SAMPFunctionsExecutor {
     }
 
     @Override
+    public int GetPlayerVehicleID(int playerid) {
+        checkForValidPlayerId(playerid);
+        return players[playerid].getVehicleId().getShouldBe();
+    }
+
+    @Override
     public int CreateVehicle(int vehicletype, float x, float y, float z, float rotation, int color1, int color2, int respawn_delay, boolean addsiren) {
         if (color1 == -1) color1 = RandomUtils.nextInt(0, 128);
         if (color2 == -1) color2 = RandomUtils.nextInt(0, 128);

@@ -1,12 +1,15 @@
 package com.lleps.test;
 
+import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.MainCallbackListener;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.anticheat.event.AnticheatEvent;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
 import com.lleps.test.anticheat.*;
+import com.lleps.test.codegenerators.VehicleComponentsEnumMaker;
 import com.lleps.test.world.VehicleTest;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * @author leandro on 28/01/16.
@@ -45,6 +48,15 @@ public class MainTest extends SAMPServer {
 
         SAMPFunctions.SendClientMessageToAll(color, SAMPFunctions.GetPlayerName(playerId) + " - " + anticheatEvent.toString());
         return false;
+    }
+
+    @Override
+    public void onExceptionOccurred(Throwable throwable) {
+        super.onExceptionOccurred(throwable);
+        String exception = ExceptionUtils.getStackTrace(throwable);
+        for (String line : exception.split("\n")) {
+            FunctionAccess.SendClientMessageToAll(0xFF0000FF, line);
+        }
     }
 
     @Override

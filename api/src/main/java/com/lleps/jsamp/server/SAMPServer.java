@@ -14,6 +14,7 @@
 package com.lleps.jsamp.server;
 
 import com.lleps.jsamp.MainCallbackListener;
+import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.anticheat.Anticheat;
 import com.lleps.jsamp.anticheat.AnticheatFunctionsExecutor;
 import com.lleps.jsamp.anticheat.AnticheatListener;
@@ -23,10 +24,7 @@ import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.constant.Weather;
 import com.lleps.jsamp.world.World;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -147,7 +145,7 @@ public abstract class SAMPServer {
     }
 
     /**
-     * Called when a unexpected exception occurs on JSAMP.
+     * Called when an unexpected exception occurs on JSAMP.
      * @param throwable exception.
      */
     public void onExceptionOccurred(Throwable throwable) {
@@ -155,19 +153,17 @@ public abstract class SAMPServer {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         throwable.printStackTrace(pw);
+        String stackTraceStr = sw.toString();
 
         // output to server_log.txt
-        FunctionAccess.logprintf(sw.toString());
+        FunctionAccess.logprintf(stackTraceStr);
 
         // output to jsamp_exceptions.txt
         final String JSAMP_EXCEPTIONS_FILE = "jsamp-exceptions.txt";
-        try {
-            File file = new File(JSAMP_EXCEPTIONS_FILE);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            Files.write(Paths.get(JSAMP_EXCEPTIONS_FILE), sw.toString().getBytes(), StandardOpenOption.APPEND);
-        } catch (IOException e) {
+
+        try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(JSAMP_EXCEPTIONS_FILE, true)))) {
+            out.println(stackTraceStr);
+        }catch (IOException e) {
             FunctionAccess.logprintf("[warning] Cannot log exception to file " + JSAMP_EXCEPTIONS_FILE);
             FunctionAccess.logprintf("[warning] Cause: " + e);
         }

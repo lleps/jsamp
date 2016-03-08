@@ -59,6 +59,7 @@ public final class Color {
     private Integer rgba;
     private Integer argb;
     private Integer rgb;
+    private String colorEmbeddingString;
 
     private Color(int red, int green, int blue, int alpha) {
         this.red = red;
@@ -174,12 +175,14 @@ public final class Color {
     }
 
     /**
-     * Return this color on {RRGGBB} format. Ideal to use on color embedding.
-     * @return this color in {RRGGBB} format.
+     * @return this color in {RRGGBB} format. Ideal to use on color embedding.
      */
     @Override
     public String toString() {
-        return super.toString();
+        if (colorEmbeddingString == null) {
+            colorEmbeddingString = String.format("{%06x}", getRGB());
+        }
+        return colorEmbeddingString;
     }
 
     private static final int VEHICLE_COLORS_RGBA[] = {
@@ -230,6 +233,8 @@ public final class Color {
     public int hashCode() {
         return hashColor(red, green, blue, alpha);
     }
+
+
 
     // Material design 500-tone colors from https://www.google.com/design/spec/style/color.html#color-color-palette
     public static final Color BLACK = ofRGB(0x000000);

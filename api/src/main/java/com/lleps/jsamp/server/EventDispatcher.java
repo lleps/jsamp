@@ -13,6 +13,12 @@
  */
 package com.lleps.jsamp.server;
 
+import com.lleps.jsamp.SAMPFunctions;
+import com.lleps.jsamp.constant.Modshop;
+import com.lleps.jsamp.constant.Paintjob;
+import com.lleps.jsamp.constant.VehicleSeat;
+import com.lleps.jsamp.constant.model.VehicleComponent;
+import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.constant.model.WeaponModel;
@@ -20,6 +26,9 @@ import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
 import com.lleps.jsamp.world.entity.Body;
 import com.lleps.jsamp.world.entity.Pickup;
+import com.lleps.jsamp.world.entity.Vehicle;
+
+import java.util.Optional;
 
 /**
  * @author spell
@@ -68,7 +77,123 @@ public class EventDispatcher implements CallbackListener {
         if (hitType == SAMPConstants.BULLET_HIT_TYPE_PLAYER_OBJECT) {
             Body body = getEntity(arrays.playerObjects, playerId, hitId);
             if (body != null) body.onPlayerShot(player, offSets, weaponModel);
+        } else if (hitType == SAMPConstants.BULLET_HIT_TYPE_VEHICLE) {
+            Vehicle vehicle = arrays.vehicles[hitId];
+            vehicle.onPlayerShootVehicle(player, weaponModel, offSets);
         }
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleSpawn(int vehicleId) {
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        vehicle.onSpawn();
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        Player player = arrays.players[playerId];
+        Modshop modshop = player.getProperty("EventDispatcher.modshop");
+
+        vehicle.onModdedInModshop(player, modshop, VehicleComponent.getById(componentId));
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleRespray(int playerId, int vehicleId, int color1, int color2) {
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        Player player = arrays.players[playerId];
+        Modshop modshop = player.getProperty("EventDispatcher.modshop");
+
+        Color newPrimaryColor = Color.ofVehicleColor(color1);
+        Color newSecondaryColor = Color.ofVehicleColor(color2);
+
+        if (vehicle.getPrimaryColor() != newPrimaryColor || vehicle.getSecondaryColor() != newSecondaryColor) {
+            vehicle.onColorChangeInModshop(player, modshop, newPrimaryColor, newSecondaryColor);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnVehiclePaintjob(int playerId, int vehicleId, int paintjobId) {
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        Player player = arrays.players[playerId];
+        Modshop modshop = player.getProperty("EventDispatcher.modshop");
+        Paintjob paintjob = Paintjob.getById(paintjobId);
+        if (paintjob != vehicle.getPaintjob()) {
+            vehicle.onPaintjobChangeInModshop(player, modshop, paintjob);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnEnterExitModShop(int playerId, int enterexit, int interiorId) {
+        Player player = arrays.players[playerId];
+        Vehicle vehicle = arrays.vehicles[SAMPFunctions.GetPlayerVehicleID(playerId)];
+        if (enterexit == 1) {
+            Modshop modshop = Modshop.getByExteriorPosition(player.getPosition(), 30);
+            player.setProperty("EventDispatcher.modshop", modshop);
+            vehicle.onEnterModshop(modshop);
+        } else if (enterexit == 0){
+            Modshop modshop = player.getProperty("EventDispatcher.modshop");
+            // We cant remove this property since sometimes OnVehicleRespray is called when you exit from modshop.
+            //player.removeProperty("EventDispatcher.modshop");
+            vehicle.onExitModshop(modshop);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnPlayerEnterVehicle(int playerId, int vehicleId, boolean isPassenger) {
+        Player player = arrays.players[playerId];
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        vehicle.onPlayerEnterAnim(player, isPassenger);
+        return false;
+    }
+
+    @Override
+    public boolean OnPlayerExitVehicle(int playerId, int vehicleId) {
+        Player player = arrays.players[playerId];
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        vehicle.onPlayerExitAnim(player);
+        return false;
+    }
+
+    @Override
+    public boolean OnPlayerStateChange(int playerId, int state, int oldState) {
+        Player player = arrays.players[playerId];
+        if (state == SAMPConstants.PLAYER_STATE_DRIVER || state == SAMPConstants.PLAYER_STATE_PASSENGER) {
+            int vehicleId = SAMPFunctions.GetPlayerVehicleID(playerId);
+            Vehicle vehicle = arrays.vehicles[vehicleId];
+            VehicleSeat seat = VehicleSeat.getById(SAMPFunctions.GetPlayerVehicleSeat(playerId));
+            vehicle.onPlayerEntered(player, seat);
+            player.setProperty("EventDispatcher.vehicleId", vehicleId);
+        } else if (state == SAMPConstants.PLAYER_STATE_ONFOOT) {
+            Integer vehicleId = player.getProperty("EventDispatcher.vehicleId");
+            if (vehicleId != null) {
+                Vehicle vehicle = arrays.vehicles[vehicleId];
+                vehicle.onPlayerExited(player);
+                player.removeProperty("EventDispatcher.vehicleId");
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleDeath(int vehicleId, int killerId) {
+        Vehicle vehicle = arrays.vehicles[vehicleId];
+        Optional<Player> killer = Optional.ofNullable(getEntity(arrays.players, killerId));
+        vehicle.onDeath(killer);
+        return false;
+    }
+
+    @Override
+    public boolean OnVehicleSirenStateChange(int playerid, int vehicleid, boolean newstate) {
+        Player player = arrays.players[playerid];
+        Vehicle vehicle = arrays.vehicles[vehicleid];
+        vehicle.onSirenStateChange(player, newstate);
         return false;
     }
 

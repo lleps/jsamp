@@ -19,13 +19,7 @@ public final class Vector2D implements Vector {
     }
 
     public static Vector2D of(float x, float y) {
-        int key = generateHashCode(x, y);
-        Vector2D result = instances.get(key);
-        if (result == null) {
-            result = new Vector2D(x, y);
-            instances.put(key, result);
-        }
-        return result;
+        return new Vector2D(x, y);
     }
 
     private final float x, y;
@@ -151,6 +145,14 @@ public final class Vector2D implements Vector {
     @Override
     public int hashCode() {
         return generateHashCode(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 
     private static int generateHashCode(float x, float y) {

@@ -23,6 +23,13 @@ import com.lleps.jsamp.data.Vector3D;
  */
 public final class Interior {
     public static final Interior NONE = new Interior(0);
+    public static final Interior INTERIOR_1 = new Interior(1);
+    public static final Interior INTERIOR_2 = new Interior(2);
+    public static final Interior INTERIOR_3 = new Interior(3);
+
+    public static Interior ofId(int id) {
+        return new Interior(id);
+    }
 
     private final int id;
 
@@ -31,6 +38,22 @@ public final class Interior {
     }
 
     public int getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Interior interior = (Interior) o;
+
+        return id == interior.id;
+
+    }
+
+    @Override
+    public int hashCode() {
         return id;
     }
 }

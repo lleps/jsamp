@@ -31,13 +31,7 @@ public final class Vector3D implements Vector {
     }
 
     public static Vector3D of(float x, float y, float z) {
-        int key = generateHashCode(x, y, z);
-        Vector3D result = instances.get(key);
-        if (result == null) {
-            result = new Vector3D(x, y, z);
-            instances.put(key, result);
-        }
-        return result;
+        return new Vector3D(x, y, z);
     }
 
     private final float x, y, z;
@@ -168,6 +162,15 @@ public final class Vector3D implements Vector {
     @Override
     public int hashCode() {
         return generateHashCode(x, y, z);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 
     private static int generateHashCode(float x, float y, float z) {

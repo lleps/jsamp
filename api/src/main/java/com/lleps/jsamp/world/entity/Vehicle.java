@@ -13,13 +13,17 @@
  */
 package com.lleps.jsamp.world.entity;
 
+import com.google.common.collect.Lists;
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.SAMPFunctions;
+import com.lleps.jsamp.constant.Modshop;
 import com.lleps.jsamp.constant.Paintjob;
 import com.lleps.jsamp.constant.SpeedUnit;
 import com.lleps.jsamp.constant.VehicleSeat;
 import com.lleps.jsamp.constant.model.VehicleComponent;
 import com.lleps.jsamp.constant.model.VehicleModel;
+import com.lleps.jsamp.constant.model.WeaponModel;
 import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
@@ -42,7 +46,7 @@ public class Vehicle extends GlobalEntity {
                 id));
     }
 
-    public interface OnPlayerEnterAnimListener { void onPlayerEnterAnim(Vehicle vehicle, Player player, VehicleSeat seat); }
+    public interface OnPlayerEnterAnimListener { void onPlayerEnterAnim(Vehicle vehicle, Player player, boolean passengerSeat); }
     public interface OnPlayerExitAnimListener { void onPlayerExitAnim (Vehicle vehicle, Player player); }
 
     public interface OnPlayerEnteredListener { void onPlayerEntered(Vehicle vehicle, Player player, VehicleSeat seat); }
@@ -51,13 +55,22 @@ public class Vehicle extends GlobalEntity {
     public interface OnSpawnListener { void onSpawn(Vehicle vehicle); }
     public interface OnDeathListener { void onDeath(Vehicle vehicle, Optional<Player> killer); }
 
-    public interface OnSirenStateChangeListener { void onSirenStateChange(Player driver, boolean started); }
+    public interface OnSirenStateChangeListener { void onSirenStateChange(Vehicle vehicle, Player driver, boolean started); }
 
-    public interface OnCrashListener { void onCrash(Vehicle vehicle, Player driver, float oldHealth, float newHealth); }
+    public interface OnModdedInModshopListener { void onModded(Vehicle vehicle, Player player, Modshop modshop, VehicleComponent component); }
 
-    public interface OnModBuyListener { void onModBuy(Vehicle vehicle, Player player, VehicleComponent component, int paidPrice); }
+    public interface OnColorChangeInModshopListener { void onColorChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Color primaryColor, Color secondaryColor); }
 
-    // TODO: listeners
+    public interface OnPaintjobChangeInModshopListener {
+        void onPaintjobChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Paintjob paintjob);
+    }
+
+    public interface OnPlayerShootVehicleListener { void onPlayerShootVehicle(Vehicle vehicle, Player player, WeaponModel model, Vector3D offSets); }
+
+    public interface OnEnterModshopListener { void onEnterInModshop(Vehicle vehicle, Modshop modshop); }
+
+    public interface OnExitModshopListener { void onExitModshop(Vehicle vehicle, Modshop modshop); }
+
     public static final int DEFAULT_RESPAWN_DELAY_MS = 1000 * 60 * 3;
     public static final float VEHICLE_MAX_HEALTH = 1_000f;
 
@@ -78,6 +91,26 @@ public class Vehicle extends GlobalEntity {
     private DoorState doorState;
     private WindowState windowState;
     private float health;
+
+    private boolean respawning;
+
+    private OnSpawnListener onSpawnListener;
+    private OnPlayerEnterAnimListener onPlayerEnterAnimListener;
+    private OnPlayerExitAnimListener onPlayerExitAnimListener;
+    private OnPlayerEnteredListener onPlayerEnteredListener;
+    private OnPlayerExitedListener onPlayerExitedListener;
+    private OnDeathListener onDeathListener;
+    private OnPlayerShootVehicleListener onPlayerShootVehicleListener;
+    private OnSirenStateChangeListener onSirenStateChangeListener;
+    private OnModdedInModshopListener onModdedInModshopListener;
+    private OnColorChangeInModshopListener onColorChangeInModshopListener;
+    private OnPaintjobChangeInModshopListener onPaintjobChangeInModshopListener;
+    private OnEnterModshopListener onEnterModshopListener;
+    private OnExitModshopListener onExitModshopListener;
+
+    private Modshop currentModshop;
+
+    private Map<VehicleSeat, Integer> playersIn = new HashMap<>();
 
     public Vehicle() {
         components = new HashMap<>();
@@ -303,6 +336,14 @@ public class Vehicle extends GlobalEntity {
     }
 
     public void respawn() {
+        if (isCreated()) {
+            SAMPFunctions.SetVehicleToRespawn(id);
+        } else {
+            setToRespawn();
+        }
+    }
+
+    private void setToRespawn() {
         // fix all
         damageState.fixAll();
         health = VEHICLE_MAX_HEALTH;
@@ -311,8 +352,7 @@ public class Vehicle extends GlobalEntity {
         this.position = spawnPosition;
         this.angle = spawnAngle;
 
-        // recreate
-        recreate();
+        respawning = true;
     }
 
     public Vector3D getLinearVelocity(SpeedUnit unit) {
@@ -400,10 +440,15 @@ public class Vehicle extends GlobalEntity {
     @Override
     protected void saveState(int id) {
         super.saveState(id);
-        getPosition();
-        getAngle();
-        getDamageState();
-        getHealth();
+
+        // This information shouldn't be saved if vehicle is respawning, because respawned state is "all fixed".
+        if (!respawning) {
+            getPosition();
+            getAngle();
+            getDamageState();
+            getHealth();
+        }
+
     }
 
     @Override
@@ -419,5 +464,180 @@ public class Vehicle extends GlobalEntity {
     @Override
     protected Object[] getIDSArray() {
         return ObjectNativeIDS.getInstance().vehicles;
+    }
+
+    public void setOnSpawnListener(OnSpawnListener onSpawnListener) {
+        this.onSpawnListener = onSpawnListener;
+    }
+
+    public void onSpawn() {
+        setToRespawn();
+
+        recreate();
+
+        if (onSpawnListener != null) onSpawnListener.onSpawn(this);
+
+        respawning = false;
+    }
+
+    public void setOnModdedInModshopListener(OnModdedInModshopListener onModdedInModshopListener) {
+        this.onModdedInModshopListener = onModdedInModshopListener;
+    }
+
+    public void onModdedInModshop(Player driver, Modshop modshop, VehicleComponent component) {
+        components.put(component.getSlot(), component);
+
+        if (onModdedInModshopListener != null) onModdedInModshopListener.onModded(this, driver, modshop, component);
+    }
+
+    public void setOnColorChangeInModshopListener(OnColorChangeInModshopListener onColorChangeInModshopListener) {
+        this.onColorChangeInModshopListener = onColorChangeInModshopListener;
+    }
+
+    public void onColorChangeInModshop(Player player, Modshop modshop, Color primaryColor, Color secondaryColor) {
+        this.primaryColor = primaryColor;
+        this.secondaryColor = secondaryColor;
+
+        if (onColorChangeInModshopListener != null) {
+            SAMPFunctions.SendClientMessageToAll(-1, "driver: " + player);
+            onColorChangeInModshopListener.onColorChangeInModshop(this, player, modshop, primaryColor, secondaryColor);
+        }
+    }
+
+    public void setOnPaintjobChangeInModshopListener(OnPaintjobChangeInModshopListener onPaintjobChangeInModshopListener) {
+        this.onPaintjobChangeInModshopListener = onPaintjobChangeInModshopListener;
+    }
+
+    public void onPaintjobChangeInModshop(Player player, Modshop modshop, Paintjob paintjob) {
+        this.paintjob = paintjob;
+
+        if (onPaintjobChangeInModshopListener != null) {
+            SAMPFunctions.SendClientMessageToAll(-1, "driver-: " + player);
+            onPaintjobChangeInModshopListener.onPaintjobChangeInModshop(this, player, modshop, paintjob);
+        }
+    }
+
+    public void setOnEnterModshopListener(OnEnterModshopListener onEnterModshopListener) {
+        this.onEnterModshopListener = onEnterModshopListener;
+    }
+
+    public void onEnterModshop(Modshop modshop) {
+        currentModshop = modshop;
+
+        if (onEnterModshopListener != null) onEnterModshopListener.onEnterInModshop(this, modshop);
+    }
+
+    public void setOnExitModshopListener(OnExitModshopListener onExitModshopListener) {
+        this.onExitModshopListener = onExitModshopListener;
+    }
+
+    public void onExitModshop(Modshop modshop) {
+        currentModshop = null;
+
+        if (onExitModshopListener != null) onExitModshopListener.onExitModshop(this, modshop);
+    }
+
+    public void setOnPlayerEnterAnimListener(OnPlayerEnterAnimListener onPlayerEnterAnimListener) {
+        this.onPlayerEnterAnimListener = onPlayerEnterAnimListener;
+    }
+
+    public void onPlayerEnterAnim(Player player, boolean isPassenger) {
+        if (onPlayerEnterAnimListener != null) onPlayerEnterAnimListener.onPlayerEnterAnim(this, player, isPassenger);
+    }
+
+    public void setOnPlayerExitAnimListener(OnPlayerExitAnimListener onPlayerExitAnimListener) {
+        this.onPlayerExitAnimListener = onPlayerExitAnimListener;
+    }
+
+    public void onPlayerExitAnim(Player player) {
+        if (onPlayerExitAnimListener != null) onPlayerExitAnimListener.onPlayerExitAnim(this, player);
+    }
+
+    public void setOnPlayerEnteredListener(OnPlayerEnteredListener onPlayerEnteredListener) {
+        this.onPlayerEnteredListener = onPlayerEnteredListener;
+    }
+
+    public void onPlayerEntered(Player player, VehicleSeat seat) {
+        playersIn.put(seat, player.getId());
+        if (onPlayerEnteredListener != null) onPlayerEnteredListener.onPlayerEntered(this, player, seat);
+    }
+
+    public void setOnPlayerExitedListener(OnPlayerExitedListener onPlayerExitedListener) {
+        this.onPlayerExitedListener = onPlayerExitedListener;
+    }
+
+    public Optional<Player> getPlayerInSeat(VehicleSeat seat) {
+        if (!isCreated()) return Optional.empty();
+
+        Integer playerId = playersIn.get(seat);
+        if (playerId != null && FunctionAccess.IsPlayerConnected(playerId) && FunctionAccess.GetPlayerVehicleID(playerId) == id) {
+            return Player.getById(playerId);
+        } else {
+            playersIn.remove(seat);
+            return Optional.empty();
+        }
+    }
+
+    public Collection<Player> getPlayersIn() {
+        if (!isCreated()) return new ArrayList<>(1);
+
+        List<Player> players = new ArrayList<>(5);
+        Iterator<Map.Entry<VehicleSeat, Integer>> entryIterator = playersIn.entrySet().iterator();
+        while (entryIterator.hasNext()) {
+            Map.Entry<VehicleSeat, Integer> entry = entryIterator.next();
+            int playerId = entry.getValue();
+            if (FunctionAccess.IsPlayerConnected(playerId) && FunctionAccess.GetPlayerVehicleID(playerId) == id) {
+                players.add(Player.getById(playerId).get());
+            } else {
+                entryIterator.remove();
+            }
+        }
+        return players;
+    }
+
+    public Optional<Player> getDriver() {
+        return getPlayerInSeat(VehicleSeat.DRIVER);
+    }
+
+    public void onPlayerExited(Player player) {
+        VehicleSeat seat = null;
+        for (Map.Entry<VehicleSeat, Integer> entry : playersIn.entrySet()) {
+            if (entry.getValue() == player.getId()) {
+                seat = entry.getKey();
+                break;
+            }
+        }
+        playersIn.remove(seat);
+
+        if (onPlayerExitedListener != null) onPlayerExitedListener.onPlayerExited(this, player);
+    }
+
+    public void setOnDeathListener(OnDeathListener onDeathListener) {
+        this.onDeathListener = onDeathListener;
+    }
+
+    public void onDeath(Optional<Player> killer) {
+        if (onDeathListener != null) onDeathListener.onDeath(this, killer);
+    }
+
+    public void setOnSirenStateChangeListener(OnSirenStateChangeListener onSirenStateChangeListener) {
+        this.onSirenStateChangeListener = onSirenStateChangeListener;
+    }
+
+    public void onSirenStateChange(Player driver, boolean started) {
+        if (onSirenStateChangeListener != null) onSirenStateChangeListener.onSirenStateChange(this, driver, started);
+    }
+
+    public void setOnPlayerShootVehicleListener(OnPlayerShootVehicleListener onPlayerShootVehicleListener) {
+        this.onPlayerShootVehicleListener = onPlayerShootVehicleListener;
+    }
+
+    public void onPlayerShootVehicle(Player player, WeaponModel weapon, Vector3D offSets) {
+        if (onPlayerShootVehicleListener != null)
+            onPlayerShootVehicleListener.onPlayerShootVehicle(this, player, weapon, offSets);
+    }
+
+    public Optional<Modshop> getCurrentModshop() {
+        return Optional.ofNullable(currentModshop);
     }
 }

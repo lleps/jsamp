@@ -19,10 +19,10 @@ import com.lleps.jsamp.constant.model.VehicleModel;
  * @author spell
  */
 public enum Paintjob {
-    DEFAULT(-1, "por defecto"),
     TYPE_1(0, "capa de pintura 1"),
     TYPE_2(1, "capa de pintura 2"),
-    TYPE_3(2, "capa de pintura 3");
+    TYPE_3(2, "capa de pintura 3"),
+    DEFAULT(3, "por defecto");
 
     private int id;
     private String name;
@@ -33,7 +33,15 @@ public enum Paintjob {
     }
 
     public static Paintjob getById(int id) {
-        return values()[id + 1];
+        // Passed in OnVehiclePaintjob as no paintjob
+        if (id == 255) {
+            return DEFAULT;
+        }
+
+        for (Paintjob paintjob : values()) {
+            if (paintjob.id == id) { return paintjob; }
+        }
+        return null;
     }
 
     public int getId() {

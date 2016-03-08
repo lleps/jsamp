@@ -2,6 +2,21 @@
 Built-in support for enterable interiors.
 Create methods setWorld in world entities for set only reference.
 
+Vehicle listeners.
+	  OnSpawn and recreate the vehicle here.
+	  Add to VehicleComponent "price"
+	  Add Modshop.getModshopByExteriorPosition()
+	  Create onModded/Paintjob/ColorInModshop
+	  Update these variables internally on Vehicle when players use modshops.
+	  Add Optional getPlayerModshop
+    * Create OnDeathListener, OnSirenState, OnEnter/ExitAnim/Ed, OnPlayerShootVehicle.
+	* add vehicle.getDriver (optional - obviously!). To do it, GO TO ANTICHEAT AND HOOK GETPLAYERVEHICLEID with SOUHBE
+	  check why onColor/PaintjobChangeListener dont works, maybe driver is wrong?
+    * do organization based on projects and sub-projects
+    * change names onplayerenter/exit and onplayershoot (names that sucks should be changed!)
+      vehiclemode.getSeats
+      Vehicle.getPlayerInSeat(Seat), Vehicle.getPlayersIn
+
 First, i'll write all about worlds.
  * Refactor Entity to make independent of worlds. "Single responsibility principle - Do one thing."
  * Write and test all entities.

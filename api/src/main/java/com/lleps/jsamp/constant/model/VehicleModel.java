@@ -15,9 +15,12 @@ package com.lleps.jsamp.constant.model;
 
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.constant.VehicleSeat;
 import com.lleps.jsamp.data.Vector3D;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -280,27 +283,37 @@ public enum VehicleModel {
 
     final static int[] PAINTJOB_MODELS = new int[] {483, 562, 562, 565, 559, 561, 560, 575, 534, 567, 536, 535, 576, 558};
 
-    int modelId;
-    String name;
-    Type type;
-    int seats;
+    private int modelId;
+    private String name;
+    private Type type;
+    private int seatCount;
 
     // Vehicle model info
-    Vector3D size;
-    Vector3D frontSeat;
-    Vector3D rearSeat;
-    Vector3D petrolCap;
-    Vector3D wheelsFront;
-    Vector3D wheelsRear;
-    Vector3D wheelsMID;
-    Vector3D frontBumperZHeight;
-    Vector3D rearBumperZHeight;
+    private Vector3D size;
+    private Vector3D frontSeat;
+    private Vector3D rearSeat;
+    private Vector3D petrolCap;
+    private Vector3D wheelsFront;
+    private Vector3D wheelsRear;
+    private Vector3D wheelsMID;
+    private Vector3D frontBumperZHeight;
+    private Vector3D rearBumperZHeight;
 
-    VehicleModel(int modelId, String name, Type type, int seats) {
+    private Collection<VehicleSeat> seats = new ArrayList<>();
+
+    VehicleModel(int modelId, String name, Type type, int seatCount) {
         this.modelId = modelId;
         this.name = name;
         this.type = type;
-        this.seats = seats;
+        this.seatCount = seatCount;
+
+        for (int i = 0; i < seatCount; i++) {
+            seats.add(VehicleSeat.getById(i));
+        }
+    }
+
+    public Collection<VehicleSeat> getSeats() {
+        return seats;
     }
 
     public int getModelId() {
@@ -315,8 +328,8 @@ public enum VehicleModel {
         return type;
     }
 
-    public int getSeats() {
-        return seats;
+    public int getSeatCount() {
+        return seatCount;
     }
 
     public boolean canUsePaintjobs() {

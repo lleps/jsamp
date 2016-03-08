@@ -31,13 +31,7 @@ public final class Vector4D implements Vector {
     }
 
     public static Vector4D of(float x, float y, float z, float w) {
-        int key = generateHashCode(x, y, z, w);
-        Vector4D result = instances.get(key);
-        if (result == null) {
-            result = new Vector4D(x, y, z, w);
-            instances.put(key, result);
-        }
-        return result;
+        return new Vector4D(x, y, z, w);
     }
 
     private final float x, y, z, w;
@@ -166,6 +160,16 @@ public final class Vector4D implements Vector {
     @Override
     public int hashCode() {
         return generateHashCode(x, y, z, w);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", w=" + w +
+                '}';
     }
 
     private static int generateHashCode(float x, float y, float z, float w) {

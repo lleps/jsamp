@@ -23,6 +23,8 @@ import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.world.World;
 
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -34,13 +36,16 @@ public class Player {
     }
 
     private int id;
+    private String name;
     private World world;
     private Dialog dialog;
     private Weather weather;
     private LocalTime time;
+    private Map<String, Object> properties = new HashMap<>();
 
     public Player(int id) {
         this.id = id;
+        this.name = FunctionAccess.GetPlayerName(id);
         ObjectNativeIDS.getInstance().players[id] = this;
     }
 
@@ -65,6 +70,44 @@ public class Player {
      */
     public World getWorld() {
         return world;
+    }
+
+    /**
+     * Set a player property. Properties are like PVars, but a lot faster, since are java HashMap.
+     * Note that properties cannot shared through AMX scripts.
+     * @param property property name.
+     * @param value property value.
+     */
+    public void setProperty(String property, Object value) {
+        properties.put(property, value);
+    }
+
+    /**
+     * Removes a property from player properties map.
+     * @param property the property.
+     */
+    public void removeProperty(String property) {
+        properties.remove(property);
+    }
+
+    /**
+     * Check if the player contains the given property.
+     * @param property which property.
+     * @return true if properties HashMap contains the property, false otherwise.
+     */
+    public boolean containsProperty(String property) {
+        return properties.containsKey(property);
+    }
+
+    /**
+     * Return the value of a property.
+     * @param property property name.
+     * @param <T> generic to avoid casting.
+     * @return the property value, or null if none.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getProperty(String property) {
+        return (T) properties.get(property);
     }
 
     /**
@@ -204,5 +247,13 @@ public class Player {
      */
     public void sendMessage(String message) {
         sendMessage(Color.WHITE, message);
+    }
+
+    /**
+     * @return a string formatted like: "name (id)"
+     */
+    @Override
+    public String toString() {
+        return name + " (" + id + ")";
     }
 }

@@ -14,6 +14,11 @@
 package com.lleps.jsamp.anticheat;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author spell
@@ -290,6 +295,37 @@ public class ACUtils {
 
     private static boolean isOrdinaryComponent(int componentid) {
         return isWheelComponent(componentid) || componentid == 1086 || componentid == 1087 || (componentid >= 1008 && componentid <= 1010);
+    }
+
+    public static int[] getCompatibleComponentModels(int componentId) {
+        List<Integer> compatibleModels = new ArrayList<>();
+        if (isOrdinaryComponent(componentId)) {
+            // add all ordinary vehicles
+            final int nonOrdinaryVehicleModels[] = { 581, 523, 462, 521, 463, 522, 461, 448, 468, 586, 509, 481, 510, 472, 473, 493, 595, 484, 430, 453, 452, 446, 454, 590, 569, 537, 538, 570, 449 };
+            for (int i = 400; i <= 611; i++) {
+                boolean nonOrdinary = false;
+                for (int nonOrdinaryModel : nonOrdinaryVehicleModels) {
+                    if (nonOrdinaryModel == i) {
+                        nonOrdinary = true;
+                    }
+                }
+                if (!nonOrdinary) {
+                    compatibleModels.add(i);
+                }
+            }
+        }
+        final int rows = ACArraysStore.validModelComponents.length;
+        final int columns = ACArraysStore.validModelComponents[0].length;
+        for (int i = 0; i < rows; i++) {
+            int modelId = ACArraysStore.validModelComponents[i][0];
+            for (int j = 1; j < columns; j++) {
+                int comp = ACArraysStore.validModelComponents[i][j];
+                if (comp == componentId) compatibleModels.add(modelId);
+            }
+        }
+        int[] result = new int[compatibleModels.size()];
+        for (int i = 0; i < compatibleModels.size(); i++) result[i] = compatibleModels.get(i);
+        return result;
     }
 
     public static boolean isValidComponent(int modelid, int componentid) {

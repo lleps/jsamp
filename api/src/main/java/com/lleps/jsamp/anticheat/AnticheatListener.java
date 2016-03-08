@@ -908,7 +908,7 @@ public class AnticheatListener implements CallbackListener {
 
     @Override
     public boolean OnVehicleMod(int playerId, int vehicleId, int componentId) {
-        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehicleRespray(pid=%d,veh=%d,comp=%d)",
+        if (!anticheat.isValidVehicle(vehicleId) && reportInvalidCall(playerId, "OnVehicleMod(pid=%d,veh=%d,comp=%d)",
                 playerId, vehicleId, componentId)) {
             return true;
         }

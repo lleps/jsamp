@@ -14,6 +14,7 @@
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.world.World;
 
@@ -68,9 +69,6 @@ public abstract class GlobalEntity extends WorldEntity {
             destroyNatively(id);
             getIDSArray()[id] = null;
             id = getInvalidId();
-
-            worldId = -1;
-            interiorId = -1;
         }
     }
 
