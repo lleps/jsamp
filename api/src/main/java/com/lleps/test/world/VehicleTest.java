@@ -26,6 +26,7 @@ import com.lleps.jsamp.data.vehicle.VehicleDamageState;
 import com.lleps.jsamp.data.vehicle.WindowState;
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Label;
 import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.test.CommandListener;
 
@@ -397,6 +398,28 @@ public class VehicleTest implements CommandListener {
             return true;
         }
 
+        if (command.equals("/veh_attachlabel")) {
+            String vehicleKey = args[0];
+            String labelKey = args[1];
+
+            Vehicle v = vehiclesByKeys.get(vehicleKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+
+            Vector3D offSets = Vector3D.of(Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
+
+            v.attachLabel(l, offSets);
+            return true;
+        }
+
+        if (command.equals("/veh_detachlabel")) {
+            String vehicleKey = args[0];
+            String labelKey = args[1];
+
+            Vehicle v = vehiclesByKeys.get(vehicleKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+            v.detachLabel(l);
+            return true;
+        }
         return false;
     }
 }

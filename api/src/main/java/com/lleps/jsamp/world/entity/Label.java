@@ -31,6 +31,8 @@ public class Label extends PerPlayerEntity {
     private float drawDistance;
     private boolean testLOS;
 
+    private AttachedData<Vehicle> attachedVehicle;
+
     public Label(Vector3D position, Color color, String text, float drawDistance) {
         this(position, color, text, drawDistance, true);
     }
@@ -88,11 +90,26 @@ public class Label extends PerPlayerEntity {
         return testLOS;
     }
 
+    public void setAttachedVehicle(AttachedData<Vehicle> attachedVehicle) {
+        this.attachedVehicle = attachedVehicle;
+    }
+
     @Override
     protected int createNatively(int playerId) {
+        int attachedVehicleId = SAMPConstants.INVALID_VEHICLE_ID;
+        float x = position.getX();
+        float y = position.getY();
+        float z = position.getZ();
+        if (attachedVehicle != null) {
+            attachedVehicleId = attachedVehicle.getSource().getId();
+            x = attachedVehicle.getOffSets().getX();
+            y = attachedVehicle.getOffSets().getY();
+            z = attachedVehicle.getOffSets().getZ();
+        }
+
         return FunctionAccess.CreatePlayer3DTextLabel(playerId, text, color.getRGBA(),
-                position.getX(), position.getY(), position.getZ(), drawDistance, SAMPConstants.INVALID_PLAYER_ID,
-                SAMPConstants.INVALID_VEHICLE_ID, testLOS);
+                x, y, z, drawDistance, SAMPConstants.INVALID_PLAYER_ID,
+                attachedVehicleId, testLOS);
     }
 
     @Override

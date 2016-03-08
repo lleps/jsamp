@@ -24,7 +24,6 @@ import com.lleps.jsamp.constant.model.VehicleComponent;
 import com.lleps.jsamp.constant.model.VehicleModel;
 import com.lleps.jsamp.constant.model.WeaponModel;
 import com.lleps.jsamp.data.Color;
-import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.data.Vector4D;
 import com.lleps.jsamp.data.vehicle.DoorState;
@@ -33,6 +32,7 @@ import com.lleps.jsamp.data.vehicle.VehicleParams;
 import com.lleps.jsamp.data.vehicle.WindowState;
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.world.World;
 
 import java.util.*;
 
@@ -134,7 +134,7 @@ public class Vehicle extends GlobalEntity {
     private OnEnterModshopListener onEnterModshopListener;
     private OnExitModshopListener onExitModshopListener;
 
-    private Set<Body> attachedBodies = new HashSet<>();
+    private Set<WorldEntity> attachedEntities = new HashSet<>();
 
     private Modshop currentModshop;
 
@@ -435,7 +435,7 @@ public class Vehicle extends GlobalEntity {
     }
 
     public void attachBody(Body body, Vector3D offSets, Vector3D rotation) {
-        attachedBodies.add(body);
+        attachedEntities.add(body);
         AttachedData<Vehicle> attachedData = new AttachedData<>(this, offSets, rotation);
         body.setAttachedVehicle(attachedData);
 
@@ -445,11 +445,30 @@ public class Vehicle extends GlobalEntity {
     }
 
     public void detachBody(Body body) {
-        attachedBodies.remove(body);
+        attachedEntities.remove(body);
         body.setAttachedVehicle(null);
 
         if (isCreated()) {
-            playerIds.forEach(playerId -> body.destroy(playerId));
+            playerIds.forEach(body::destroy);
+        }
+    }
+
+    public void attachLabel(Label label, Vector3D offSets) {
+        attachedEntities.add(label);
+        AttachedData<Vehicle> attachedData = new AttachedData<>(this, offSets);
+        label.setAttachedVehicle(attachedData);
+
+        if (isCreated()) {
+            playerIds.forEach(playerId -> label.create(playerId, 0, 0));
+        }
+    }
+
+    public void detachLabel(Label label) {
+        attachedEntities.remove(label);
+        label.setAttachedVehicle(null);
+
+        if (isCreated()) {
+            playerIds.forEach(label::destroy);
         }
     }
 
@@ -457,8 +476,8 @@ public class Vehicle extends GlobalEntity {
     public boolean create(int playerId, int worldId, int interiorId) {
         boolean created = super.create(playerId, worldId, interiorId);
         if (created) {
-            for (Body body : attachedBodies) {
-                body.create(playerId, worldId, interiorId);
+            for (WorldEntity entity : attachedEntities) {
+                entity.create(playerId, worldId, interiorId);
             }
         }
         return created;
@@ -467,8 +486,8 @@ public class Vehicle extends GlobalEntity {
     @Override
     public void destroy(int playerId) {
         super.destroy(playerId);
-        for (Body body : attachedBodies) {
-            body.destroy(playerId);
+        for (WorldEntity entity : attachedEntities) {
+            entity.destroy(playerId);
         }
     }
 
