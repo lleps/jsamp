@@ -300,7 +300,7 @@ public class VehicleTest implements CommandListener {
         if (command.equals("/veh_onenteranim")) {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
-            v.setOnPlayerEnterAnimListener((vehicle, player1, passengerSeat) ->
+            v.setOnPlayerEnteringListener((vehicle, player1, passengerSeat) ->
             player1.sendMessage("entering to seat " + passengerSeat));
             return true;
         }
@@ -308,20 +308,20 @@ public class VehicleTest implements CommandListener {
         if (command.equals("/veh_onexitanim")) {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
-            v.setOnPlayerExitAnimListener(((vehicle, player1) -> player1.sendMessage("exiting from vehicle")));
+            v.setOnPlayerExitingListener(((vehicle, player1) -> player1.sendMessage("exiting from vehicle")));
             return true;
         }
         if (command.equals("/veh_onentered")) {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
-            v.setOnPlayerEnteredListener((vehicle, player1, seat) -> player1.sendMessage("entered on seat " + seat));
+            v.setOnPlayerEnterListener((vehicle, player1, seat) -> player1.sendMessage("entered on seat " + seat));
             return true;
         }
 
         if (command.equals("/veh_onexited")) {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
-            v.setOnPlayerExitedListener((veh, player1) -> player1.sendMessage("exited"));
+            v.setOnPlayerExitListener((veh, player1) -> player1.sendMessage("exited"));
             return true;
         }
 
@@ -343,7 +343,7 @@ public class VehicleTest implements CommandListener {
         if (command.equals("/veh_onshooted")) {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
-            v.setOnPlayerShootVehicleListener((vehicle, shooter, weap, offSets) ->  {
+            v.setOnShootedListener((vehicle, shooter, weap, offSets) ->  {
                 player.sendMessage("shooted by " + shooter + " with a " + weap + " in " + offSets);
             });
             return true;

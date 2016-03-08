@@ -13,7 +13,6 @@
  */
 package com.lleps.jsamp.world.entity;
 
-import com.google.common.collect.Lists;
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
@@ -46,11 +45,11 @@ public class Vehicle extends GlobalEntity {
                 id));
     }
 
-    public interface OnPlayerEnterAnimListener { void onPlayerEnterAnim(Vehicle vehicle, Player player, boolean passengerSeat); }
-    public interface OnPlayerExitAnimListener { void onPlayerExitAnim (Vehicle vehicle, Player player); }
+    public interface OnPlayerEnteringListener { void onPlayerEntering(Vehicle vehicle, Player player, boolean passengerSeat); }
+    public interface OnPlayerExitingListener { void onPlayerExiting(Vehicle vehicle, Player player); }
 
-    public interface OnPlayerEnteredListener { void onPlayerEntered(Vehicle vehicle, Player player, VehicleSeat seat); }
-    public interface OnPlayerExitedListener { void onPlayerExited(Vehicle vehicle, Player player); }
+    public interface OnPlayerEnterListener { void onPlayerEnter(Vehicle vehicle, Player player, VehicleSeat seat); }
+    public interface OnPlayerExitListener { void onPlayerExit(Vehicle vehicle, Player player); }
 
     public interface OnSpawnListener { void onSpawn(Vehicle vehicle); }
     public interface OnDeathListener { void onDeath(Vehicle vehicle, Optional<Player> killer); }
@@ -65,7 +64,7 @@ public class Vehicle extends GlobalEntity {
         void onPaintjobChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Paintjob paintjob);
     }
 
-    public interface OnPlayerShootVehicleListener { void onPlayerShootVehicle(Vehicle vehicle, Player player, WeaponModel model, Vector3D offSets); }
+    public interface OnShootedListener { void onShooted(Vehicle vehicle, Player shooter, WeaponModel model, Vector3D offSets); }
 
     public interface OnEnterModshopListener { void onEnterInModshop(Vehicle vehicle, Modshop modshop); }
 
@@ -95,12 +94,12 @@ public class Vehicle extends GlobalEntity {
     private boolean respawning;
 
     private OnSpawnListener onSpawnListener;
-    private OnPlayerEnterAnimListener onPlayerEnterAnimListener;
-    private OnPlayerExitAnimListener onPlayerExitAnimListener;
-    private OnPlayerEnteredListener onPlayerEnteredListener;
-    private OnPlayerExitedListener onPlayerExitedListener;
+    private OnPlayerEnteringListener onPlayerEnteringListener;
+    private OnPlayerExitingListener onPlayerExitingListener;
+    private OnPlayerEnterListener onPlayerEnterListener;
+    private OnPlayerExitListener onPlayerExitListener;
     private OnDeathListener onDeathListener;
-    private OnPlayerShootVehicleListener onPlayerShootVehicleListener;
+    private OnShootedListener onShootedListener;
     private OnSirenStateChangeListener onSirenStateChangeListener;
     private OnModdedInModshopListener onModdedInModshopListener;
     private OnColorChangeInModshopListener onColorChangeInModshopListener;
@@ -537,33 +536,33 @@ public class Vehicle extends GlobalEntity {
         if (onExitModshopListener != null) onExitModshopListener.onExitModshop(this, modshop);
     }
 
-    public void setOnPlayerEnterAnimListener(OnPlayerEnterAnimListener onPlayerEnterAnimListener) {
-        this.onPlayerEnterAnimListener = onPlayerEnterAnimListener;
+    public void setOnPlayerEnteringListener(OnPlayerEnteringListener onPlayerEnteringListener) {
+        this.onPlayerEnteringListener = onPlayerEnteringListener;
     }
 
     public void onPlayerEnterAnim(Player player, boolean isPassenger) {
-        if (onPlayerEnterAnimListener != null) onPlayerEnterAnimListener.onPlayerEnterAnim(this, player, isPassenger);
+        if (onPlayerEnteringListener != null) onPlayerEnteringListener.onPlayerEntering(this, player, isPassenger);
     }
 
-    public void setOnPlayerExitAnimListener(OnPlayerExitAnimListener onPlayerExitAnimListener) {
-        this.onPlayerExitAnimListener = onPlayerExitAnimListener;
+    public void setOnPlayerExitingListener(OnPlayerExitingListener onPlayerExitingListener) {
+        this.onPlayerExitingListener = onPlayerExitingListener;
     }
 
     public void onPlayerExitAnim(Player player) {
-        if (onPlayerExitAnimListener != null) onPlayerExitAnimListener.onPlayerExitAnim(this, player);
+        if (onPlayerExitingListener != null) onPlayerExitingListener.onPlayerExiting(this, player);
     }
 
-    public void setOnPlayerEnteredListener(OnPlayerEnteredListener onPlayerEnteredListener) {
-        this.onPlayerEnteredListener = onPlayerEnteredListener;
+    public void setOnPlayerEnterListener(OnPlayerEnterListener onPlayerEnterListener) {
+        this.onPlayerEnterListener = onPlayerEnterListener;
     }
 
     public void onPlayerEntered(Player player, VehicleSeat seat) {
         playersIn.put(seat, player.getId());
-        if (onPlayerEnteredListener != null) onPlayerEnteredListener.onPlayerEntered(this, player, seat);
+        if (onPlayerEnterListener != null) onPlayerEnterListener.onPlayerEnter(this, player, seat);
     }
 
-    public void setOnPlayerExitedListener(OnPlayerExitedListener onPlayerExitedListener) {
-        this.onPlayerExitedListener = onPlayerExitedListener;
+    public void setOnPlayerExitListener(OnPlayerExitListener onPlayerExitListener) {
+        this.onPlayerExitListener = onPlayerExitListener;
     }
 
     public Optional<Player> getPlayerInSeat(VehicleSeat seat) {
@@ -609,7 +608,7 @@ public class Vehicle extends GlobalEntity {
         }
         playersIn.remove(seat);
 
-        if (onPlayerExitedListener != null) onPlayerExitedListener.onPlayerExited(this, player);
+        if (onPlayerExitListener != null) onPlayerExitListener.onPlayerExit(this, player);
     }
 
     public void setOnDeathListener(OnDeathListener onDeathListener) {
@@ -628,13 +627,13 @@ public class Vehicle extends GlobalEntity {
         if (onSirenStateChangeListener != null) onSirenStateChangeListener.onSirenStateChange(this, driver, started);
     }
 
-    public void setOnPlayerShootVehicleListener(OnPlayerShootVehicleListener onPlayerShootVehicleListener) {
-        this.onPlayerShootVehicleListener = onPlayerShootVehicleListener;
+    public void setOnShootedListener(OnShootedListener onShootedListener) {
+        this.onShootedListener = onShootedListener;
     }
 
     public void onPlayerShootVehicle(Player player, WeaponModel weapon, Vector3D offSets) {
-        if (onPlayerShootVehicleListener != null)
-            onPlayerShootVehicleListener.onPlayerShootVehicle(this, player, weapon, offSets);
+        if (onShootedListener != null)
+            onShootedListener.onShooted(this, player, weapon, offSets);
     }
 
     public Optional<Modshop> getCurrentModshop() {

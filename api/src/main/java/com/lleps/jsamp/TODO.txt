@@ -1,63 +1,31 @@
+Dialog
 
-Built-in support for enterable interiors.
-Create methods setWorld in world entities for set only reference.
+Entities
+    Vehicles
+        TODO: Add attach methods.
+    Actor
+    Body
+    Label
 
-Vehicle listeners.
-	  OnSpawn and recreate the vehicle here.
-	  Add to VehicleComponent "price"
-	  Add Modshop.getModshopByExteriorPosition()
-	  Create onModded/Paintjob/ColorInModshop
-	  Update these variables internally on Vehicle when players use modshops.
-	  Add Optional getPlayerModshop
-    * Create OnDeathListener, OnSirenState, OnEnter/ExitAnim/Ed, OnPlayerShootVehicle.
-	* add vehicle.getDriver (optional - obviously!). To do it, GO TO ANTICHEAT AND HOOK GETPLAYERVEHICLEID with SOUHBE
-	  check why onColor/PaintjobChangeListener dont works, maybe driver is wrong?
-    * do organization based on projects and sub-projects
-    * change names onplayerenter/exit and onplayershoot (names that sucks should be changed!)
-      vehiclemode.getSeats
-      Vehicle.getPlayerInSeat(Seat), Vehicle.getPlayersIn
-
-First, i'll write all about worlds.
- * Refactor Entity to make independent of worlds. "Single responsibility principle - Do one thing."
- * Write and test all entities.
- * Write and test all world implementations.
-
-Come back to think on this sheet's abstraction.
-
-GameMode
-    getEventHandler
-
-
-EventHandler
-    addOnXListener
-    removeOnXListener
+Player
+    TODO: Do player class.
 
 World
-    entites
-        setPos
-        getPos
-        setOnXListener
+    NoStreamingWorld
+    CellStreamingWorld
+        TODO: Do it.
 
-    Body
-    Vehicle
-    Label
-    Pickup
-    Actor
+Timer
+    TODO: Fix it.
 
-NoStreamingWorld
-CellStreamingWorld
-DistanceStreamingWorld
+Checkpoint
+    TODO: Do it.
 
-player
-    setWorld
-    getWorld
-    addOnXListener
-    removeOnXListener
+TextDraws
+    TODO: Do it.
 
-dialogs - done.
+EventHandler
+    TODO: Do event handler, based on entities listener methods.
 
-textdraws
-
-checkpoint
-
-timer
+Other
+    TODO: Built-in support for enterable interiors.
