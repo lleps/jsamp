@@ -48,7 +48,7 @@ public class Label extends PerPlayerEntity {
     }
 
     @Override
-    public Vector getPosition() {
+    public Vector3D getPosition() {
         return position;
     }
 

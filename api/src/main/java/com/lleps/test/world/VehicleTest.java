@@ -25,6 +25,7 @@ import com.lleps.jsamp.data.vehicle.DoorState;
 import com.lleps.jsamp.data.vehicle.VehicleDamageState;
 import com.lleps.jsamp.data.vehicle.WindowState;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.world.entity.Body;
 import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.test.CommandListener;
 
@@ -35,7 +36,7 @@ import java.util.Map;
  * @author spell
  */
 public class VehicleTest implements CommandListener {
-    Map<String, Vehicle> vehiclesByKeys = new HashMap<>();
+    private Map<String, Vehicle> vehiclesByKeys = new HashMap<>();
 
     @Override
     public boolean onCommand(Player player, String command, String[] args) {
@@ -369,6 +370,30 @@ public class VehicleTest implements CommandListener {
             String key = args[0];
             Vehicle v = vehiclesByKeys.get(key);
             player.sendMessage("players in: " + v.getPlayersIn());
+            return true;
+        }
+
+        if (command.equals("/veh_attachbody")) {
+            String vehicleKey = args[0];
+            String bodyKey = args[1];
+
+            Vehicle v = vehiclesByKeys.get(vehicleKey);
+            Body b = BodyTest.bodiesByKeys.get(bodyKey);
+
+            Vector3D offSets = Vector3D.of(Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
+            Vector3D rotation = Vector3D.of(Float.parseFloat(args[5]), Float.parseFloat(args[6]), Float.parseFloat(args[7]));
+
+            v.attachBody(b, offSets, rotation);
+            return true;
+        }
+
+        if (command.equals("/veh_detachbody")) {
+            String vehicleKey = args[0];
+            String bodyKey = args[1];
+
+            Vehicle v = vehiclesByKeys.get(vehicleKey);
+            Body b = BodyTest.bodiesByKeys.get(bodyKey);
+            v.detachBody(b);
             return true;
         }
 

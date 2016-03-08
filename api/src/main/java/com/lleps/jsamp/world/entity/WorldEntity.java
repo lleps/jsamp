@@ -79,7 +79,7 @@ public abstract class WorldEntity {
     /**
      * @return entity world position.
      */
-    public abstract Vector getPosition();
+    public abstract Vector3D getPosition();
 
     /**
      * Create this entity for a player.

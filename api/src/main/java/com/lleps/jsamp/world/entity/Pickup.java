@@ -71,7 +71,7 @@ public class Pickup extends GlobalEntity {
     }
 
     @Override
-    public Vector getPosition() {
+    public Vector3D getPosition() {
         return position;
     }
 

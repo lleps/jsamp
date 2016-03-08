@@ -8,6 +8,7 @@ import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.player.Player;
 import com.lleps.test.anticheat.*;
 import com.lleps.test.codegenerators.VehicleComponentsEnumMaker;
+import com.lleps.test.world.BodyTest;
 import com.lleps.test.world.VehicleTest;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -35,6 +36,7 @@ public class MainTest extends SAMPServer {
 
         dispatcher.addCommandListener(new DialogTest());
         dispatcher.addCommandListener(new VehicleTest());
+        dispatcher.addCommandListener(new BodyTest());
 
         printLine("Loaded..");
     }

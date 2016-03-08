@@ -29,38 +29,34 @@ import java.util.*;
  * @author spell
  */
 public class Body extends PerPlayerEntity {
-    public interface OnPlayerShotListener {
-        void onPlayerShot(Body body, Player player, Vector3D offSets, WeaponModel weapon);
+    public interface OnShootedListener {
+        void onShooted(Body body, Player player, Vector3D offSets, WeaponModel weapon);
     }
 
     public static final int MAX_MATERIAL_INDEX = 15;
 
-    private World world;
     private BodyModel model;
     private Vector3D position;
     private Vector3D rotation;
     private float drawDistance;
-    private Map<Integer, BodyMaterial> materials;
+    private Map<Integer, BodyMaterial> materials = new HashMap<>();
 
-    private OnPlayerShotListener onPlayerShotListener;
+    private AttachedData<Vehicle> attachedVehicle;
 
-    public Body() {
-        materials = new HashMap<>();
-    }
+    private OnShootedListener onShootedListener;
 
     public Body(BodyModel model, Vector3D position, Vector3D rotation) {
-        this();
         this.model = model;
         this.position = position;
         this.rotation = rotation;
     }
 
     public void onPlayerShot(Player player, Vector3D offSets, WeaponModel weapon) {
-        if (onPlayerShotListener != null) onPlayerShotListener.onPlayerShot(this, player, offSets, weapon);
+        if (onShootedListener != null) onShootedListener.onShooted(this, player, offSets, weapon);
     }
 
-    public void setOnPlayerShotListener(OnPlayerShotListener onPlayerShotListener) {
-        this.onPlayerShotListener = onPlayerShotListener;
+    public void setOnShootedListener(OnShootedListener onShootedListener) {
+        this.onShootedListener = onShootedListener;
     }
 
     public void setModel(BodyModel model) {
@@ -72,7 +68,7 @@ public class Body extends PerPlayerEntity {
     }
 
     @Override
-    public Vector getPosition() {
+    public Vector3D getPosition() {
         return position;
     }
 
@@ -113,6 +109,25 @@ public class Body extends PerPlayerEntity {
         materials.remove(index);
     }
 
+    public int move(Vector3D position, Vector3D rotation, float speed) {
+        int moveTimeMS = 0;
+        for (Map.Entry<Integer, Integer> entry : idsByPlayerIds.entrySet()) {
+            int playerId = entry.getKey();
+            int objectId = entry.getValue();
+            moveTimeMS = FunctionAccess.MovePlayerObject(playerId, objectId,
+                    position.getX(), position.getY(), position.getZ(), speed, rotation.getX(), rotation.getY(), rotation.getZ());
+        }
+
+        this.position = position;
+        this.rotation = rotation;
+
+        return moveTimeMS;
+    }
+
+    public void setAttachedVehicle(AttachedData<Vehicle> attachedVehicle) {
+        this.attachedVehicle = attachedVehicle;
+    }
+
     @Override
     protected int createNatively(int playerId) {
         return FunctionAccess.CreatePlayerObject(playerId, model.getId(),
@@ -125,6 +140,14 @@ public class Body extends PerPlayerEntity {
         super.applyState(playerId, entityId);
 
         materials.forEach((index, material) -> material.apply(playerId, entityId, index));
+
+        if (attachedVehicle != null) {
+            SAMPFunctions.AttachPlayerObjectToVehicle(playerId, entityId, attachedVehicle.getSource().getId(),
+                    attachedVehicle.getOffSets().getX(), attachedVehicle.getOffSets().getY(),
+                    attachedVehicle.getOffSets().getZ(),
+                    attachedVehicle.getRotation().getX(), attachedVehicle.getRotation().getY(),
+                    attachedVehicle.getRotation().getZ());
+        }
     }
 
     @Override

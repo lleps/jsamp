@@ -174,7 +174,12 @@ public class EventDispatcher implements CallbackListener {
             Integer vehicleId = player.getProperty("EventDispatcher.vehicleId");
             if (vehicleId != null) {
                 Vehicle vehicle = arrays.vehicles[vehicleId];
-                vehicle.onPlayerExited(player);
+
+                // if vehicle got destroyed when player is driving it, player state will be ONFOOT, but vehicle array will point to null!
+                if (vehicle != null) {
+                    vehicle.onPlayerExited(player);
+                }
+
                 player.removeProperty("EventDispatcher.vehicleId");
             }
         }

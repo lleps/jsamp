@@ -35,7 +35,7 @@ public abstract class PerPlayerEntity extends WorldEntity {
     }
 
     @Override
-    public final boolean create(int playerId, int worldId, int interiorId) {
+    public boolean create(int playerId, int worldId, int interiorId) {
         if (idsByPlayerIds.containsKey(playerId)) {
             return true;
         }
@@ -54,7 +54,7 @@ public abstract class PerPlayerEntity extends WorldEntity {
     }
 
     @Override
-    public final void destroy(int playerId) {
+    public void destroy(int playerId) {
         Integer entityId = idsByPlayerIds.get(playerId);
         if (entityId != null) {
             saveState(playerId, entityId);
@@ -67,7 +67,7 @@ public abstract class PerPlayerEntity extends WorldEntity {
     }
 
     @Override
-    public final boolean isCreated(int playerId) {
+    public boolean isCreated(int playerId) {
         return idsByPlayerIds.containsKey(playerId);
     }
 

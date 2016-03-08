@@ -41,7 +41,7 @@ public abstract class GlobalEntity extends WorldEntity {
     }
 
     @Override
-    public final boolean create(int playerId, int worldId, int interiorId) {
+    public boolean create(int playerId, int worldId, int interiorId) {
         playerIds.add(playerId);
 
         if (isCreated()) return true;
@@ -61,7 +61,7 @@ public abstract class GlobalEntity extends WorldEntity {
     }
 
     @Override
-    public final void destroy(int playerId) {
+    public void destroy(int playerId) {
         playerIds.remove(playerId);
 
         if (isCreated() && playerIds.isEmpty()) {
@@ -73,7 +73,7 @@ public abstract class GlobalEntity extends WorldEntity {
     }
 
     @Override
-    public final boolean isCreated(int playerId) {
+    public boolean isCreated(int playerId) {
         return isCreated();
     }
 

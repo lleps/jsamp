@@ -25,15 +25,11 @@ public class BodyModel {
     private static final Map<Integer, BodyModel> instances = new HashMap<>();
 
     public static BodyModel getById(int id) {
-        if (id < 0 || id > 20000) { // some arbitrary limit.
+        if (id < -1 || id > 20000) { // some arbitrary limit.
             throw new IllegalArgumentException("Invalid body model id (" + id + ")");
         }
-        BodyModel model = instances.get(id);
-        if (model == null) {
-            model = new BodyModel(id);
-            instances.put(id, model);
-        }
-        return model;
+        if (!instances.containsKey(id)) instances.put(id, new BodyModel(id));
+        return instances.get(id);
     }
 
     private final int id;

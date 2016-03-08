@@ -35,17 +35,17 @@ public final class Vector2D implements Vector {
     }
 
     @Override
-    public Vector plusX(float amount) {
+    public Vector2D plusX(float amount) {
         return of(x+amount, y);
     }
 
     @Override
-    public Vector minusX(float amount) {
+    public Vector2D minusX(float amount) {
         return of(x-amount, y);
     }
 
     @Override
-    public Vector withX(float value) {
+    public Vector2D withX(float value) {
         return of(value, y);
     }
 
@@ -55,17 +55,17 @@ public final class Vector2D implements Vector {
     }
 
     @Override
-    public Vector plusY(float amount) {
+    public Vector2D plusY(float amount) {
         return of(x, y+amount);
     }
 
     @Override
-    public Vector minusY(float amount) {
+    public Vector2D minusY(float amount) {
         return of(x, y-amount);
     }
 
     @Override
-    public Vector withY(float value) {
+    public Vector2D withY(float value) {
         return of(x, value);
     }
 
@@ -75,17 +75,17 @@ public final class Vector2D implements Vector {
     }
 
     @Override
-    public Vector plusZ(float amount) {
+    public Vector2D plusZ(float amount) {
         return this;
     }
 
     @Override
-    public Vector minusZ(float amount) {
+    public Vector2D minusZ(float amount) {
         return this;
     }
 
     @Override
-    public Vector withZ(float value) {
+    public Vector2D withZ(float value) {
         return this;
     }
 
@@ -95,17 +95,17 @@ public final class Vector2D implements Vector {
     }
 
     @Override
-    public Vector plusW(float amount) {
+    public Vector2D plusW(float amount) {
         return this;
     }
 
     @Override
-    public Vector minusW(float amount) {
+    public Vector2D minusW(float amount) {
         return this;
     }
 
     @Override
-    public Vector withW(float value) {
+    public Vector2D withW(float value) {
         return this;
     }
 

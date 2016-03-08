@@ -14,6 +14,7 @@
 package com.lleps.jsamp.data.bodymaterial;
 
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.constant.model.BodyModel;
 import com.lleps.jsamp.data.Color;
 

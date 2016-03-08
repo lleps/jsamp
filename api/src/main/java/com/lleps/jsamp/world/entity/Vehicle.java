@@ -45,30 +45,57 @@ public class Vehicle extends GlobalEntity {
                 id));
     }
 
-    public interface OnPlayerEnteringListener { void onPlayerEntering(Vehicle vehicle, Player player, boolean passengerSeat); }
-    public interface OnPlayerExitingListener { void onPlayerExiting(Vehicle vehicle, Player player); }
+    public interface OnPlayerEnteringListener {
+        void onPlayerEntering(Vehicle vehicle, Player player, boolean passengerSeat);
+    }
 
-    public interface OnPlayerEnterListener { void onPlayerEnter(Vehicle vehicle, Player player, VehicleSeat seat); }
-    public interface OnPlayerExitListener { void onPlayerExit(Vehicle vehicle, Player player); }
+    public interface OnPlayerExitingListener {
+        void onPlayerExiting(Vehicle vehicle, Player player);
+    }
 
-    public interface OnSpawnListener { void onSpawn(Vehicle vehicle); }
-    public interface OnDeathListener { void onDeath(Vehicle vehicle, Optional<Player> killer); }
+    public interface OnPlayerEnterListener {
+        void onPlayerEnter(Vehicle vehicle, Player player, VehicleSeat seat);
+    }
 
-    public interface OnSirenStateChangeListener { void onSirenStateChange(Vehicle vehicle, Player driver, boolean started); }
+    public interface OnPlayerExitListener {
+        void onPlayerExit(Vehicle vehicle, Player player);
+    }
 
-    public interface OnModdedInModshopListener { void onModded(Vehicle vehicle, Player player, Modshop modshop, VehicleComponent component); }
+    public interface OnSpawnListener {
+        void onSpawn(Vehicle vehicle);
+    }
 
-    public interface OnColorChangeInModshopListener { void onColorChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Color primaryColor, Color secondaryColor); }
+    public interface OnDeathListener {
+        void onDeath(Vehicle vehicle, Optional<Player> killer);
+    }
+
+    public interface OnSirenStateChangeListener {
+        void onSirenStateChange(Vehicle vehicle, Player driver, boolean started);
+    }
+
+    public interface OnModdedInModshopListener {
+        void onModded(Vehicle vehicle, Player player, Modshop modshop, VehicleComponent component);
+    }
+
+    public interface OnColorChangeInModshopListener {
+        void onColorChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Color primaryColor, Color secondaryColor);
+    }
 
     public interface OnPaintjobChangeInModshopListener {
         void onPaintjobChangeInModshop(Vehicle vehicle, Player player, Modshop modshop, Paintjob paintjob);
     }
 
-    public interface OnShootedListener { void onShooted(Vehicle vehicle, Player shooter, WeaponModel model, Vector3D offSets); }
+    public interface OnShootedListener {
+        void onShooted(Vehicle vehicle, Player shooter, WeaponModel model, Vector3D offSets);
+    }
 
-    public interface OnEnterModshopListener { void onEnterInModshop(Vehicle vehicle, Modshop modshop); }
+    public interface OnEnterModshopListener {
+        void onEnterInModshop(Vehicle vehicle, Modshop modshop);
+    }
 
-    public interface OnExitModshopListener { void onExitModshop(Vehicle vehicle, Modshop modshop); }
+    public interface OnExitModshopListener {
+        void onExitModshop(Vehicle vehicle, Modshop modshop);
+    }
 
     public static final int DEFAULT_RESPAWN_DELAY_MS = 1000 * 60 * 3;
     public static final float VEHICLE_MAX_HEALTH = 1_000f;
@@ -106,6 +133,8 @@ public class Vehicle extends GlobalEntity {
     private OnPaintjobChangeInModshopListener onPaintjobChangeInModshopListener;
     private OnEnterModshopListener onEnterModshopListener;
     private OnExitModshopListener onExitModshopListener;
+
+    private Set<Body> attachedBodies = new HashSet<>();
 
     private Modshop currentModshop;
 
@@ -148,7 +177,7 @@ public class Vehicle extends GlobalEntity {
     }
 
     @Override
-    public Vector getPosition() {
+    public Vector3D getPosition() {
         if (isCreated()) position = Vector3D.of(FunctionAccess.GetVehiclePos(id));
         return position;
     }
@@ -405,6 +434,44 @@ public class Vehicle extends GlobalEntity {
         return Vector4D.empty();
     }
 
+    public void attachBody(Body body, Vector3D offSets, Vector3D rotation) {
+        attachedBodies.add(body);
+        AttachedData<Vehicle> attachedData = new AttachedData<>(this, offSets, rotation);
+        body.setAttachedVehicle(attachedData);
+
+        if (isCreated()) {
+            playerIds.forEach(playerId -> body.create(playerId, 0, 0));
+        }
+    }
+
+    public void detachBody(Body body) {
+        attachedBodies.remove(body);
+        body.setAttachedVehicle(null);
+
+        if (isCreated()) {
+            playerIds.forEach(playerId -> body.destroy(playerId));
+        }
+    }
+
+    @Override
+    public boolean create(int playerId, int worldId, int interiorId) {
+        boolean created = super.create(playerId, worldId, interiorId);
+        if (created) {
+            for (Body body : attachedBodies) {
+                body.create(playerId, worldId, interiorId);
+            }
+        }
+        return created;
+    }
+
+    @Override
+    public void destroy(int playerId) {
+        super.destroy(playerId);
+        for (Body body : attachedBodies) {
+            body.destroy(playerId);
+        }
+    }
+
     @Override
     protected int createNatively(int worldId) {
         return FunctionAccess.CreateVehicle(model.getModelId(), position.getX(), position.getY(),
@@ -434,6 +501,7 @@ public class Vehicle extends GlobalEntity {
         if (health != VEHICLE_MAX_HEALTH) FunctionAccess.SetVehicleHealth(id, health);
 
         FunctionAccess.SetVehicleNumberPlate(id, plate);
+
     }
 
     @Override

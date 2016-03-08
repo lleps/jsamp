@@ -48,17 +48,17 @@ public final class Vector3D implements Vector {
     }
 
     @Override
-    public Vector plusX(float amount) {
+    public Vector3D plusX(float amount) {
         return of(x+amount, y, z);
     }
 
     @Override
-    public Vector minusX(float amount) {
+    public Vector3D minusX(float amount) {
         return of(x-amount, y, z);
     }
 
     @Override
-    public Vector withX(float value) {
+    public Vector3D withX(float value) {
         return of(value, y, z);
     }
 
@@ -68,17 +68,17 @@ public final class Vector3D implements Vector {
     }
 
     @Override
-    public Vector plusY(float amount) {
+    public Vector3D plusY(float amount) {
         return of(x, y+amount, z);
     }
 
     @Override
-    public Vector minusY(float amount) {
+    public Vector3D minusY(float amount) {
         return of(x, y-amount, z);
     }
 
     @Override
-    public Vector withY(float value) {
+    public Vector3D withY(float value) {
         return of(x, value, z);
     }
 
@@ -88,17 +88,17 @@ public final class Vector3D implements Vector {
     }
 
     @Override
-    public Vector plusZ(float amount) {
+    public Vector3D plusZ(float amount) {
         return of(x, y, z+amount);
     }
 
     @Override
-    public Vector minusZ(float amount) {
+    public Vector3D minusZ(float amount) {
         return of(x, y, z-amount);
     }
 
     @Override
-    public Vector withZ(float value) {
+    public Vector3D withZ(float value) {
         return of(x, y, value);
     }
 
@@ -108,17 +108,17 @@ public final class Vector3D implements Vector {
     }
 
     @Override
-    public Vector plusW(float amount) {
+    public Vector3D plusW(float amount) {
         return this;
     }
 
     @Override
-    public Vector minusW(float amount) {
+    public Vector3D minusW(float amount) {
         return this;
     }
 
     @Override
-    public Vector withW(float value) {
+    public Vector3D withW(float value) {
         return this;
     }
 

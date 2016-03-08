@@ -2,10 +2,13 @@ Dialog
 
 Entities
     Vehicles
-        TODO: Add attach methods.
-    Actor
+        TODO: Create attach method for labels
     Body
+    Actor
     Label
+        TODO: Create and test
+        TODO: Add attach method to vehicles
+    Pickup
 
 Player
     TODO: Do player class.

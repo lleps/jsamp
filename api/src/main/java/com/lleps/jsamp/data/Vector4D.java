@@ -49,17 +49,17 @@ public final class Vector4D implements Vector {
     }
 
     @Override
-    public Vector plusX(float amount) {
+    public Vector4D plusX(float amount) {
         return of(x+amount, y, z, w);
     }
 
     @Override
-    public Vector minusX(float amount) {
+    public Vector4D minusX(float amount) {
         return of(x-amount, y, z, w);
     }
 
     @Override
-    public Vector withX(float value) {
+    public Vector4D withX(float value) {
         return of(value, y, z, w);
     }
 
@@ -69,17 +69,17 @@ public final class Vector4D implements Vector {
     }
 
     @Override
-    public Vector plusY(float amount) {
+    public Vector4D plusY(float amount) {
         return of(x, y+amount, z, w);
     }
 
     @Override
-    public Vector minusY(float amount) {
+    public Vector4D minusY(float amount) {
         return of(x, y-amount, z, w);
     }
 
     @Override
-    public Vector withY(float value) {
+    public Vector4D withY(float value) {
         return of(x, value, z, w);
     }
 
@@ -89,17 +89,17 @@ public final class Vector4D implements Vector {
     }
 
     @Override
-    public Vector plusZ(float amount) {
+    public Vector4D plusZ(float amount) {
         return of(x, y, z+amount, w);
     }
 
     @Override
-    public Vector minusZ(float amount) {
+    public Vector4D minusZ(float amount) {
         return of(x, y, z-amount, w);
     }
 
     @Override
-    public Vector withZ(float value) {
+    public Vector4D withZ(float value) {
         return of(x, y, value, w);
     }
 
@@ -109,17 +109,17 @@ public final class Vector4D implements Vector {
     }
 
     @Override
-    public Vector plusW(float amount) {
+    public Vector4D plusW(float amount) {
         return of(x, y, z, w+amount);
     }
 
     @Override
-    public Vector minusW(float amount) {
+    public Vector4D minusW(float amount) {
         return of(x, y, z, w-amount);
     }
 
     @Override
-    public Vector withW(float value) {
+    public Vector4D withW(float value) {
         return of(x, y, z, value);
     }
 
