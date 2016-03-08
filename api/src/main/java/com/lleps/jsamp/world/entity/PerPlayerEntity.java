@@ -15,6 +15,8 @@ package com.lleps.jsamp.world.entity;
 
 import com.google.common.collect.Sets;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.server.EventDispatcher;
+import com.lleps.jsamp.server.SAMPServer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +27,7 @@ import java.util.Map;
  *
  * @author spell
  */
-public abstract class PerPlayerEntity extends WorldEntity {
+public abstract class PerPlayerEntity extends WorldEntity implements EventDispatcher.OnPlayerIdDisconnectListener {
     /**
      * This map contains references player id -> entity id.
      */
@@ -47,6 +49,8 @@ public abstract class PerPlayerEntity extends WorldEntity {
 
         idsByPlayerIds.put(playerId, entityId);
 
+        SAMPServer.getEventDispatcher().addOnPlayerIdDisconnectListener(playerId, this);
+
         getArrayNativeIDS()[playerId][entityId] = this;
 
         applyState(playerId, entityId);
@@ -61,6 +65,7 @@ public abstract class PerPlayerEntity extends WorldEntity {
             destroyNatively(playerId, entityId);
 
             idsByPlayerIds.remove(playerId);
+            SAMPServer.getEventDispatcher().removeOnPlayerIdDisconnectListener(playerId, this);
 
             getArrayNativeIDS()[playerId][entityId] = null;
         }
@@ -72,7 +77,7 @@ public abstract class PerPlayerEntity extends WorldEntity {
     }
 
     /**
-     * In case this entity is created, this method will destroy it and create it again. It is used for
+     * In case this entity is created, this method will destroy and create it again. It is used for
      * cases when there isn't a native method to change a property. For example, if you want to change
      * a vehicle model you must recreate the vehicle to make the change visible.
      */
@@ -130,4 +135,9 @@ public abstract class PerPlayerEntity extends WorldEntity {
      * @return an array.
      */
     protected abstract Object[][] getArrayNativeIDS();
+
+    @Override
+    public void onPlayerIdDisconnect(int playerId, int reason) {
+        idsByPlayerIds.remove(playerId);
+    }
 }

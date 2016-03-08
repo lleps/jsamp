@@ -54,6 +54,8 @@ public abstract class SAMPServer {
 
     private final Map<Runnable, Long> tasksToRunLater = new ConcurrentHashMap<>();
 
+    private EventDispatcher eventDispatcher;
+
     private Weather weather;
     private LocalTime time;
 
@@ -83,7 +85,9 @@ public abstract class SAMPServer {
         AnticheatFunctionsExecutor acExecutor = new AnticheatFunctionsExecutor(anticheat);
         FunctionAccess.setExecutor(acExecutor);
 
-        MainCallbackListener.addCallbackListener(new EventDispatcher(this), MainCallbackListener.ListenerPriority.LOW);
+        eventDispatcher = new EventDispatcher(this);
+
+        MainCallbackListener.addCallbackListener(eventDispatcher, MainCallbackListener.ListenerPriority.LOW);
     }
 
     /**
@@ -252,5 +256,12 @@ public abstract class SAMPServer {
      */
     public static void sendRConCommand(String command) {
         FunctionAccess.SendRconCommand(command);
+    }
+
+    /**
+     * @return server event dispatcher object.
+     */
+    public static EventDispatcher getEventDispatcher() {
+        return THIS.eventDispatcher;
     }
 }

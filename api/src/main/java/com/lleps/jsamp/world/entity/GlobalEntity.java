@@ -16,6 +16,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.player.Player;
+import com.lleps.jsamp.server.EventDispatcher;
+import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.world.World;
 
 import java.util.HashSet;
@@ -24,7 +26,7 @@ import java.util.Set;
 /**
  * @author spell
  */
-public abstract class GlobalEntity extends WorldEntity {
+public abstract class GlobalEntity extends WorldEntity implements EventDispatcher.OnPlayerIdDisconnectListener {
     /**
      * This set will store all player ids with this entity streamed.
      * No matters if the entity creation was successfully or not, the
@@ -43,6 +45,7 @@ public abstract class GlobalEntity extends WorldEntity {
     @Override
     public boolean create(int playerId, int worldId, int interiorId) {
         playerIds.add(playerId);
+        SAMPServer.getEventDispatcher().addOnPlayerIdDisconnectListener(playerId, this);
 
         if (isCreated()) return true;
 
@@ -63,13 +66,9 @@ public abstract class GlobalEntity extends WorldEntity {
     @Override
     public void destroy(int playerId) {
         playerIds.remove(playerId);
+        SAMPServer.getEventDispatcher().removeOnPlayerIdDisconnectListener(playerId, this);
 
-        if (isCreated() && playerIds.isEmpty()) {
-            saveState(id);
-            destroyNatively(id);
-            getIDSArray()[id] = null;
-            id = getInvalidId();
-        }
+        checkForDestroyAndSave();
     }
 
     @Override
@@ -160,5 +159,20 @@ public abstract class GlobalEntity extends WorldEntity {
      */
     public int getId() {
         return id;
+    }
+
+    @Override
+    public void onPlayerIdDisconnect(int playerId, int reason) {
+        playerIds.remove(playerId);
+        checkForDestroyAndSave();
+    }
+
+    private void checkForDestroyAndSave() {
+        if (isCreated() && playerIds.isEmpty()) {
+            saveState(id);
+            destroyNatively(id);
+            getIDSArray()[id] = null;
+            id = getInvalidId();
+        }
     }
 }

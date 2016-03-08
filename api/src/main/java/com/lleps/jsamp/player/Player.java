@@ -21,11 +21,10 @@ import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.world.World;
+import com.lleps.jsamp.world.entity.WorldEntity;
 
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author spell

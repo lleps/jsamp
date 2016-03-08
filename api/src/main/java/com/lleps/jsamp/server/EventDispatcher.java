@@ -13,6 +13,10 @@
  */
 package com.lleps.jsamp.server;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.Multiset;
 import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.constant.Modshop;
 import com.lleps.jsamp.constant.Paintjob;
@@ -28,14 +32,23 @@ import com.lleps.jsamp.world.entity.Body;
 import com.lleps.jsamp.world.entity.Pickup;
 import com.lleps.jsamp.world.entity.Vehicle;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author spell
  */
 public class EventDispatcher implements CallbackListener {
-    private SAMPServer server;
-    private ObjectNativeIDS arrays = ObjectNativeIDS.getInstance();
+    public interface OnPlayerIdDisconnectListener {
+        void onPlayerIdDisconnect(int playerId, int reason);
+    }
+
+    private final SAMPServer server;
+    private final ObjectNativeIDS arrays = ObjectNativeIDS.getInstance();
+
+    private final Multimap<Integer, OnPlayerIdDisconnectListener> disconnectListeners = ArrayListMultimap.create();
 
     public EventDispatcher(SAMPServer server) {
         this.server = server;
@@ -200,6 +213,35 @@ public class EventDispatcher implements CallbackListener {
         Vehicle vehicle = arrays.vehicles[vehicleid];
         vehicle.onSirenStateChange(player, newstate);
         return false;
+    }
+
+    @Override
+    public boolean OnPlayerDisconnect(int playerId, int reason) {
+        for (OnPlayerIdDisconnectListener listener : disconnectListeners.get(playerId)) {
+            listener.onPlayerIdDisconnect(playerId, reason);
+        }
+        disconnectListeners.removeAll(playerId);
+        return false;
+    }
+
+    /**
+     * Listen when a player id disconnects. All per-player listeners are automatically removed after the player disconnects.
+     * @param playerId player id
+     * @param listener listener
+     */
+    public void addOnPlayerIdDisconnectListener(int playerId, OnPlayerIdDisconnectListener listener) {
+        disconnectListeners.put(playerId, listener);
+    }
+
+    /**
+     * Removes a player disconnection listener. You don't need to remove player listeners on player disconnect, since all listeners
+     * are automatically removed when player leaves the server.
+     * @param playerId player id.
+     * @param listener listener id.
+     * @exception java.util.ConcurrentModificationException if you try to remove a listener when a player is disconnecting.
+     */
+    public void removeOnPlayerIdDisconnectListener(int playerId, OnPlayerIdDisconnectListener listener) {
+        disconnectListeners.remove(playerId, listener);
     }
 
     private <T> T getEntity(T[] array, int entityId) {
