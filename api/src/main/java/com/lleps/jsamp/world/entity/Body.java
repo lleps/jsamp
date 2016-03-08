@@ -43,6 +43,8 @@ public class Body extends PerPlayerEntity {
 
     private AttachedData<Vehicle> attachedVehicle;
 
+    private Set<WorldEntity> attachedEntities = new HashSet<>();
+
     private OnShootedListener onShootedListener;
 
     public Body(BodyModel model, Vector3D position, Vector3D rotation) {
@@ -88,6 +90,20 @@ public class Body extends PerPlayerEntity {
                 rotation.getX(), rotation.getY(), rotation.getZ()));
     }
 
+    public void attachLabel(Label label, Vector3D offSets) {
+        AttachedData<Body> attachedData = new AttachedData<>(this, offSets);
+        label.setAttachedBody(attachedData);
+        attachedEntities.add(label);
+
+        idsByPlayerIds.forEach((playerId, objectId) -> label.create(playerId, 0, 0));
+    }
+
+    public void detachLabel(Label label) {
+        attachedEntities.remove(label);
+
+        idsByPlayerIds.forEach((playerId, objectId) -> label.destroy(playerId));
+    }
+
     public void setDrawDistance(float drawDistance) {
         this.drawDistance = drawDistance;
     }
@@ -126,6 +142,21 @@ public class Body extends PerPlayerEntity {
 
     public void setAttachedVehicle(AttachedData<Vehicle> attachedVehicle) {
         this.attachedVehicle = attachedVehicle;
+    }
+
+    @Override
+    public boolean create(int playerId, int worldId, int interiorId) {
+        boolean created = super.create(playerId, worldId, interiorId);
+        if (created) {
+            attachedEntities.forEach(e -> e.create(playerId, worldId, interiorId));
+        }
+        return created;
+    }
+
+    @Override
+    public void destroy(int playerId) {
+        super.destroy(playerId);
+        attachedEntities.forEach(e -> e.destroy(playerId));
     }
 
     @Override

@@ -20,6 +20,9 @@ import com.lleps.jsamp.constant.model.BodyModel;
 import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author spell
  */
@@ -48,6 +51,8 @@ public class Pickup extends GlobalEntity {
     private Type type;
     private BodyModel model;
     private Vector3D position;
+
+    private Set<WorldEntity> attachedEntities = new HashSet<>();
 
     private OnPickupListener onPickupListener;
 
@@ -89,6 +94,36 @@ public class Pickup extends GlobalEntity {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+
+    public void attachLabel(Label label, Vector3D offSets) {
+        AttachedData<Pickup> attachedData = new AttachedData<>(this, offSets);
+        label.setAttachedPickup(attachedData);
+        attachedEntities.add(label);
+
+        playerIds.forEach((playerId) -> label.create(playerId, 0, 0));
+    }
+
+    public void detachLabel(Label label) {
+        attachedEntities.remove(label);
+
+        playerIds.forEach(label::destroy);
+    }
+
+    @Override
+    public boolean create(int playerId, int worldId, int interiorId) {
+        boolean created = super.create(playerId, worldId, interiorId);
+        if (created) {
+            attachedEntities.forEach(e -> e.create(playerId, worldId, interiorId));
+        }
+        return created;
+    }
+
+    @Override
+    public void destroy(int playerId) {
+        super.destroy(playerId);
+        attachedEntities.forEach(e -> e.destroy(playerId));
     }
 
     @Override

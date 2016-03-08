@@ -1,12 +1,15 @@
 Dialog
 
 Entities
-    Vehicles
+    Vehicle
     Body
-    Actor
     Label
     Pickup
-
+    Actor
+        TODO: Do class
+        TODO: Do properties
+        TODO: Do listeners
+        TODO: attachLabel
 Player
     TODO: Do player class.
 

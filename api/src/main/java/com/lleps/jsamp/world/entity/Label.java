@@ -32,6 +32,8 @@ public class Label extends PerPlayerEntity {
     private boolean testLOS;
 
     private AttachedData<Vehicle> attachedVehicle;
+    private AttachedData<Body> attachedBody;
+    private AttachedData<Pickup> attachedPickup;
 
     public Label(Vector3D position, Color color, String text, float drawDistance) {
         this(position, color, text, drawDistance, true);
@@ -94,17 +96,38 @@ public class Label extends PerPlayerEntity {
         this.attachedVehicle = attachedVehicle;
     }
 
+    public void setAttachedBody(AttachedData<Body> attachedBody) {
+        this.attachedBody = attachedBody;
+    }
+
+    public void setAttachedPickup(AttachedData<Pickup> attachedPickup) {
+        this.attachedPickup = attachedPickup;
+    }
+
     @Override
     protected int createNatively(int playerId) {
         int attachedVehicleId = SAMPConstants.INVALID_VEHICLE_ID;
         float x = position.getX();
         float y = position.getY();
         float z = position.getZ();
+
         if (attachedVehicle != null) {
             attachedVehicleId = attachedVehicle.getSource().getId();
             x = attachedVehicle.getOffSets().getX();
             y = attachedVehicle.getOffSets().getY();
             z = attachedVehicle.getOffSets().getZ();
+        } else if (attachedBody != null) {
+            Body body = attachedBody.getSource();
+            Vector3D offSets = attachedBody.getOffSets();
+            x = body.getPosition().getX() + offSets.getX();
+            y = body.getPosition().getY() + offSets.getY();
+            z = body.getPosition().getZ() + offSets.getZ();
+        } else if (attachedPickup != null) {
+            Pickup pickup = attachedPickup.getSource();
+            Vector3D offSets = attachedPickup.getOffSets();
+            x = pickup.getPosition().getX() + offSets.getX();
+            y = pickup.getPosition().getY() + offSets.getY();
+            z = pickup.getPosition().getZ() + offSets.getZ();
         }
 
         return FunctionAccess.CreatePlayer3DTextLabel(playerId, text, color.getRGBA(),
