@@ -464,10 +464,8 @@ public class Vehicle extends GlobalEntity {
     }
 
     public void detachLabel(Label label) {
-        attachedEntities.remove(label);
-        label.setAttachedVehicle(null);
-
-        if (isCreated()) {
+        if (attachedEntities.remove(label)) {
+            label.setAttachedVehicle(null);
             playerIds.forEach(label::destroy);
         }
     }

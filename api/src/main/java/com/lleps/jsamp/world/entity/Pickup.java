@@ -106,9 +106,10 @@ public class Pickup extends GlobalEntity {
     }
 
     public void detachLabel(Label label) {
-        attachedEntities.remove(label);
-
-        playerIds.forEach(label::destroy);
+        if (attachedEntities.remove(label)) {
+            label.setAttachedPickup(null);
+            if (isCreated()) playerIds.forEach(label::destroy);
+        }
     }
 
     @Override

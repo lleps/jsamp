@@ -99,9 +99,10 @@ public class Body extends PerPlayerEntity {
     }
 
     public void detachLabel(Label label) {
-        attachedEntities.remove(label);
-
-        idsByPlayerIds.forEach((playerId, objectId) -> label.destroy(playerId));
+        if (attachedEntities.remove(label)) {
+            label.setAttachedBody(null);
+            idsByPlayerIds.forEach((playerId, objectId) -> label.destroy(playerId));
+        }
     }
 
     public void setDrawDistance(float drawDistance) {

@@ -25,6 +25,7 @@ import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.transition.BodyTransition;
 import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Label;
 import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.test.CommandListener;
 
@@ -154,6 +155,30 @@ public class BodyTest implements CommandListener {
                         player.sendMessage("la barrera se cerró.");
                     });
             closeAnimation.play(body);
+        }
+
+
+        if (command.equals("/body_attachlabel")) {
+            String bodyKey = args[0];
+            String labelKey = args[1];
+
+            Body b = bodiesByKeys.get(bodyKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+
+            Vector3D offSets = Vector3D.of(Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
+
+            b.attachLabel(l, offSets);
+            return true;
+        }
+
+        if (command.equals("/body_detachlabel")) {
+            String bodyKey = args[0];
+            String labelKey = args[1];
+
+            Body b = bodiesByKeys.get(bodyKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+            b.detachLabel(l);
+            return true;
         }
         return false;
     }

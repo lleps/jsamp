@@ -34,6 +34,7 @@ public class Label extends PerPlayerEntity {
     private AttachedData<Vehicle> attachedVehicle;
     private AttachedData<Body> attachedBody;
     private AttachedData<Pickup> attachedPickup;
+    private AttachedData<Actor> attachedActor;
 
     public Label(Vector3D position, Color color, String text, float drawDistance) {
         this(position, color, text, drawDistance, true);
@@ -104,6 +105,10 @@ public class Label extends PerPlayerEntity {
         this.attachedPickup = attachedPickup;
     }
 
+    public void setAttachedActor(AttachedData<Actor> attachedActor) {
+        this.attachedActor = attachedActor;
+    }
+
     @Override
     protected int createNatively(int playerId) {
         int attachedVehicleId = SAMPConstants.INVALID_VEHICLE_ID;
@@ -128,6 +133,12 @@ public class Label extends PerPlayerEntity {
             x = pickup.getPosition().getX() + offSets.getX();
             y = pickup.getPosition().getY() + offSets.getY();
             z = pickup.getPosition().getZ() + offSets.getZ();
+        } else if (attachedActor != null) {
+            Actor actor = attachedActor.getSource();
+            Vector3D offSets = attachedActor.getOffSets();
+            x = actor.getPosition().getX() + offSets.getX();
+            y = actor.getPosition().getY() + offSets.getY();
+            z = actor.getPosition().getZ() + offSets.getZ();
         }
 
         return FunctionAccess.CreatePlayer3DTextLabel(playerId, text, color.getRGBA(),

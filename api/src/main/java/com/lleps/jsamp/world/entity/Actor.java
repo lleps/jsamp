@@ -27,7 +27,9 @@ import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.server.SAMPServer;
 
 import java.time.Duration;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author spell
@@ -63,6 +65,8 @@ public class Actor extends GlobalEntity {
 
     private Animation animation;
     private AnimationRunner animationRunner;
+
+    private Set<WorldEntity> attachedEntities = new HashSet<>();
 
     public Actor(SkinModel skin, Vector3D position, float facingAngle) {
         this.skin = skin;
@@ -167,6 +171,36 @@ public class Actor extends GlobalEntity {
 
     public Animation getAnimation() {
         return animation;
+    }
+
+    public void attachLabel(Label label, Vector3D offSets) {
+        attachedEntities.add(label);
+        AttachedData<Actor> attachedData = new AttachedData<>(this, offSets);
+        label.setAttachedActor(attachedData);
+
+        if (isCreated()) playerIds.forEach(playerId -> label.create(playerId, 0, 0));
+    }
+
+    public void detachLabel(Label label) {
+        if (attachedEntities.remove(label)) {
+            label.setAttachedActor(null);
+            if (isCreated()) playerIds.forEach(label::destroy);
+        }
+    }
+
+    @Override
+    public boolean create(int playerId, int worldId, int interiorId) {
+        boolean created = super.create(playerId, worldId, interiorId);
+        if (created) {
+            attachedEntities.forEach(e -> e.create(playerId, worldId, interiorId));
+        }
+        return created;
+    }
+
+    @Override
+    public void destroy(int playerId) {
+        super.destroy(playerId);
+        attachedEntities.forEach(e -> e.destroy(playerId));
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.transition.BodyTransition;
 import com.lleps.jsamp.world.entity.Actor;
 import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Label;
 import com.lleps.test.CommandListener;
 
 import java.time.Duration;
@@ -101,6 +102,29 @@ public class ActorTest implements CommandListener {
             actorsByKeys.get(key).setOnDeathListener((actor, killer) -> {
                 player.sendMessage("actor killed by " + killer);
             });
+            return true;
+        }
+
+        if (command.equals("/actor_attachlabel")) {
+            String actorKey = args[0];
+            String labelKey = args[1];
+
+            Actor a = actorsByKeys.get(actorKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+
+            Vector3D offSets = Vector3D.of(Float.parseFloat(args[2]), Float.parseFloat(args[3]), Float.parseFloat(args[4]));
+
+            a.attachLabel(l, offSets);
+            return true;
+        }
+
+        if (command.equals("/actor_detachlabel")) {
+            String actorKey = args[0];
+            String labelKey = args[1];
+
+            Actor a = actorsByKeys.get(actorKey);
+            Label l = LabelTest.labelsByKeys.get(labelKey);
+            a.detachLabel(l);
             return true;
         }
         return false;
