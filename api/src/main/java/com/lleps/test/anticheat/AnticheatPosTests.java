@@ -31,6 +31,14 @@ public class AnticheatPosTests implements CommandListener {
             FunctionAccess.SetPlayerPos(player.getId(), Float.parseFloat(args[0]), Float.parseFloat(args[1]), Float.parseFloat(args[2]));
             return true;
         }
+        if (command.equals("/setvw")) {
+            FunctionAccess.SetPlayerVirtualWorld(player.getId(), Integer.parseInt(args[1]));
+            return true;
+        }
+        if (command.equals("/setinterior")) {
+            FunctionAccess.SetPlayerInterior(player.getId(), Integer.parseInt(args[1]));
+            return true;
+        }
         return false;
     }
 }

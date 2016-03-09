@@ -15,10 +15,7 @@ package com.lleps.jsamp.server;
 
 import com.lleps.jsamp.player.Player;
 import com.lleps.jsamp.SAMPConstants;
-import com.lleps.jsamp.world.entity.Body;
-import com.lleps.jsamp.world.entity.Label;
-import com.lleps.jsamp.world.entity.Vehicle;
-import com.lleps.jsamp.world.entity.Pickup;
+import com.lleps.jsamp.world.entity.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -42,6 +39,7 @@ public class ObjectNativeIDS {
     public final Pickup[] pickups = new Pickup[SAMPConstants.MAX_PICKUPS];
     public final Vehicle[] vehicles = new Vehicle[SAMPConstants.MAX_VEHICLES];
     public final Label[][] playerLabels = new Label[SAMPConstants.MAX_PLAYERS][SAMPConstants.MAX_3DTEXT_PLAYER];
+    public final Actor[] actors = new Actor[SAMPConstants.MAX_ACTORS];
 
     public static <T> T get(T[] array, int entityId) {
         if (entityId >= 0 && entityId < array.length) {

@@ -18,6 +18,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multiset;
 import com.lleps.jsamp.SAMPFunctions;
+import com.lleps.jsamp.constant.BodyPart;
 import com.lleps.jsamp.constant.Modshop;
 import com.lleps.jsamp.constant.Paintjob;
 import com.lleps.jsamp.constant.VehicleSeat;
@@ -28,9 +29,7 @@ import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.constant.model.WeaponModel;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
-import com.lleps.jsamp.world.entity.Body;
-import com.lleps.jsamp.world.entity.Pickup;
-import com.lleps.jsamp.world.entity.Vehicle;
+import com.lleps.jsamp.world.entity.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -93,6 +92,25 @@ public class EventDispatcher implements CallbackListener {
         } else if (hitType == SAMPConstants.BULLET_HIT_TYPE_VEHICLE) {
             Vehicle vehicle = arrays.vehicles[hitId];
             vehicle.onPlayerShootVehicle(player, weaponModel, offSets);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean OnPlayerGiveDamageActor(int playerid, int actor_id, float amount, int weapon, int bodypart) {
+        Player player = arrays.players[playerid];
+        Actor actor = arrays.actors[actor_id];
+
+        if (!actor.onDamaged(player, amount, WeaponModel.getById(weapon), BodyPart.get(bodypart))) {
+            float newActorHealth = actor.getHealth() - amount;
+
+            if (newActorHealth < 0) newActorHealth = 0;
+
+            actor.setHealth(newActorHealth);
+
+            if (newActorHealth == 0) {
+                actor.onDeath(player);
+            }
         }
         return false;
     }

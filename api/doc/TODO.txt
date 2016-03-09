@@ -10,6 +10,7 @@ Entities
         TODO: Do properties
         TODO: Do listeners
         TODO: attachLabel
+
 Player
     TODO: Do player class.
 
@@ -29,6 +30,7 @@ TextDraws
 
 EventHandler
     TODO: Do event handler, based on entities listener methods.
+    TODO: Instead of rewrite interfaces again, use listener interfaces from objects instead of creating new ones.
 
 Other
     TODO: Built-in support for enterable interiors.
