@@ -20,27 +20,26 @@ Player
     TODO: some methods needs only the native function, while others such as attached objects may need extra code
     TODO: PED methods: state, health, armour, pos, z ang, skin, attached objects, freezed, animations(apply,get,clean), vehicles, world-bounds
     TODO: Pvars
-       net methods
-            Add methods to an extra class NetStats, you get it using getNetStats()
-       client version
-       TODO: weapons
-       TODO: util methods: distanceToPoint, inRangeOfPoint
-       kick and ban.
-       TODO: surfing vehicle and body
-       TODO: game text using TextStyle enum
-       TODO: spawn point
-       TODO: fighting style
-       TODO: weather and time
-       TODO: keys
-       TODO: Set other player color, setTagShown for others
-       TODO: setCameraBehind, set/getCameraPos, cameraFrontVector, zoom, aspectRatio
-       TODO: attachCameraToBody - not necessary.
-       TODO: spectating
-       TODO: camera transitions
-       TODO: target entities
-       TODO: client stuff like playSound, playAudioStream
-       TODO: Listeners
-       TODO: attachLabel methods!
+                net methods
+                Add methods to an extra class NetStats, you get it using getNetStats()
+                client version
+              TODO: weapons
+              util methods: distanceToPoint, inRangeOfPoint
+              kick and ban.
+              surfing vehicle
+              game text using TextStyle enum
+              TODO: spawn point
+              fighting style
+              keys
+              TODO: Set other player color, setTagShown for others
+              TODO: setCameraBehind, set/getCameraPos, cameraFrontVector, zoom, aspectRatio
+              TODO: attachCameraToBody - not necessary.
+              TODO: spectating
+              TODO: camera transitions
+              TODO: target entities
+              TODO: client stuff like playSound, playAudioStream
+              TODO: Listeners
+              TODO: attachLabel methods!
 
 
 Timer

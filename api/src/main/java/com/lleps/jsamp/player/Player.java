@@ -17,14 +17,19 @@ import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
+import com.lleps.jsamp.constant.FightStyle;
+import com.lleps.jsamp.constant.GameTextStyle;
 import com.lleps.jsamp.constant.Weather;
 import com.lleps.jsamp.data.Color;
+import com.lleps.jsamp.data.KeyState;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
 import com.lleps.jsamp.exception.InvalidNameException;
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.world.World;
+import com.lleps.jsamp.world.entity.Body;
+import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.jsamp.world.entity.WorldEntity;
 
 import java.time.Duration;
@@ -221,6 +226,10 @@ public class Player {
         return Optional.ofNullable(dialog);
     }
 
+    public KeyState getKeyState() {
+        return new KeyState(FunctionAccess.GetPlayerKeys(id));
+    }
+
     /**
      * Called when this player disconnects from this server. Used internally.
      */
@@ -254,6 +263,18 @@ public class Player {
      */
     public void sendMessage(String message) {
         sendMessage(Color.WHITE, message);
+    }
+
+    public void gameText(GameTextStyle style, String message, Duration duration) {
+        FunctionAccess.GameTextForPlayer(id, message, (int)duration.toMillis(), style.getValue());
+    }
+
+    public void setFightStyle(FightStyle fightStyle) {
+        FunctionAccess.SetPlayerFightingStyle(id, fightStyle.getValue());
+    }
+
+    public FightStyle getFightStyle() {
+        return FightStyle.get(FunctionAccess.GetPlayerFightingStyle(id));
     }
 
     public boolean isOnline() {
@@ -331,6 +352,19 @@ public class Player {
     public void ban(String reason) {
         SAMPServer.printLine(this.toString() + " has been banned for: " + reason);
         FunctionAccess.BanEx(id, reason);
+    }
+
+    public float getDistanceToPoint(Vector3D pointCoordinates) {
+        return FunctionAccess.GetPlayerDistanceFromPoint(id, pointCoordinates.getX(), pointCoordinates.getY(), pointCoordinates.getZ());
+    }
+
+    public boolean isInRangeOfPoint(Vector3D pointCoordinates, float toleranceDistance) {
+        return FunctionAccess.IsPlayerInRangeOfPoint(id, toleranceDistance, pointCoordinates.getX(), pointCoordinates.getY(),
+                pointCoordinates.getZ());
+    }
+
+    public Optional<Vehicle> getSurfingVehicle() {
+        return Vehicle.getById(FunctionAccess.GetPlayerSurfingVehicleID(id));
     }
 
     public NetStats getNetStats() {
