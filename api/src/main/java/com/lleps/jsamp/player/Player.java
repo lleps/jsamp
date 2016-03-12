@@ -230,6 +230,44 @@ public class Player {
         return new KeyState(FunctionAccess.GetPlayerKeys(id));
     }
 
+    public void setCameraBehind() {
+        FunctionAccess.SetCameraBehindPlayer(id);
+    }
+
+    public void setCameraPosition(Vector3D position) {
+        FunctionAccess.SetPlayerCameraPos(id, position.getX(), position.getY(), position.getZ());
+    }
+
+    public Vector3D getCameraPosition() {
+        return Vector3D.of(FunctionAccess.GetPlayerCameraPos(id));
+    }
+
+    public void setCameraLookAt(Vector3D whereToLook) {
+        FunctionAccess.SetPlayerCameraLookAt(id, whereToLook.getX(), whereToLook.getY(), whereToLook.getZ(), SAMPConstants.CAMERA_CUT);
+    }
+
+    public Vector3D getCameraFrontVector() {
+        return Vector3D.of(FunctionAccess.GetPlayerCameraFrontVector(id));
+    }
+
+    public Vector3D getCameraLookAt() {
+        Vector3D frontCoordinates = getCameraFrontVector();
+        Vector3D cameraPos = getCameraPosition();
+        return cameraPos.plus(frontCoordinates);
+    }
+
+    public float getCameraZoom() {
+        return FunctionAccess.GetPlayerCameraZoom(id);
+    }
+
+    public float getCameraAspectRatio() {
+        return FunctionAccess.GetPlayerCameraAspectRatio(id);
+    }
+
+    public int getCameraMode() {
+        return FunctionAccess.GetPlayerCameraMode(id);
+    }
+
     /**
      * Called when this player disconnects from this server. Used internally.
      */

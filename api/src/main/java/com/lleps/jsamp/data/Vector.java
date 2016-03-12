@@ -21,6 +21,9 @@ public interface Vector {
     float length();
     float distanceTo(Vector target);
 
+    Vector plus(Vector other);
+    Vector minus(Vector other);
+
     float getX();
     Vector plusX(float amount);
     Vector minusX(float amount);

@@ -140,6 +140,16 @@ public final class Vector3D implements Vector {
         return (float) Math.sqrt((x1 * x1) + (y1 * y1) + (z1 * z1));
     }
 
+    @Override
+    public Vector3D plus(Vector other) {
+        return of(x + other.getX(), y + other.getY(), z + other.getZ());
+    }
+
+    @Override
+    public Vector3D minus(Vector other) {
+        return of(x - other.getX(), y - other.getY(), z - other.getZ());
+    }
+
     public Vector2D asVector2D() {
         return Vector2D.of(x, y);
     }

@@ -131,6 +131,16 @@ public final class Vector2D implements Vector {
     }
 
     @Override
+    public Vector2D plus(Vector other) {
+        return of(x + other.getX(), y + other.getY());
+    }
+
+    @Override
+    public Vector2D minus(Vector other) {
+        return of(x - other.getX(), y - other.getY());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
