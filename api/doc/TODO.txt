@@ -8,27 +8,27 @@ Entities
     Pickup
     Actor
 
--Added plus and minus methods to vectors.
-
 Player
-    Ones which needs extra code:
-        * freezed - a variable to store if player is freezed or not.
-        * spawn position
-        * attached objects - we need an array to find the first free slot, however, player can teorically contains infinite attached object.
-        also attached objects must be loaded when player respawns.
-        * weapons. I still have no idea of how to do it.
-        * camera transition class
-        * name - check for name change errors.
-    TODO: some methods needs only the native function, while others such as attached objects may need extra code
-    TODO: PED methods: state, health, armour, pos, z ang, skin, attached objects, freezed, animations(apply,get,clean), vehicles, world-bounds
-    TODO: Pvars
+    state
+    health
+    armour
+    pos
+    z ang
+    skin
+    TODO: attached objects
+    freezed
+    animations(apply,get,clean)
+    special actions
+    vehicles
+    world-bounds
+    Pvars
+    Score
               TODO: weapons
               TODO: spawn point
               TODO: Set other player color, setTagShown for others
-              setCameraBehind, set/getCameraPos, cameraFrontVector, look at, zoom, aspectRatio, mode
               TODO: attachCameraToBody - not necessary.
               TODO: spectating
-              TODO: camera transitions
+              camera transitions
               TODO: target entities
               TODO: client stuff like playSound, playAudioStream
               TODO: Listeners

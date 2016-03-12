@@ -17,12 +17,8 @@ import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
-import com.lleps.jsamp.constant.FightStyle;
-import com.lleps.jsamp.constant.GameTextStyle;
-import com.lleps.jsamp.constant.Weather;
-import com.lleps.jsamp.data.Color;
-import com.lleps.jsamp.data.KeyState;
-import com.lleps.jsamp.data.Vector3D;
+import com.lleps.jsamp.constant.*;
+import com.lleps.jsamp.data.*;
 import com.lleps.jsamp.dialog.Dialog;
 import com.lleps.jsamp.exception.InvalidNameException;
 import com.lleps.jsamp.server.ObjectNativeIDS;
@@ -40,6 +36,8 @@ import java.util.*;
  * @author spell
  */
 public class Player {
+    // TODO: Set freezed to false when player spawns.
+
     public static Optional<Player> getById(int id) {
         return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().players, id));
     }
@@ -52,6 +50,7 @@ public class Player {
     private LocalTime time;
     private Map<String, Object> properties = new HashMap<>();
     private NetStats netStats;
+    private boolean freezed;
 
     public Player(int id) {
         this.id = id;
@@ -190,6 +189,10 @@ public class Player {
         return id;
     }
 
+    public void setPosition(Vector3D position) {
+        FunctionAccess.SetPlayerPos(id, position.getX(), position.getY(), position.getZ());
+    }
+
     /**
      * Get this player position.
      *
@@ -197,6 +200,91 @@ public class Player {
      */
     public Vector3D getPosition() {
         return Vector3D.of(FunctionAccess.GetPlayerPos(id));
+    }
+
+    public void setFacingAngle(float angle) {
+        FunctionAccess.SetPlayerFacingAngle(id, angle);
+    }
+
+    public float getFacingAngle() {
+        return FunctionAccess.GetPlayerFacingAngle(id);
+    }
+
+    public void setSkin(SkinModel skin) {
+        FunctionAccess.SetPlayerSkin(id, skin.getId());
+    }
+
+    public SkinModel getSkin() {
+        return SkinModel.getById(FunctionAccess.GetPlayerSkin(id));
+    }
+
+    public void setFreezed(boolean freezed) {
+        FunctionAccess.TogglePlayerControllable(id, freezed);
+        this.freezed = freezed;
+    }
+
+    public boolean isFreezed() {
+        return freezed;
+    }
+
+    public void setScore(int score) {
+        FunctionAccess.SetPlayerScore(id, score);
+    }
+
+    public int getScore() {
+        return FunctionAccess.GetPlayerScore(id);
+    }
+
+    public Optional<Vehicle> getVehicle() {
+        return Vehicle.getById(FunctionAccess.GetPlayerVehicleID(id));
+    }
+
+    public VehicleSeat getSeat() {
+        return VehicleSeat.getById(FunctionAccess.GetPlayerVehicleSeat(id));
+    }
+
+    public boolean isInAnyVehicle() {
+        return FunctionAccess.IsPlayerInAnyVehicle(id);
+    }
+
+    public void putInVehicle(Vehicle vehicle, VehicleSeat seat) {
+        FunctionAccess.PutPlayerInVehicle(id, vehicle.getId(), seat.getId());
+    }
+
+    public void setWorldBounds(Area area) {
+        FunctionAccess.SetPlayerWorldBounds(id, area.getMax().getX(), area.getMin().getX(), area.getMax().getY(), area.getMin().getY());
+    }
+
+    public void removeWorldBounds() {
+        FunctionAccess.SetPlayerWorldBounds(id, 20000.0000f, -20000.0000f, 20000.0000f, -20000.0000f);
+    }
+
+    public void applyAnimation(Animation animation, AnimationRunner runner) {
+        applyAnimation(animation, runner, false);
+    }
+
+    public void applyAnimation(Animation animation, AnimationRunner runner, boolean forceSync) {
+        runner.applyToPlayer(animation, id, forceSync);
+    }
+
+    public Animation getAnimation() {
+        return Animation.of(FunctionAccess.GetPlayerAnimationIndex(id));
+    }
+
+    public void clearAnimations() {
+        clearAnimations(false);
+    }
+
+    public void clearAnimations(boolean forceSync) {
+        FunctionAccess.ClearAnimations(id, forceSync);
+    }
+
+    public void setSpecialAction(SpecialAction action) {
+        FunctionAccess.SetPlayerSpecialAction(id, action.getValue());
+    }
+
+    public SpecialAction getSpecialAction() {
+        return SpecialAction.get(FunctionAccess.GetPlayerSpecialAction(id));
     }
 
     /**
@@ -268,11 +356,70 @@ public class Player {
         return FunctionAccess.GetPlayerCameraMode(id);
     }
 
+    public void setVarInt(String varname, int value) {
+        FunctionAccess.SetPVarInt(id, varname, value);
+    }
+
+    public void setVarFloat(String varname, float value) {
+        FunctionAccess.SetPVarFloat(id, varname, value);
+    }
+
+    public void setVarString(String varname, String value) {
+        FunctionAccess.SetPVarString(id, varname, value);
+    }
+
+    public int getVarInt(String varname) {
+        return FunctionAccess.GetPVarInt(id, varname);
+    }
+
+    public float getVarFloat(String varname) {
+        return FunctionAccess.GetPVarFloat(id, varname);
+    }
+
+    public String getVarString(String varname) {
+        return FunctionAccess.GetPVarString(id, varname);
+    }
+
+    public void deleteVar(String varname) {
+        FunctionAccess.DeletePVar(id, varname);
+    }
+
+    public int getVarsUpperIndex() {
+        return FunctionAccess.GetPVarsUpperIndex(id);
+    }
+
+    public String getVarNameAtIndex(int index) {
+        return FunctionAccess.GetPVarNameAtIndex(id, index);
+    }
+
+    public VarType getVarType(String varname) {
+        return VarType.get(FunctionAccess.GetPVarType(id, varname));
+    }
+
+    public PlayerState getState() {
+        return PlayerState.get(FunctionAccess.GetPlayerState(id));
+    }
+
+    public void setHealth(float health) {
+        FunctionAccess.SetPlayerHealth(id, health);
+    }
+
+    public float getHealth() {
+        return FunctionAccess.GetPlayerHealth(id);
+    }
+
+    public void setArmour(float armour) {
+        FunctionAccess.SetPlayerArmour(id, armour);
+    }
+
+    public float getArmour() {
+        return FunctionAccess.GetPlayerArmour(id);
+    }
+
     /**
      * Called when this player disconnects from this server. Used internally.
      */
     public void onDisconnect() {
-
         if (world != null) {
             world.onPlayerExit(this);
         }
