@@ -35,6 +35,10 @@ import java.util.Set;
  * @author spell
  */
 public class Actor extends GlobalEntity {
+    public Optional<Actor> getById(int id) {
+        return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().actors, id));
+    }
+
     public interface OnDamagedListener {
         /**
          * Called when a player shots an actor. Note that this is not called if actor is invulnerable.

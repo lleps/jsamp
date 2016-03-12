@@ -21,10 +21,17 @@ import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.world.entity.PerPlayerEntity;
 
+import java.util.Optional;
+
 /**
  * @author spell
  */
 public class Label extends PerPlayerEntity {
+    public static Optional<Label> getById(int playerId, int objectId) {
+        return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().playerLabels,
+                playerId, objectId));
+    }
+
     private Vector3D position;
     private Color color;
     private String text;

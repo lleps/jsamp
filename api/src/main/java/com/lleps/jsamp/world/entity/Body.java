@@ -29,6 +29,11 @@ import java.util.*;
  * @author spell
  */
 public class Body extends PerPlayerEntity {
+    public static Optional<Body> getById(int playerId, int objectId) {
+        return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().playerObjects,
+                playerId, objectId));
+    }
+
     public interface OnShootedListener {
         void onShooted(Body body, Player player, Vector3D offSets, WeaponModel weapon);
     }

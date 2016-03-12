@@ -15,14 +15,19 @@ package com.lleps.jsamp.player;
 
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.FunctionAccess;
+import com.lleps.jsamp.SAMPFunctions;
 import com.lleps.jsamp.constant.Weather;
 import com.lleps.jsamp.data.Color;
 import com.lleps.jsamp.data.Vector3D;
 import com.lleps.jsamp.dialog.Dialog;
+import com.lleps.jsamp.exception.InvalidNameException;
 import com.lleps.jsamp.server.ObjectNativeIDS;
+import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.world.World;
 import com.lleps.jsamp.world.entity.WorldEntity;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -41,11 +46,14 @@ public class Player {
     private Weather weather;
     private LocalTime time;
     private Map<String, Object> properties = new HashMap<>();
+    private NetStats netStats;
 
     public Player(int id) {
         this.id = id;
         this.name = FunctionAccess.GetPlayerName(id);
         ObjectNativeIDS.getInstance().players[id] = this;
+
+        netStats = new NetStats(id);
     }
 
     /**
@@ -246,6 +254,91 @@ public class Player {
      */
     public void sendMessage(String message) {
         sendMessage(Color.WHITE, message);
+    }
+
+    public boolean isOnline() {
+        return FunctionAccess.IsPlayerConnected(id);
+    }
+
+    public void setDrunkLevel(int level) {
+        FunctionAccess.SetPlayerDrunkLevel(id, level);
+    }
+
+    public void giveMoney(int money) {
+        FunctionAccess.GivePlayerMoney(id, money);
+    }
+
+    public void setMoney(int money) {
+        FunctionAccess.ResetPlayerMoney(id);
+        FunctionAccess.GivePlayerMoney(id, money);
+    }
+
+    public int getMoney(int money) {
+        return FunctionAccess.GetPlayerMoney(id);
+    }
+
+    public int getPing() {
+        return FunctionAccess.GetPlayerPing(id);
+    }
+    
+    public int getDrunkLevel() {
+        return FunctionAccess.GetPlayerDrunkLevel(id);
+    }
+
+    public String getIp() {
+        return FunctionAccess.GetPlayerIp(id);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setWantedLevel(int level) {
+        FunctionAccess.SetPlayerWantedLevel(id, level);
+    }
+
+    public int getWantedLevel() {
+        return FunctionAccess.GetPlayerWantedLevel(id);
+    }
+
+    public void setChatBubble(String text, Color color, float drawDistance, Duration duration) {
+        FunctionAccess.SetPlayerChatBubble(id, text, color.getRGBA(), drawDistance, (int)duration.toMillis());
+    }
+
+    public void setColor(Color color) {
+        FunctionAccess.SetPlayerColor(id, color.getRGBA());
+    }
+
+    public Color getColor() {
+        return Color.ofRGBA(FunctionAccess.GetPlayerColor(id));
+    }
+
+    public void setName(String name) throws InvalidNameException {
+        int nameChangeResult = FunctionAccess.SetPlayerName(id, name);
+        if (nameChangeResult == -1) throw new InvalidNameException(name);
+        if (nameChangeResult == 0) {
+            FunctionAccess.SetPlayerName(id, "changing..");
+            FunctionAccess.SetPlayerName(id, name);
+        }
+        this.name = name;
+    }
+
+    public void kick(String reason) {
+        SAMPServer.printLine(this.toString() + " has been kicked for: " + reason);
+        FunctionAccess.Kick(id);
+    }
+
+    public void ban(String reason) {
+        SAMPServer.printLine(this.toString() + " has been banned for: " + reason);
+        FunctionAccess.BanEx(id, reason);
+    }
+
+    public NetStats getNetStats() {
+        return netStats;
+    }
+
+    public String getClientVersion() {
+        return FunctionAccess.GetPlayerVersion(id);
     }
 
     /**

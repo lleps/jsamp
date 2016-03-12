@@ -1,36 +1,70 @@
 Dialog
 
 Entities
+    TODO: Add "getAttachedEntities".
     Vehicle
     Body
     Label
     Pickup
     Actor
-        TODO: Do class
-        TODO: Do properties
-        TODO: Do listeners
-        TODO: attachLabel
 
 Player
-    TODO: Do player class.
+    Ones which needs extra code:
+        * freezed - a variable to store if player is freezed or not.
+        * spawn position
+        * attached objects - we need an array to find the first free slot, however, player can teorically contains infinite attached object.
+        also attached objects must be loaded when player respawns.
+        * weapons. I still have no idea of how to do it.
+        * camera transition class
+        * name - check for name change errors.
+    TODO: some methods needs only the native function, while others such as attached objects may need extra code
+    TODO: PED methods: state, health, armour, pos, z ang, skin, attached objects, freezed, animations(apply,get,clean), vehicles, world-bounds
+    TODO: Pvars
+       net methods
+            Add methods to an extra class NetStats, you get it using getNetStats()
+       client version
+       TODO: weapons
+       TODO: util methods: distanceToPoint, inRangeOfPoint
+       kick and ban.
+       TODO: surfing vehicle and body
+       TODO: game text using TextStyle enum
+       TODO: spawn point
+       TODO: fighting style
+       TODO: weather and time
+       TODO: keys
+       TODO: Set other player color, setTagShown for others
+       TODO: setCameraBehind, set/getCameraPos, cameraFrontVector, zoom, aspectRatio
+       TODO: attachCameraToBody - not necessary.
+       TODO: spectating
+       TODO: camera transitions
+       TODO: target entities
+       TODO: client stuff like playSound, playAudioStream
+       TODO: Listeners
+       TODO: attachLabel methods!
+
+
+Timer
+    TODO: Fix it.
+
+TODO: SAMap
+    A class that should store information about GTA map itself, such as add or remove gta sa objects.
 
 World
     NoStreamingWorld
     CellStreamingWorld
         TODO: Do it.
+        TODO: Add a timer to dispatch vehicle position changes when driving, also dispatch body movement and same for
+        TODO: setPosition methods for all entities.
 
-Timer
-    TODO: Fix it.
+MapIcon
+    TODO: Do it.
 
 Checkpoint
     TODO: Do it.
 
 TextDraws
-    TODO: Do it.
+    TODO: Do class.
+    TODO: Give players the ability to select tds
 
 EventHandler
-    TODO: Do event handler, based on entities listener methods.
-    TODO: Instead of rewrite interfaces again, use listener interfaces from objects instead of creating new ones.
-
-Other
-    TODO: Built-in support for enterable interiors.
+    TODO: Do event handler, using entity listener interfaces.

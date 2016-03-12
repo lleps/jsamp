@@ -21,12 +21,17 @@ import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
  * @author spell
  */
 public class Pickup extends GlobalEntity {
+    public Optional<Pickup> getById(int id) {
+        return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().pickups, id));
+    }
+
     public interface OnPickupListener {
         void onPickup(Pickup pickup, Player player);
     }
