@@ -20,6 +20,7 @@ import com.lleps.jsamp.constant.model.BodyModel;
 import com.lleps.jsamp.data.Vector;
 import com.lleps.jsamp.data.Vector3D;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -115,6 +116,10 @@ public class Pickup extends GlobalEntity {
             label.setAttachedPickup(null);
             if (isCreated()) playerIds.forEach(label::destroy);
         }
+    }
+
+    public Set<WorldEntity> getAttachedEntities() {
+        return Collections.unmodifiableSet(attachedEntities);
     }
 
     @Override

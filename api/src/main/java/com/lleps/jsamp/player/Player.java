@@ -24,6 +24,7 @@ import com.lleps.jsamp.exception.InvalidNameException;
 import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.server.SAMPServer;
 import com.lleps.jsamp.world.World;
+import com.lleps.jsamp.world.entity.Actor;
 import com.lleps.jsamp.world.entity.Body;
 import com.lleps.jsamp.world.entity.Vehicle;
 import com.lleps.jsamp.world.entity.WorldEntity;
@@ -312,6 +313,18 @@ public class Player {
      */
     public Optional<Dialog> getDialog() {
         return Optional.ofNullable(dialog);
+    }
+
+    public Optional<Player> getCameraTargetPlayer() {
+        return Player.getById(FunctionAccess.GetPlayerCameraTargetPlayer(id));
+    }
+
+    public Optional<Vehicle> getCameraTargetVehicle() {
+        return Vehicle.getById(FunctionAccess.GetPlayerCameraTargetVehicle(id));
+    }
+
+    public Optional<Actor> getCameraTargetActor() {
+        return Actor.getById(FunctionAccess.GetPlayerCameraTargetActor(id));
     }
 
     public KeyState getKeyState() {

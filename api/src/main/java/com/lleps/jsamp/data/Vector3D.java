@@ -13,13 +13,11 @@
  */
 package com.lleps.jsamp.data;
 
-import java.util.HashMap;
 
 /**
  * @author spell
  */
 public final class Vector3D implements Vector {
-    private static HashMap<Integer, Vector3D> instances = new HashMap<>();
 
     public static Vector3D empty() {
         return of(0, 0, 0);

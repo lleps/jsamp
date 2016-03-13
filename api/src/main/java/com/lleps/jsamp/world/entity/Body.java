@@ -110,6 +110,10 @@ public class Body extends PerPlayerEntity {
         }
     }
 
+    public Set<WorldEntity> getAttachedEntities() {
+        return Collections.unmodifiableSet(attachedEntities);
+    }
+
     public void setDrawDistance(float drawDistance) {
         this.drawDistance = drawDistance;
     }

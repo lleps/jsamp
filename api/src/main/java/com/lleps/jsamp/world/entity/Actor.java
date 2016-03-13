@@ -27,6 +27,7 @@ import com.lleps.jsamp.server.ObjectNativeIDS;
 import com.lleps.jsamp.server.SAMPServer;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -35,7 +36,7 @@ import java.util.Set;
  * @author spell
  */
 public class Actor extends GlobalEntity {
-    public Optional<Actor> getById(int id) {
+    public static Optional<Actor> getById(int id) {
         return Optional.ofNullable(ObjectNativeIDS.get(ObjectNativeIDS.getInstance().actors, id));
     }
 
@@ -51,6 +52,7 @@ public class Actor extends GlobalEntity {
          */
         boolean onDamaged(Actor actor, Player damager, float lostHealth, WeaponModel weaponModel, BodyPart bodyPart);
     }
+
 
     public interface OnDeathListener {
         void onDeath(Actor actor, Player killer);
@@ -190,6 +192,10 @@ public class Actor extends GlobalEntity {
             label.setAttachedActor(null);
             if (isCreated()) playerIds.forEach(label::destroy);
         }
+    }
+
+    public Set<WorldEntity> getAttachedEntities() {
+        return Collections.unmodifiableSet(attachedEntities);
     }
 
     @Override

@@ -27,6 +27,8 @@ import java.util.LinkedList;
  * @author spell
  */
 public abstract class WorldEntity {
+    // TODO: Find a way to avoid repeating code for entity attaching.
+
     /**
      * This interface is a listener used for report position changes.
      */

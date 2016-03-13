@@ -45,4 +45,28 @@ public final class Area {
         return point.getX() > min.getX() && point.getX() < max.getX()
                 && point.getY() > min.getY() && point.getY() < max.getY();
     }
+
+    @Override
+    public String toString() {
+        return "{min:" + min + ", max:" + max + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Area area = (Area) o;
+
+        if (!min.equals(area.min)) return false;
+        return max.equals(area.max);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = min.hashCode();
+        result = 31 * result + max.hashCode();
+        return result;
+    }
 }

@@ -13,6 +13,8 @@
  */
 package com.lleps.jsamp.world.entity;
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Sets;
 import com.lleps.jsamp.SAMPConstants;
 import com.lleps.jsamp.FunctionAccess;
 import com.lleps.jsamp.SAMPFunctions;
@@ -468,6 +470,10 @@ public class Vehicle extends GlobalEntity {
             label.setAttachedVehicle(null);
             playerIds.forEach(label::destroy);
         }
+    }
+
+    public Set<WorldEntity> getAttachedEntities() {
+        return Collections.unmodifiableSet(attachedEntities);
     }
 
     @Override

@@ -9,31 +9,16 @@ Entities
     Actor
 
 Player
-    state
-    health
-    armour
-    pos
-    z ang
-    skin
+    TODO: Set other player color, setTagShown for others
+    TODO: client stuff like playSound, playAudioStream
+    TODO: Listeners
+    TODO: target entities
     TODO: attached objects
-    freezed
-    animations(apply,get,clean)
-    special actions
-    vehicles
-    world-bounds
-    Pvars
-    Score
-              TODO: weapons
-              TODO: spawn point
-              TODO: Set other player color, setTagShown for others
-              TODO: attachCameraToBody - not necessary.
-              TODO: spectating
-              camera transitions
-              TODO: target entities
-              TODO: client stuff like playSound, playAudioStream
-              TODO: Listeners
-              TODO: attachLabel methods!
-
+    TODO: weapons
+    TODO: spawn point
+    TODO: attachCameraToBody - not necessary.
+    TODO: spectating
+    TODO: attachLabel methods!
 
 Timer
     TODO: Fix it.
