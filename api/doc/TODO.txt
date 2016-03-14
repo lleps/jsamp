@@ -1,7 +1,6 @@
 Dialog
 
 Entities
-    TODO: Add "getAttachedEntities".
     Vehicle
     Body
     Label

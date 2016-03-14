@@ -1,0 +1,137 @@
+java.lang.ArrayIndexOutOfBoundsException: 3
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:46)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:363)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:42)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:105)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 0
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:57)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:80)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:69)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:105)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.IllegalArgumentException: Invalid body model id (-1)
+	at com.lleps.jsamp.constant.model.BodyModel.getById(BodyModel.java:29)
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:121)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:122)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 3
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:69)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:60)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.jsamp.server.EventDispatcher.OnPlayerStateChange(EventDispatcher.java:177)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerStateChange(MainCallbackListener.java:207)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:53)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:53)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NumberFormatException: For input string: "chau"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.lleps.test.world.LabelTest.onCommand(LabelTest.java:60)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.jsamp.world.entity.Vehicle.attachLabel(Vehicle.java:459)
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:410)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NullPointerException
+	at com.lleps.test.world.LabelTest.onCommand(LabelTest.java:49)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.NumberFormatException: For input string: "1t"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:48)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:403)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 2
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:408)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 2
+	at com.lleps.test.world.VehicleTest.onCommand(VehicleTest.java:408)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.ActorTest.onCommand(ActorTest.java:78)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 1
+	at com.lleps.test.world.ActorTest.onCommand(ActorTest.java:45)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 2
+	at com.lleps.test.world.ActorTest.onCommand(ActorTest.java:115)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+
+java.lang.ArrayIndexOutOfBoundsException: 4
+	at com.lleps.test.world.BodyTest.onCommand(BodyTest.java:168)
+	at com.lleps.test.TestCallbackDispatcher.OnPlayerCommandText(TestCallbackDispatcher.java:52)
+	at com.lleps.jsamp.MainCallbackListener.OnPlayerCommandText(MainCallbackListener.java:175)
+

@@ -108,6 +108,11 @@ static jint Java_GetPlayerTargetPlayer(JNIEnv* env, jobject obj, jint playerid) 
 	return ret;
 }
 
+static jint Java_GetPlayerTargetActor(JNIEnv* env, jobject obj, jint playerid) {
+	jint ret = GetPlayerTargetActor(playerid);
+	return ret;
+}
+
 static jboolean Java_SetPlayerTeam(JNIEnv* env, jobject obj, jint playerid, jint teamid) {
 	bool ret = SetPlayerTeam(playerid, teamid);
 	return ret;
